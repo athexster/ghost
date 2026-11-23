@@ -89,32 +89,35 @@ svg.ic{width:19px;height:19px;flex-shrink:0}
 .lp-silver{background:linear-gradient(135deg,#f8fafc,#e2e8f0,#cbd5e1,#94a3b8);color:#1e293b;--pill-glow:rgba(203,213,225,.5)}
 .lp-black{background:linear-gradient(135deg,#475569,#1f2937,#111827,#020617);color:#f8fafc;--pill-glow:rgba(100,116,139,.65);border-color:rgba(255,255,255,.38)}
 .presence-line{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);line-height:1.35}
-.presence-line .pdot{width:8px;height:8px;border-radius:50%;background:#64748b;flex-shrink:0}
+.presence-line .pdot{width:8px;height:8px;min-width:8px;min-height:8px;aspect-ratio:1/1;border-radius:50%;background:#64748b;flex-shrink:0;box-sizing:border-box}
 .presence-line.online{color:#4ade80;font-weight:600}
 .presence-line.online .pdot{background:var(--ok);box-shadow:0 0 6px rgba(34,197,94,.85)}
 /* Profile pages show presence as a DOT ONLY — no wording: bright
    green while active, plain grey when not, and no dot at all when
    the member has hidden their active status in Settings. */
-.profile-presence-dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#64748b;vertical-align:middle}
+.profile-presence-dot{display:inline-block;width:11px;height:11px;min-width:11px;min-height:11px;aspect-ratio:1/1;border-radius:50%;background:#64748b;vertical-align:middle;flex-shrink:0;box-sizing:border-box}
 .profile-presence-dot.online{background:var(--ok);box-shadow:0 0 8px rgba(34,197,94,.9)}
-/* Profile presence dot lives on the big avatar itself — anchored at
-   its bottom-right corner (same corner pattern as post-card avatars),
-   on mobile and desktop alike. No standalone row under the Joined
-   pill any more, so nothing dangles or floats on its own line. */
-.profile-avatar-wrap{position:relative;display:inline-flex;flex-shrink:0;line-height:0}
-.profile-avatar-wrap [data-profile-dot]{position:absolute;right:1px;bottom:1px;z-index:6;display:inline-flex}
-.profile-avatar-wrap .profile-dot-wrap{width:30px;height:30px;padding:0;margin:0;background:var(--bg-card);border:2px solid var(--bg-card);box-shadow:0 2px 8px rgba(0,0,0,.45)}
-.profile-avatar-wrap .profile-presence-dot{width:17px;height:17px;border:2px solid rgba(255,255,255,.14)}
-.profile-avatar-wrap .profile-presence-dot.online{box-shadow:0 0 9px rgba(34,197,94,.95)}
+/* Profile presence dot lives IN THE NAME ROW — between the verified
+   badge and the label / Owner pill (name, badge, dot, pill), on
+   mobile and desktop alike. It is NOT on the avatar any more and
+   there is no standalone row under the Joined pill, so nothing
+   dangles or floats on its own line. The slot collapses entirely
+   when there is no dot (active status hidden), so the row keeps
+   its normal spacing. */
+#profileDotSlot{display:inline-flex;align-items:center;flex-shrink:0}
+#profileDotSlot:empty{display:none}
+.profile-name-row .profile-presence-dot{width:13px;height:13px;min-width:13px;min-height:13px}
+.profile-name-row .profile-presence-dot.online{box-shadow:0 0 9px rgba(34,197,94,.95)}
 /* The profile dot stays dot-only by default — hovering it (desktop),
    focusing it, or tapping it (mobile, .tip-open) reveals a small
    tooltip with the status text ("Active now" / "Last active …").
    Moving the mouse away, tapping elsewhere, or pressing Escape
    dismisses it. No dot (status hidden) = nothing to reveal.
    The tooltip opens BELOW-RIGHT of the dot (top + left:0, never
-   centred over it), so from the avatar corner it grows into the
-   card instead of running off the left edge of a narrow phone.
-   max-width + wrapping keep its right edge inside the viewport too. */
+   centred over it), so from its spot in the name row it grows
+   down into the card instead of running off the left edge of a
+   narrow phone. max-width + wrapping keep its right edge inside
+   the viewport too. */
 .profile-dot-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;padding:6px;margin:-6px;border-radius:50%;cursor:pointer;vertical-align:middle;-webkit-tap-highlight-color:transparent}
 .profile-dot-wrap:focus-visible{outline:2px solid var(--line-focus);outline-offset:1px}
 .profile-presence-tip{position:absolute;top:calc(100% + 8px);bottom:auto;left:0;transform:translateY(3px);background:#141c2e;border:1px solid var(--line-strong);color:var(--ink);font-size:12px;font-weight:600;line-height:1.35;padding:6px 11px;border-radius:9px;white-space:normal;max-width:min(220px,72vw);box-shadow:0 12px 26px rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .15s ease,transform .15s ease;z-index:60}
@@ -187,7 +190,12 @@ svg.ic{width:19px;height:19px;flex-shrink:0}
 .avatar.lg{width:84px;height:84px;border-radius:22px;font-size:32px}
 .avatar.xl{width:104px;height:104px;border-radius:26px;font-size:40px}
 .avatar.diamond-frame{background:linear-gradient(135deg,#bae6fd,#38bdf8,#818cf8,#f472b6)!important;color:#090d16;box-shadow:0 0 0 2px rgba(255,255,255,.85),0 0 18px rgba(56,189,248,.7)}
-.presence-dot{position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-radius:50%;background:#64748b;border:2.5px solid var(--bg-base);z-index:2}
+/* Presence dot on avatars: a PERFECT circle, always. Fixed equal
+   width/height + aspect-ratio + border-box sizing, and it sits a
+   few px INSIDE the avatar's corner — pushed out to the very edge
+   it was clipped by the avatar's rounded corner (overflow:hidden),
+   which made it look like an egg / crescent inside a dark ring. */
+.presence-dot{position:absolute;right:3px;bottom:3px;width:12px;height:12px;min-width:12px;min-height:12px;aspect-ratio:1/1;border-radius:50%;background:#64748b;border:2.5px solid var(--bg-base);z-index:2;flex-shrink:0;box-sizing:border-box}
 .presence-dot.online{background:var(--ok);box-shadow:0 0 7px rgba(34,197,94,.8)}
 
 /* ---------- auth ---------- */
@@ -508,7 +516,7 @@ body.guest-prompt #authSection .auth-card{animation:guestSlideUp .45s cubic-bezi
 @keyframes guestFadeIn{from{opacity:0}to{opacity:1}}
 @keyframes guestSlideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 .guest-note{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);background:var(--bg-card);border:1px solid var(--line);border-radius:999px;padding:7px 13px;margin-bottom:12px}
-.guest-note .pdot{width:8px;height:8px;border-radius:50%;background:var(--warn);flex-shrink:0}
+.guest-note .pdot{width:8px;height:8px;min-width:8px;min-height:8px;aspect-ratio:1/1;border-radius:50%;background:var(--warn);flex-shrink:0;box-sizing:border-box}
 /* ---------- guest preview EXPIRED (15s) → locked auth over blurred home ----------
    After exactly 15 seconds the preview ends completely. The full
    existing auth panel (both tabs, all fields, eye toggles, submit
@@ -573,7 +581,7 @@ body.guest-locked #authSection .auth-card{width:100%;max-width:460px;animation:g
 .switch.on .switch-knob{transform:translateX(21px);background:var(--ok);box-shadow:0 0 8px rgba(34,197,94,.8)}
 /* ---------- brand account ---------- */
 .brand-status-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border-radius:999px;font-size:12.5px;font-weight:800;letter-spacing:.02em;background:linear-gradient(135deg,rgba(245,158,11,.22),rgba(236,72,153,.18));border:1px solid rgba(245,158,11,.5);color:#fcd34d}
-.brand-status-pill .pdot{width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 7px rgba(245,158,11,.9);flex-shrink:0}
+.brand-status-pill .pdot{width:8px;height:8px;min-width:8px;min-height:8px;aspect-ratio:1/1;border-radius:50%;background:var(--warn);box-shadow:0 0 7px rgba(245,158,11,.9);flex-shrink:0;box-sizing:border-box}
 .brand-points{display:flex;flex-direction:column;gap:8px;margin:0 0 14px;padding:0;list-style:none}
 .brand-points li{display:flex;gap:9px;font-size:13.5px;color:var(--ink-2);line-height:1.55}
 .brand-points li b{color:var(--ink)}
@@ -621,12 +629,13 @@ body.guest-locked #authSection .auth-card{width:100%;max-width:460px;animation:g
 .feed-tab.active{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 4px 14px rgba(99,102,241,.3)}
 .feed-tab .ft-count{font-size:11px;opacity:.85;font-weight:600}
 .feed-tabs .feed-tab{white-space:nowrap;min-width:0}
-/* Main feed tab bar: icon + label structure. Desktop shows the word
-   labels exactly as before (icons hidden); on mobile (≤820px, see
-   the block below) the labels hide and clean SVG symbols take over. */
+/* Main feed tab bar: icon + label structure. Desktop shows each
+   tab's SVG icon AND its word label side by side; on mobile
+   (≤820px, see the block below) the labels hide and the clean SVG
+   symbols stand alone. */
 .feed-main-tabs .feed-tab{display:inline-flex;align-items:center;justify-content:center;gap:6px;position:relative}
-.ft-icon{display:none;align-items:center;justify-content:center;line-height:0;flex-shrink:0}
-.ft-icon svg{width:22px;height:22px}
+.ft-icon{display:inline-flex;align-items:center;justify-content:center;line-height:0;flex-shrink:0}
+.ft-icon svg{width:17px;height:17px}
 .ft-label{display:inline}
 /* The notification filter bar sits in normal flow under the
    Notifications heading — it must not become a second sticky bar
@@ -798,7 +807,7 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
   .post-card{padding:14px 13px 10px}
   .post-actions{grid-template-columns:repeat(5,1fr)}
   .feed-tabs{position:sticky;top:57px;z-index:30}
-  /* Mobile ONLY: the main feed tab bar (Home / Following / Trending /
+  /* Mobile ONLY: the main feed tab bar (Home / Trending /
      Notifications) shows icons instead of words — evenly spaced,
      comfortably tappable, active tab keeps its highlighted pill.
      Other tab bars (notification filters, My Posts, followers) are
@@ -926,9 +935,9 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
       <section id="feedView">
         <div id="guestNote" class="guest-note hidden"><span class="pdot"></span><span>You are browsing as a <b>guest</b> — log in to react, comment, follow, post and message.</span></div>
         <div id="peopleResults" class="hidden"></div>
-        <div class="feed-tabs feed-main-tabs" role="tablist" aria-label="Feed filter"><button type="button" class="feed-tab active" data-feed-filter="all" role="tab" aria-selected="true" aria-label="Home" title="Home"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span><span class="ft-label">Home</span></button><button type="button" class="feed-tab" data-feed-filter="following" role="tab" aria-selected="false" aria-label="Following" title="Following"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="ft-label">Following</span> <span class="ft-count" id="followingCount"></span></button><button type="button" class="feed-tab" data-feed-filter="trending" role="tab" aria-selected="false" aria-label="Trending" title="Trending"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span><span class="ft-label">Trending</span></button><button type="button" class="feed-tab" data-feed-filter="notifications" role="tab" aria-selected="false" aria-label="Notifications" title="Notifications"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span><span class="ft-label">Notifications</span></button></div>
+        <div class="feed-tabs feed-main-tabs" role="tablist" aria-label="Feed filter"><button type="button" class="feed-tab active" data-feed-filter="all" role="tab" aria-selected="true" aria-label="Home" title="Home"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span><span class="ft-label">Home</span></button><button type="button" class="feed-tab" data-feed-filter="trending" role="tab" aria-selected="false" aria-label="Trending" title="Trending"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span><span class="ft-label">Trending</span></button><button type="button" class="feed-tab" data-feed-filter="notifications" role="tab" aria-selected="false" aria-label="Notifications" title="Notifications"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span><span class="ft-label">Notifications</span></button></div>
         <h2 class="view-title" id="feedTitle" style="margin-top:14px">Home Feed</h2>
-        <div id="notifFilterBar" class="feed-tabs hidden" role="tablist" aria-label="Notification filter" style="margin-top:12px"><button type="button" class="feed-tab" data-notif-filter="likes" role="tab" aria-selected="false">Likes <span class="ft-count" id="notifCountLikes"></span></button><button type="button" class="feed-tab" data-notif-filter="comments" role="tab" aria-selected="false">Comments <span class="ft-count" id="notifCountComments"></span></button><button type="button" class="feed-tab" data-notif-filter="follows" role="tab" aria-selected="false">Follows <span class="ft-count" id="notifCountFollows"></span></button></div>
+        <div id="notifFilterBar" class="feed-tabs hidden" role="tablist" aria-label="Notification filter" style="margin-top:12px"><button type="button" class="feed-tab" data-notif-filter="likes" role="tab" aria-selected="false">Likes <span class="ft-count" id="notifCountLikes"></span></button><button type="button" class="feed-tab" data-notif-filter="comments" role="tab" aria-selected="false">Comments <span class="ft-count" id="notifCountComments"></span></button><button type="button" class="feed-tab" data-notif-filter="follows" role="tab" aria-selected="false">Follows <span class="ft-count" id="notifCountFollows"></span></button><button type="button" class="feed-tab" data-notif-filter="following" role="tab" aria-selected="false">Following <span class="ft-count" id="notifCountFollowing"></span></button></div>
         <div id="feedList" style="display:flex;flex-direction:column;gap:14px;margin-top:12px"></div>
       </section>
 
@@ -1011,6 +1020,7 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
             <div class="profile-name-row">
               <div class="profile-name" id="detailFullName"></div>
               <button type="button" id="followProfileBtn" class="btn btn-sm hidden">Follow</button>
+              <span id="profileDotSlot"></span>
               <span class="label-pill hidden" id="profileLabelPill"></span>
             </div>
             <div class="profile-handle" id="detailUsername"></div>
@@ -1582,13 +1592,17 @@ let currentView='feed'; let previousView='feed';
 let guestMode=false; let guestPromptTimer=null; let guestPromptShown=false; let guestStartedAt=0; let guestExpired=false; const GUEST_PREVIEW_MS=15000;
 let viewedProfile=null; let selectedPeer=null;
 let feedQuery=''; let activeTag=''; let feedFilter='all';
-/* Notifications: a fourth feed tab (feedFilter==='notifications').
-   notifFilter is the sub-filter under the Notifications heading —
-   null = combined (likes + comments + follows together), or one of
-   'likes' | 'comments' | 'follows'. Tapping the active sub-filter
-   again returns to null (combined). No notifications table exists:
-   everything is computed live from post_likes, post_reactions,
-   post_comments and profile_follows already in the caches. */
+/* Notifications: one of the THREE feed tabs
+   (feedFilter==='notifications'; the bar is Home / Trending /
+   Notifications). notifFilter is the sub-filter under the
+   Notifications heading — null = combined (likes + comments +
+   follows together), or one of 'likes' | 'comments' | 'follows' |
+   'following'. Tapping the active sub-filter again returns to
+   null (combined). 'following' shows the Following feed (posts by
+   people I follow) inside Notifications — it is no longer a feed
+   tab of its own. No notifications table exists: everything is
+   computed live from post_likes, post_reactions, post_comments
+   and profile_follows already in the caches. */
 let notifFilter=null;
 const openCommentIds=new Set();
 let editingPostId=null; let sharePostId=null; let confirmCb=null;
@@ -2008,10 +2022,19 @@ document.addEventListener('click',e=>{if(!e.target.closest('.top-search'))closeS
 
 /* ---------- feed filter tabs ---------- */
 function setFeedFilter(f){
+  /* The feed bar has THREE tabs now — Home, Trending,
+     Notifications. The Following feed moved inside Notifications
+     as its fourth inner tab, so anything still asking for the old
+     'following' filter (an older deep link, saved state, a stray
+     caller) lands on Notifications → Following instead of
+     breaking. */
+  let wantFollowing=false;
+  if(f==='following'){f='notifications';wantFollowing=true;}
   /* Notifications are personal — a guest tapping the tab gets the
      same login prompt as any other member action, and the tab does
      not switch. */
   if(f==='notifications'&&!currentUser){showLoginPrompt();return;}
+  if(wantFollowing)notifFilter='following';
   feedFilter=f;
   document.querySelectorAll('[data-feed-filter]').forEach(b=>{
     const on=b.getAttribute('data-feed-filter')===f;
@@ -2024,10 +2047,13 @@ function setFeedFilter(f){
   if(f==='notifications')refreshNotifCache().then(()=>{if(feedFilter==='notifications'&&currentView==='feed')renderFeed();});
 }
 document.querySelectorAll('[data-feed-filter]').forEach(b=>b.addEventListener('click',()=>setFeedFilter(b.getAttribute('data-feed-filter'))));
-/* Notifications sub-filters — Likes / Comments / Follows, in that
-   order, directly under the Notifications heading. Tapping one
-   filters to that type only; tapping the active one again returns
-   to the combined view (notifFilter back to null). */
+/* Notifications sub-filters — Likes / Comments / Follows /
+   Following, in that order, directly under the Notifications
+   heading. Tapping one filters to that type only; tapping the
+   active one again returns to the combined view (notifFilter back
+   to null). 'following' is the odd one out: instead of a
+   notification type it shows the Following feed — the posts of
+   the people I follow — which used to be its own feed tab. */
 document.querySelectorAll('[data-notif-filter]').forEach(b=>b.addEventListener('click',()=>{
   const f=b.getAttribute('data-notif-filter');
   notifFilter=(notifFilter===f)?null:f;
@@ -2593,12 +2619,37 @@ function notifItemHtml(n){
     +(n.time?'<span class="notif-time" title="'+escapeHtml(formatDateTime(n.time))+'">'+escapeHtml(relTime(n.time))+'</span>':'')
     +'</button>';
 }
+/* The Following feed's posts: ONLY posts by people the signed-in
+   user follows (profile_follows), newest first (cachedPosts is
+   already newest-first and filtering preserves that order), with
+   hidden / deleted posts excluded — exactly what the old
+   Following feed tab showed. Own posts do not appear here. */
+function followingPosts(){
+  if(!currentUser)return [];
+  const fol=myFollowingSet();
+  return cachedPosts.filter(p=>!isPostHidden(p)&&!isPostDeleted(p)&&fol.has(p.author_email));
+}
 function notificationsListHtml(){
   const data=buildNotifications();
   const cl=document.getElementById('notifCountLikes');if(cl)cl.textContent='('+data.likes.length+')';
   const cc=document.getElementById('notifCountComments');if(cc)cc.textContent='('+data.comments.length+')';
   const cf=document.getElementById('notifCountFollows');if(cf)cf.textContent='('+data.follows.length+')';
+  /* The count that used to ride on the old Following feed tab now
+     rides on the inner Following tab: how many posts from people
+     I follow are currently in the feed. */
+  const cg=document.getElementById('notifCountFollowing');if(cg)cg.textContent='('+followingPosts().length+')';
   document.querySelectorAll('[data-notif-filter]').forEach(b=>{const on=b.getAttribute('data-notif-filter')===notifFilter;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false');});
+  /* Inner Following tab: the Following feed itself, rendered with
+     the same post cards and the same empty states the old
+     Following tab used. */
+  if(notifFilter==='following'){
+    const posts=followingPosts();
+    if(!posts.length){
+      if(currentUser&&myFollowingSet().size===0)return emptyState(IC.feed,'You are not following anyone yet','Follow people from the suggestions and their posts will appear here — only theirs, newest first.');
+      return emptyState(IC.feed,'No posts from people you follow yet','The people you follow have not posted yet. Their posts will appear here as soon as they do.');
+    }
+    return posts.map(postCardHtml).join('');
+  }
   const items=notifFilter?data[notifFilter]:data.all;
   if(!items.length){
     if(notifFilter==='likes')return emptyState(IC.heart,'No likes yet','When someone likes or reacts to one of your posts, it will show up here.');
@@ -2612,11 +2663,9 @@ function notificationsListHtml(){
 /* ---------- feed ---------- */
 function filteredPosts(){
   let posts=cachedPosts.filter(p=>!isPostHidden(p)&&!isPostDeleted(p));
-  /* Following = ONLY posts by people the signed-in user follows
-     (profile_follows). Own posts do not appear here — they live
-     under Home and in the separate My Posts view. cachedPosts is
-     already newest-first, and filtering preserves that order. */
-  if(feedFilter==='following'&&currentUser){const fol=myFollowingSet();posts=posts.filter(p=>fol.has(p.author_email));}
+  /* Following no longer reaches this function as a feed filter —
+     setFeedFilter routes it into Notifications → Following, whose
+     list comes from followingPosts() above. */
   if(activeTag)posts=posts.filter(p=>extractTags(p.content).includes(activeTag));
   if(feedQuery){
     posts=posts.filter(p=>{
@@ -2634,11 +2683,13 @@ function filteredPosts(){
 function renderFeed(){
   const list=document.getElementById('feedList');
   const title=document.getElementById('feedTitle');
-  const fc=document.getElementById('followingCount');if(fc&&currentUser)fc.textContent='('+cachedPosts.filter(p=>!isPostDeleted(p)&&myFollowingSet().has(p.author_email)).length+')';
   /* Notifications tab: the same feed list area becomes the
-     Notifications view — heading, Likes/Comments/Follows filter
-     bar directly under it, then the event list. A live search or
-     #tag still takes over the feed exactly as on the other tabs. */
+     Notifications view — heading, Likes/Comments/Follows/Following
+     filter bar directly under it, then the event list (or, on the
+     inner Following tab, the Following feed's post cards — those
+     go through observePostCards so their views count exactly as
+     they did on the old Following tab). A live search or #tag
+     still takes over the feed exactly as on the other tabs. */
   const nbar=document.getElementById('notifFilterBar');
   const isNotif=feedFilter==='notifications'&&!!currentUser&&!activeTag&&!feedQuery;
   if(nbar)nbar.classList.toggle('hidden',!isNotif);
@@ -2646,18 +2697,15 @@ function renderFeed(){
     title.textContent='Notifications';
     renderPeopleResults();
     list.innerHTML=notificationsListHtml();
+    observePostCards();
     return;
   }
-  title.textContent=activeTag?('Posts tagged '+activeTag):(feedQuery?('Results for "'+(globalSearch.value.trim())+'"'):(feedFilter==='following'?'Following':(feedFilter==='trending'?'Trending':'Home Feed')));
+  title.textContent=activeTag?('Posts tagged '+activeTag):(feedQuery?('Results for "'+(globalSearch.value.trim())+'"'):(feedFilter==='trending'?'Trending':'Home Feed'));
   renderPeopleResults();
   const posts=filteredPosts();
   if(!posts.length){
     let emptyTitle,emptyText;
     if(feedQuery||activeTag){emptyTitle='Nothing found';emptyText='Try a different search, or clear it to see the full feed.';}
-    else if(feedFilter==='following'){
-      if(currentUser&&myFollowingSet().size===0){emptyTitle='You are not following anyone yet';emptyText='Follow people from the suggestions and their posts will appear here — only theirs, newest first.';}
-      else{emptyTitle='No posts from people you follow yet';emptyText='The people you follow have not posted yet. Their posts will appear here as soon as they do.';}
-    }
     else if(feedFilter==='trending'){emptyTitle='Nothing trending yet';emptyText='Posts climb here as they collect reactions, comments and views. React to a post in Home to get it started.';}
     else{emptyTitle='No posts yet';emptyText='Be the first to share something — create it from My Posts.';}
     list.innerHTML=emptyState(IC.feed,emptyTitle,emptyText);return;
@@ -2875,12 +2923,16 @@ function renderProfile(){
   const coverTxt=coverTextFor(u).trim();
   coverEl.textContent=coverTxt;
   coverEl.classList.toggle('hidden',!coverTxt);
-  /* Presence dot is anchored to the big avatar's bottom-right
-     corner (see .profile-avatar-wrap) — the wrapper carries
-     data-profile-dot so the 60-second presence refresh can
-     repaint the dot in place. Privacy OFF returns '' from
-     profilePresenceDotHtml, so no dot and no tooltip at all. */
-  document.getElementById('detailAvatarWrap').innerHTML='<span class="profile-avatar-wrap">'+avatarHtml(u,'xl')+'<span data-profile-dot="'+escapeHtml(u.username)+'">'+profilePresenceDotHtml(isMe?Object.assign({},u,{last_seen:new Date().toISOString()}):u)+'</span></span>';
+  /* The big avatar carries NO presence dot any more. The profile
+     presence dot lives in the NAME ROW (see #profileDotSlot in the
+     markup, between the verified badge and the label pill) — the
+     slot carries data-profile-dot so the 60-second presence
+     refresh can repaint the dot in place. Privacy OFF returns ''
+     from profilePresenceDotHtml, so no dot and no tooltip at all,
+     and the empty slot collapses out of the row. */
+  document.getElementById('detailAvatarWrap').innerHTML=avatarHtml(u,'xl');
+  const dotSlot=document.getElementById('profileDotSlot');
+  if(dotSlot){dotSlot.setAttribute('data-profile-dot',u.username);dotSlot.innerHTML=profilePresenceDotHtml(isMe?Object.assign({},u,{last_seen:new Date().toISOString()}):u);}
   document.getElementById('detailFullName').innerHTML=escapeHtml(u.full_name)+badgeHtml(u.badge_type);
   /* One unified label pill on the profile: the server's
      profile_label text in the profile_label_color scheme; the
@@ -2906,9 +2958,10 @@ function renderProfile(){
      while not, and nothing at all when the member has hidden their
      active status in Settings. No status wording shows by default;
      hovering the dot (desktop) or tapping it (mobile) reveals it in
-     the dot's tooltip. The dot itself now lives on the avatar
-     (set above with detailAvatarWrap) — there is no standalone
-     presence row under the Joined pill any more. */
+     the dot's tooltip. The dot itself sits in the name row, between
+     the verified badge and the label pill (set above via
+     #profileDotSlot) — not on the avatar, and there is no
+     standalone presence row under the Joined pill either. */
   const followers=cachedFollows.filter(f=>f.following_email===u.system_email).length;
   const following=cachedFollows.filter(f=>f.follower_email===u.system_email).length;
   const posts=cachedPosts.filter(p=>p.author_username===u.username&&!isPostHidden(p)&&!isPostDeleted(p));
