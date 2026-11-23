@@ -629,18 +629,27 @@ body.guest-locked #authSection .auth-card{width:100%;max-width:460px;animation:g
 .feed-tab.active{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 4px 14px rgba(99,102,241,.3)}
 .feed-tab .ft-count{font-size:11px;opacity:.85;font-weight:600}
 .feed-tabs .feed-tab{white-space:nowrap;min-width:0}
-/* Main feed tab bar: icon + label structure. Desktop shows each
-   tab's SVG icon AND its word label side by side; on mobile
-   (≤820px, see the block below) the labels hide and the clean SVG
-   symbols stand alone. */
+/* Main feed tab bar: SYMBOLS ONLY on every viewport — each tab is
+   just its SVG icon (house / flame / bell), no word labels on
+   desktop or mobile. The name still rides on title / aria-label
+   for clarity, and the active tab keeps its highlighted pill. */
 .feed-main-tabs .feed-tab{display:inline-flex;align-items:center;justify-content:center;gap:6px;position:relative}
 .ft-icon{display:inline-flex;align-items:center;justify-content:center;line-height:0;flex-shrink:0}
 .ft-icon svg{width:17px;height:17px}
-.ft-label{display:inline}
+.feed-main-tabs .ft-icon svg{width:20px;height:20px}
 /* The notification filter bar sits in normal flow under the
    Notifications heading — it must not become a second sticky bar
    on mobile the way the main feed tab bar does. */
 #notifFilterBar{position:relative;top:auto}
+/* Notifications INNER tabs are symbols only too, on desktop and
+   mobile alike: heart = Likes, speech bubble = Comments,
+   person-plus = Follows (someone followed me), person-check =
+   Following (people I follow, and their posts). Only the words
+   went — each tab's count stays as a small number beside its
+   icon, and the active tab keeps its highlight. */
+#notifFilterBar .feed-tab{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+#notifFilterBar .ft-icon svg{width:18px;height:18px}
+#notifFilterBar .ft-count{font-size:12px;font-weight:700;opacity:.9}
 
 /* ---------- notifications ---------- */
 .notif-panel{padding:6px 0;overflow:hidden}
@@ -807,14 +816,12 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
   .post-card{padding:14px 13px 10px}
   .post-actions{grid-template-columns:repeat(5,1fr)}
   .feed-tabs{position:sticky;top:57px;z-index:30}
-  /* Mobile ONLY: the main feed tab bar (Home / Trending /
-     Notifications) shows icons instead of words — evenly spaced,
-     comfortably tappable, active tab keeps its highlighted pill.
-     Other tab bars (notification filters, My Posts, followers) are
-     not .feed-main-tabs and keep their text labels. */
+  /* The main feed tab bar is symbols-only at every width (see the
+     base .feed-main-tabs rules) — on mobile the icons simply grow
+     a little and the tabs get a comfortable tap height, with the
+     active tab keeping its highlighted pill. */
   .feed-main-tabs{gap:6px;padding:5px}
   .feed-main-tabs .feed-tab{min-height:2.85rem;padding:10px 4px}
-  .feed-main-tabs .ft-label{display:none}
   .feed-main-tabs .ft-icon{display:inline-flex}
   .feed-main-tabs .ft-icon svg{width:23px;height:23px}
   .feed-main-tabs .ft-count{position:absolute;top:4px;right:calc(50% - 21px);min-width:17px;height:15px;padding:0 4px;border-radius:999px;background:#0b0f19;border:1px solid rgba(255,255,255,.35);color:#fff;font-size:9px;font-weight:800;line-height:13px;display:inline-flex;align-items:center;justify-content:center;opacity:1;pointer-events:none}
@@ -935,9 +942,9 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
       <section id="feedView">
         <div id="guestNote" class="guest-note hidden"><span class="pdot"></span><span>You are browsing as a <b>guest</b> — log in to react, comment, follow, post and message.</span></div>
         <div id="peopleResults" class="hidden"></div>
-        <div class="feed-tabs feed-main-tabs" role="tablist" aria-label="Feed filter"><button type="button" class="feed-tab active" data-feed-filter="all" role="tab" aria-selected="true" aria-label="Home" title="Home"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span><span class="ft-label">Home</span></button><button type="button" class="feed-tab" data-feed-filter="trending" role="tab" aria-selected="false" aria-label="Trending" title="Trending"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span><span class="ft-label">Trending</span></button><button type="button" class="feed-tab" data-feed-filter="notifications" role="tab" aria-selected="false" aria-label="Notifications" title="Notifications"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span><span class="ft-label">Notifications</span></button></div>
+        <div class="feed-tabs feed-main-tabs" role="tablist" aria-label="Feed filter"><button type="button" class="feed-tab active" data-feed-filter="all" role="tab" aria-selected="true" aria-label="Home" title="Home"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span></button><button type="button" class="feed-tab" data-feed-filter="trending" role="tab" aria-selected="false" aria-label="Trending" title="Trending"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span></button><button type="button" class="feed-tab" data-feed-filter="notifications" role="tab" aria-selected="false" aria-label="Notifications" title="Notifications"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span></button></div>
         <h2 class="view-title" id="feedTitle" style="margin-top:14px">Home Feed</h2>
-        <div id="notifFilterBar" class="feed-tabs hidden" role="tablist" aria-label="Notification filter" style="margin-top:12px"><button type="button" class="feed-tab" data-notif-filter="likes" role="tab" aria-selected="false">Likes <span class="ft-count" id="notifCountLikes"></span></button><button type="button" class="feed-tab" data-notif-filter="comments" role="tab" aria-selected="false">Comments <span class="ft-count" id="notifCountComments"></span></button><button type="button" class="feed-tab" data-notif-filter="follows" role="tab" aria-selected="false">Follows <span class="ft-count" id="notifCountFollows"></span></button><button type="button" class="feed-tab" data-notif-filter="following" role="tab" aria-selected="false">Following <span class="ft-count" id="notifCountFollowing"></span></button></div>
+        <div id="notifFilterBar" class="feed-tabs hidden" role="tablist" aria-label="Notification filter" style="margin-top:12px"><button type="button" class="feed-tab" data-notif-filter="likes" role="tab" aria-selected="false" aria-label="Likes" title="Likes"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span><span class="ft-count" id="notifCountLikes"></span></button><button type="button" class="feed-tab" data-notif-filter="comments" role="tab" aria-selected="false" aria-label="Comments" title="Comments"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span><span class="ft-count" id="notifCountComments"></span></button><button type="button" class="feed-tab" data-notif-filter="follows" role="tab" aria-selected="false" aria-label="Follows" title="Follows"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21a8 8 0 0 1 11.384-6.276"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg></span><span class="ft-count" id="notifCountFollows"></span></button><button type="button" class="feed-tab" data-notif-filter="following" role="tab" aria-selected="false" aria-label="Following" title="Following"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21a8 8 0 0 1 11.384-6.276"/><circle cx="10" cy="8" r="5"/><path d="m16 19 2 2 4-4"/></svg></span><span class="ft-count" id="notifCountFollowing"></span></button></div>
         <div id="feedList" style="display:flex;flex-direction:column;gap:14px;margin-top:12px"></div>
       </section>
 
@@ -1404,7 +1411,12 @@ function avatarHtml(user,sizeCls,showPresence){
   const name=user.full_name||user.username||'G';const uname=user.username||name;
   const diamond=normalizeBadge(user.badge_type)==='diamond';
   const online=showPresence&&isActive(user);
-  return '<span class="avatar '+(sizeCls||'')+(diamond?' diamond-frame':'')+'" style="background:'+(diamond?'':avatarGradient(uname))+'">'+escapeHtml(letterAvatar(name))+((showPresence&&showsActiveStatus(user))?'<span class="presence-dot'+(online?' online':'')+'"></span>':'')+'</span>';
+  /* The avatar presence dot obeys the mutual-follow gate
+     (canSeePresence): no dot at all for one-way relationships.
+     The data-presence-avatar attribute lets updatePresenceDom
+     repaint the dot in place when the gate flips (follow back /
+     unfollow, 60-second presence refresh). */
+  return '<span class="avatar '+(sizeCls||'')+(diamond?' diamond-frame':'')+'" style="background:'+(diamond?'':avatarGradient(uname))+'"'+(showPresence?' data-presence-avatar="'+escapeHtml(uname)+'"':'')+'>'+escapeHtml(letterAvatar(name))+((showPresence&&canSeePresence(user))?'<span class="presence-dot'+(online?' online':'')+'"></span>':'')+'</span>';
 }
 /* ---------- active-status privacy ----------
    system_accounts.show_active_status (boolean, default true) is the
@@ -1426,6 +1438,26 @@ function showsActiveStatus(u){
   }
   return true;
 }
+/* ---------- presence visibility: MUTUAL follows only ----------
+   On top of the show_active_status switch above, a member's
+   presence (profile dot + tooltip, avatar dots, "Active now /
+   Last active" lines) is visible to a viewer ONLY when the two
+   follow EACH OTHER. A one-way follow in either direction shows
+   nothing at all — not even a grey dot, since even that would
+   leak that the person has an activity state. You always see
+   your OWN presence normally. Guests follow nobody, so they see
+   no presence anywhere. Every presence surface goes through this
+   one gate, and the repaint paths (the 60-second presence
+   refresh and follow / unfollow toggles, both of which call
+   updatePresenceDom) re-evaluate it, so following back or
+   unfollowing changes visibility immediately. */
+function canSeePresence(u){
+  if(!u)return false;
+  if(!showsActiveStatus(u))return false;
+  if(!currentUser)return false;
+  if(u.system_email===currentUser.system_email)return true;
+  return isMutualPeer(u.system_email);
+}
 /* Profile pages show presence as a DOT ONLY — bright green while the
    person is active, plain grey when they are not, and nothing at all
    when they have hidden their active status. No wording by default:
@@ -1435,7 +1467,9 @@ function showsActiveStatus(u){
    mobile (see .profile-dot-wrap / .profile-presence-tip and the
    tap-toggle listener by the follow button). */
 function profilePresenceDotHtml(u){
-  if(!u||!showsActiveStatus(u))return '';
+  /* Mutual-follow gate: a non-mutual viewer gets NO dot and NO
+     tooltip on this profile — not even a grey/inactive one. */
+  if(!canSeePresence(u))return '';
   const status=lastActiveText(u);
   return '<span class="profile-dot-wrap" tabindex="0" role="button" aria-label="'+escapeHtml(status)+'"><span class="profile-presence-dot'+(isActive(u)?' online':'')+'"></span><span class="profile-presence-tip" role="tooltip">'+escapeHtml(status)+'</span></span>';
 }
@@ -1454,7 +1488,7 @@ function lastActiveText(u){
   if(days===1)return 'Last active yesterday at '+time;
   return 'Last active '+d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' at '+time;
 }
-function presenceHtml(u){if(u&&!showsActiveStatus(u))return '';const on=isActive(u);return '<span class="presence-line'+(on?' online':'')+'"'+(u&&u.last_seen?' title="Last seen '+escapeHtml(formatDateTime(u.last_seen))+'"':'')+'><span class="pdot"></span>'+escapeHtml(lastActiveText(u))+'</span>';}
+function presenceHtml(u){if(!canSeePresence(u))return '';const on=isActive(u);return '<span class="presence-line'+(on?' online':'')+'"'+(u&&u.last_seen?' title="Last seen '+escapeHtml(formatDateTime(u.last_seen))+'"':'')+'><span class="pdot"></span>'+escapeHtml(lastActiveText(u))+'</span>';}
 function presenceSpan(u){return '<span data-presence="'+escapeHtml(u.username)+'">'+presenceHtml(u)+'</span>';}
 function isPostDeleted(p){return !!(p&&p.deleted_at);}
 function autoDeleteText(p){
@@ -1993,7 +2027,7 @@ function renderSearchDropdown(){
   const tags=Object.keys(tagCounts).filter(tg=>tg.includes(q)||tg.replace('#','').includes(q)).slice(0,4);
   const posts=cachedPosts.filter(pp=>!isPostDeleted(pp)&&(plainText(pp.content).toLowerCase().includes(q)||(pp.author_name||'').toLowerCase().includes(q)||(pp.author_username||'').toLowerCase().includes(q))).slice(0,3);
   let html='';
-  if(people.length){html+='<div class="search-sec">People</div>'+people.map(u=>'<button type="button" class="search-item" data-search-person="'+escapeHtml(u.username)+'">'+avatarHtml(u,'sm',true)+'<span class="si-main"><span class="si-title">'+escapeHtml(u.full_name)+badgeHtml(u.badge_type)+'</span><span class="si-sub">@'+escapeHtml(u.username)+' · '+escapeHtml(lastActiveText(u))+'</span></span></button>').join('');}
+  if(people.length){html+='<div class="search-sec">People</div>'+people.map(u=>'<button type="button" class="search-item" data-search-person="'+escapeHtml(u.username)+'">'+avatarHtml(u,'sm',true)+'<span class="si-main"><span class="si-title">'+escapeHtml(u.full_name)+badgeHtml(u.badge_type)+'</span><span class="si-sub">@'+escapeHtml(u.username)+(canSeePresence(u)?' · '+escapeHtml(lastActiveText(u)):'')+'</span></span></button>').join('');}
   if(tags.length){html+='<div class="search-sec">Hashtags</div>'+tags.map(tg=>'<button type="button" class="search-item" data-search-tag="'+escapeHtml(tg)+'"><span class="si-tag">'+escapeHtml(tg)+'</span><span class="si-sub">'+tagCounts[tg]+' post'+(tagCounts[tg]===1?'':'s')+'</span></button>').join('');}
   if(posts.length){html+='<div class="search-sec">Posts</div>'+posts.map(pp=>'<button type="button" class="search-item" data-search-post="'+escapeHtml(String(pp.id))+'"><span class="si-main"><span class="si-title">@'+escapeHtml(pp.author_username)+' · '+relTime(pp.created_at)+'</span><span class="si-sub">'+escapeHtml(plainText(pp.content).slice(0,90))+'</span></span></button>').join('');}
   if(!html)html='<div class="search-empty">No matches for &ldquo;'+escapeHtml(raw)+'&rdquo;.<br/>Try a name, a @username, or a #tag.</div>';
@@ -2371,6 +2405,12 @@ async function markConversationRead(peerEmail){
 function updatePresenceDom(){
   document.querySelectorAll('[data-presence]').forEach(el=>{const u=userByUsername(el.getAttribute('data-presence'));if(u)el.innerHTML=presenceHtml(u);});
   document.querySelectorAll('[data-profile-dot]').forEach(el=>{const u=userByUsername(el.getAttribute('data-profile-dot'));if(u){const isMe=currentUser&&u.system_email===currentUser.system_email;el.innerHTML=profilePresenceDotHtml(isMe?Object.assign({},u,{last_seen:new Date().toISOString()}):u);}});
+  /* Avatar presence dots are baked in at render time, so repaint
+     them here too: the mutual-follow gate is re-evaluated on
+     every presence refresh and every follow toggle — a dot
+     appears the moment a follow becomes mutual and disappears
+     the moment it stops being mutual. */
+  document.querySelectorAll('[data-presence-avatar]').forEach(el=>{const u=userByUsername(el.getAttribute('data-presence-avatar'));if(!u)return;const old=el.querySelector('.presence-dot');if(old)old.remove();if(canSeePresence(u)){const d=document.createElement('span');d.className='presence-dot'+(isActive(u)?' online':'');el.appendChild(d);}});
 }
 async function refreshPresence(){
   if(!currentUser||!ghostDb){updatePresenceDom();return;}
@@ -2737,7 +2777,9 @@ function personRowHtml(u,isFollowing,opts){
 }
 function renderStories(){
   const row=document.getElementById('storiesRow');if(!row)return;
-  const others=allUsers.filter(u=>u.system_email!==currentUser.system_email);
+  /* Presence is mutual-only, so this row only ever lists mutual
+     friends — anyone else's active state is not shown here. */
+  const others=allUsers.filter(u=>u.system_email!==currentUser.system_email&&isMutualPeer(u.system_email));
   const sorted=others.slice().sort((a,b)=>(isActive(b)?1:0)-(isActive(a)?1:0));
   const activeN=sorted.filter(isActive).length;
   document.getElementById('activeCount').textContent=activeN?activeN+' online':'';
@@ -3456,6 +3498,11 @@ async function toggleFollow(email){
      mutual follow, which moves this chat between Personal and
      Brand — repaint the list so the move shows immediately. */
   if(amBrand()&&currentView==='messages')renderUsersList();
+  /* A follow / unfollow can complete or break a MUTUAL follow,
+     which is exactly the presence gate — repaint every presence
+     surface (avatar dots, presence lines, the profile dot) so
+     the change in who can see whose active status shows at once. */
+  updatePresenceDom();
   const target=userByEmail(email);
   toast(following?('Unfollowed '+(target?'@'+target.username:'user')):('Following '+(target?'@'+target.username:'user')));
 }
