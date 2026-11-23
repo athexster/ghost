@@ -416,6 +416,9 @@ svg.ic{width:19px;height:19px;flex-shrink:0}
 .right-rail{position:sticky;top:76px;display:flex;flex-direction:column;gap:16px}
 .widget{background:var(--bg-rail);border:1px solid var(--line);border-radius:20px;padding:16px}
 .widget h3{margin:0 0 13px;font-size:14.5px;font-weight:800}
+/* People to follow lists EVERY real account (no cap), so the list
+   scrolls inside its widget once it grows past a few rows. */
+#suggestList{max-height:344px;overflow-y:auto;scrollbar-width:thin}
 .person-row{display:flex;align-items:center;gap:10px;padding:7px 6px;border-radius:12px}
 .person-row:hover{background:var(--bg-card)}
 .person-open{display:flex;align-items:center;gap:10px;min-width:0;flex:1;background:none;border:none;cursor:pointer;text-align:left;color:var(--ink);padding:0}
@@ -667,113 +670,6 @@ body.guest-locked #authSection .auth-card{width:100%;max-width:460px;justify-sel
 .peer-section-tag{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;flex-shrink:0}
 .peer-section-tag.personal{background:rgba(34,197,94,.13);color:#4ade80;border:1px solid rgba(34,197,94,.35)}
 .peer-section-tag.brand{background:rgba(245,158,11,.12);color:#fbbf24;border:1px solid rgba(245,158,11,.38)}
-/* Official Ghost chat: a pinned conversation slot at the very top
-   of the Messages sidebar — above the brand Personal/Brand tabs —
-   shown to EVERY logged-in user. The row carries the diamond badge
-   and a small gold "Official" pill so it can never be mistaken for
-   a normal member chat, and it is never part of the tab filtering. */
-.official-chat-slot{display:flex;flex-direction:column}
-.user-item.official{border-color:rgba(245,158,11,.5);background:linear-gradient(135deg,rgba(245,158,11,.13),rgba(99,102,241,.12))}
-.user-item.official:hover{background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(99,102,241,.18))}
-.user-item.official.active{border-color:rgba(245,158,11,.75);background:linear-gradient(135deg,rgba(245,158,11,.22),rgba(99,102,241,.2))}
-.label-pill.official-pill{font-size:10.5px;padding:2px 9px;margin-left:7px;letter-spacing:.03em;box-shadow:0 1px 6px var(--pill-glow)}
-/* Official chat PAGE — Ghost Official's own main view (left
-   sidebar "Ghost Official", ⋮ menu, or the Message button on
-   the Ghost profile): a dedicated single-conversation chat
-   screen. Ghost's identity sits in the header (avatar, name,
-   diamond badge, gold "Official" pill), the full thread scrolls
-   in its own box, and the "Get temporary login pass" bar and
-   the composer close the card. NOT the Messages inbox and not
-   a popup; the thread's unread count rides on the sidebar nav
-   item's badge and the ⋮ menu entry instead, and never counts
-   into the Messages nav badge. */
-.offpage-card{padding:0;overflow:hidden}
-.offpage-head{display:flex;align-items:center;gap:11px;padding:14px 16px 12px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(245,158,11,.13),rgba(99,102,241,.10))}
-.offpage-head-main{min-width:0}
-.offpage-name{font-size:15.5px;font-weight:800;display:flex;align-items:center;line-height:1.25}
-.offpage-sub{font-size:12px;color:#fbbf24;display:block;margin-top:2px}
-.offpage-thread{height:52vh;min-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:9px;padding:14px;scrollbar-width:thin}
-.oc-bubble{background:var(--bg-card-alt);border:1px solid var(--line);border-radius:13px;border-top-left-radius:5px;padding:8px 11px;font-size:12.8px;line-height:1.55;color:var(--ink);max-width:88%;overflow-wrap:anywhere;white-space:pre-wrap}
-.oc-bubble.me{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;border:none;border-top-left-radius:13px;border-top-right-radius:5px}
-.oc-time{display:block;font-size:10px;opacity:.6;margin-top:3px;text-align:right}
-.oc-empty{padding:4px 2px;font-size:12.5px;color:var(--ink-2);line-height:1.55}
-.offpage-form{border-top:1px solid var(--line)}
-/* "Copy" chip on Ghost messages that deliver a code (the
-   8-character login pass or the 6-digit password-change code) —
-   rendered in the rail thread and in the full official chat. */
-.code-copy-btn{display:inline-flex;align-items:center;gap:5px;margin-top:7px;padding:4px 11px;border-radius:999px;border:1px solid rgba(245,158,11,.55);background:rgba(245,158,11,.14);color:#fbbf24;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit}
-.code-copy-btn:hover{background:rgba(245,158,11,.26)}
-.code-copy-btn svg{width:12px;height:12px}
-/* Official chat page: the pass-button bar that sits directly
-   above the composer on the Ghost Official page. */
-.official-pass-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 12px;border-top:1px solid var(--line);background:linear-gradient(135deg,rgba(245,158,11,.10),rgba(99,102,241,.08))}
-/* Settings → Change Password: the verification-code row (code
-   input + "Send code" button side by side). */
-.code-row{display:flex;gap:8px;align-items:stretch}
-.code-row input{flex:1;min-width:0}
-.code-row .btn{flex-shrink:0;white-space:nowrap}
-/* mobile ⋮ menu: the Ghost Official entry's unread badge */
-.top-dots-item .tm-unread{margin-left:auto;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--heart);color:#fff;font-size:10.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center}
-/* AI page tools row — the "Clear history" button under the
-   Assistant's intro line. */
-.ai-tools{display:flex;justify-content:flex-end;margin-top:8px}
-.ai-tag{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;min-width:26px;border-radius:8px;background:linear-gradient(135deg,var(--cyan),var(--brand));color:#fff;font-size:10.5px;font-weight:900;letter-spacing:.04em;flex-shrink:0}
-.sys-tab .ai-tag{width:20px;height:20px;min-width:20px;border-radius:6px;font-size:9px}
-.ai-tag-lg{width:30px;height:30px;border-radius:9px;font-size:12px;vertical-align:-7px;margin-right:2px}
-.ai-pane{display:flex;flex-direction:column}
-.ai-msgs{max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:9px;padding:12px;scrollbar-width:thin}
-.ai-row{display:flex;gap:7px;align-items:flex-start}
-.ai-row.me{justify-content:flex-end}
-.ai-bubble{background:var(--bg-card-alt);border:1px solid var(--line);border-radius:13px;border-top-left-radius:5px;padding:8px 11px;font-size:12.8px;line-height:1.55;color:var(--ink);max-width:88%;overflow-wrap:anywhere}
-.ai-bubble.me{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;border:none;border-top-left-radius:13px;border-top-right-radius:5px}
-.ai-action-btn{margin-top:8px}
-.ai-form{display:flex;gap:7px;padding:10px 12px 12px;border-top:1px solid var(--line)}
-.ai-form input{flex:1;min-width:0;height:38px;border-radius:999px;padding:0 14px;background:var(--bg-input);border:1px solid var(--line);color:var(--ink);font-family:inherit;font-size:13px;outline:none}
-.ai-form input:focus{border-color:var(--line-focus)}
-.ai-send{border-radius:999px;width:38px;height:38px;min-width:38px;padding:0;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
-.ai-send svg{width:16px;height:16px}
-.ai-card-m{margin-top:14px;padding:0;overflow:hidden}
-.ai-msgs-m{max-height:52vh}
-/* AI page — MULTI-CHAT layout: a conversation list beside the
-   open chat, like a real chat app. Desktop gets the wide shell
-   (and the app layout itself widens while the AI page is open —
-   see the :has rules in the min-width:821px block below) so the
-   reading area uses the bigger display; on mobile the two panes
-   stack: the list shows first, tapping a chat swaps it for the
-   full-width conversation, and "← Chats" swaps back. */
-.ai-shell{display:grid;grid-template-columns:264px minmax(0,1fr);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--bg-card);height:min(74vh,760px);min-height:500px;margin-top:14px}
-.ai-list-pane{border-right:1px solid var(--line);background:rgba(11,15,25,.5);display:flex;flex-direction:column;min-height:0}
-.ai-list-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 12px 10px}
-.ai-list-head h3{margin:0;font-size:13px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-2)}
-.ai-chat-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:5px;padding:0 10px 12px;min-height:0;scrollbar-width:thin}
-.ai-chat-item{display:flex;align-items:flex-start;gap:8px;padding:10px;border-radius:12px;border:1px solid transparent;background:transparent;cursor:pointer;width:100%;text-align:left;color:var(--ink)}
-.ai-chat-item:hover{background:var(--bg-card-alt)}
-.ai-chat-item.active{border-color:var(--line-focus);background:rgba(99,102,241,.14)}
-.ai-chat-item-main{flex:1;min-width:0;display:flex;flex-direction:column}
-.ai-chat-item-title{font-size:13.5px;font-weight:700;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ai-chat-item-time{font-size:11px;color:var(--ink-3);margin-top:2px}
-.ai-chat-del{flex-shrink:0;width:28px;height:28px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--ink-3);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
-.ai-chat-del:hover{color:#fda4af;background:rgba(244,63,94,.12);border-color:rgba(244,63,94,.35)}
-.ai-chat-del svg{width:15px;height:15px}
-.ai-list-empty{padding:16px 12px;font-size:12.5px;color:var(--ink-3);line-height:1.55}
-.ai-chat-pane{display:flex;flex-direction:column;min-height:0;background:var(--bg-input)}
-.ai-chat-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--bg-card-alt)}
-.ai-chat-head-title{flex:1;min-width:0;font-weight:800;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ai-list-back{display:none}
-.ai-shell .ai-msgs{flex:1;max-height:none;min-height:0;padding:16px}
-.ai-shell .ai-bubble{font-size:13.5px;max-width:82%}
-@media (max-width:820px){
-  .ai-shell{grid-template-columns:1fr;height:min(72dvh,640px);min-height:430px}
-  .ai-shell .ai-chat-pane{display:none}
-  .ai-shell.chat-open .ai-chat-pane{display:flex}
-  .ai-shell.chat-open .ai-list-pane{display:none}
-  .ai-list-back{display:inline-flex}
-}
-/* Settings → Change Password: the live code-expiry countdown.
-   It keeps ticking from the code's real expiry timestamp while
-   the user is off in the official chat copying the code, so on
-   return the remaining time is exact. */
-#pwCodeTimer{font-weight:700;color:#f59e0b}
 
 /* ---------- drive (private notebook) ---------- */
 .drive-meter-card{padding:16px 20px;margin-top:14px}
@@ -938,12 +834,6 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
   .top-search{position:absolute;left:50%;transform:translateX(-50%);width:min(430px,calc(100% - 340px));max-width:430px;flex:none}
   .app-layout{flex:1 1 auto;min-height:0;width:100%;padding-bottom:20px}
   .app-layout:has(#messagesView:not(.hidden)){align-items:stretch;grid-template-rows:minmax(0,1fr)}
-  /* While the AI page is open, the center column takes the whole
-     width the right rail would have used (the rail steps aside),
-     so the chat list + conversation get the bigger desktop
-     display the page was designed for. */
-  .app-layout:has(#aiView:not(.hidden)){grid-template-columns:238px minmax(0,1fr)}
-  .app-layout:has(#aiView:not(.hidden)) .right-rail{display:none}
   .app-layout:has(#messagesView:not(.hidden)) .left-rail,
   .app-layout:has(#messagesView:not(.hidden)) .right-rail{align-self:start}
   .app-layout:has(#messagesView:not(.hidden)) .center-col{min-height:0}
@@ -1125,8 +1015,6 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
             <button type="button" class="top-dots-item" data-topmenu="myposts" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>My Posts</button>
             <button type="button" class="top-dots-item" data-topmenu="saved" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Saved</button>
             <button type="button" class="top-dots-item" data-topmenu="drive" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><path d="M6 16h.01"/><path d="M10 16h.01"/></svg>Drive</button>
-            <button type="button" class="top-dots-item hidden" id="topMenuOfficialItem" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>Ghost Official<span class="tm-unread hidden" id="topMenuOfficialUnread"></span></button>
-            <button type="button" class="top-dots-item" id="topMenuAiItem" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg>AI Assistant</button>
           </div>
         </div>
       </div>
@@ -1141,9 +1029,7 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
         <button type="button" class="nav-link" data-nav="messages"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>Messages<span class="count-badge hidden" id="msgBadge"></span></button>
         <button type="button" class="nav-link" data-nav="myposts"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>My Posts</button>
         <button type="button" class="nav-link" data-nav="saved"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Saved</button>
-        <button type="button" class="nav-link" data-nav="ai"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg>AI</button>
         <button type="button" class="nav-link" data-nav="drive"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><path d="M6 16h.01"/><path d="M10 16h.01"/></svg>Drive</button>
-        <button type="button" class="nav-link" data-nav="official"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>Ghost Official<span class="count-badge hidden" id="officialNavBadge"></span></button>
         <button type="button" class="nav-link" data-nav="profile"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</button>
         <button type="button" class="nav-link" data-nav="settings"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>Settings</button>
       </nav>
@@ -1320,12 +1206,11 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
             <span class="expand-row-arrow" aria-hidden="true">▾</span>
           </button>
           <div id="changePasswordBody" class="expand-body hidden">
-          <p class="sub">Confirm your current password, choose a new one, and enter the verification code Ghost sends to your official chat. The change is saved on the server right away and you stay logged in.</p>
+          <p class="sub">Confirm your current password and choose a new one. The change is saved on the server right away and you stay logged in.</p>
           <form id="changePasswordForm">
             <div class="field"><label for="currentPassword">Current password</label><div class="pass-wrap"><input type="password" id="currentPassword" placeholder="Enter your current password" autocomplete="current-password" required /><button type="button" class="pass-toggle" data-pass-toggle="currentPassword" aria-label="Show password" aria-pressed="false" title="Show / hide password"><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg><svg class="ic-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.4 10.4 0 0 1 12 5c7 0 10 7 10 7a13.2 13.2 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.39-1.61"/><path d="m2 2 20 20"/></svg></button></div></div>
             <div class="field"><label for="newPassword">New password</label><div class="pass-wrap"><input type="password" id="newPassword" placeholder="Create a new password (min. 6 characters)" autocomplete="new-password" required /><button type="button" class="pass-toggle" data-pass-toggle="newPassword" aria-label="Show password" aria-pressed="false" title="Show / hide password"><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg><svg class="ic-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.4 10.4 0 0 1 12 5c7 0 10 7 10 7a13.2 13.2 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.39-1.61"/><path d="m2 2 20 20"/></svg></button></div><div class="pass-hint">At least 6 characters. Tap the eye to check what you typed.</div></div>
             <div class="field"><label for="confirmNewPassword">Confirm new password</label><div class="pass-wrap"><input type="password" id="confirmNewPassword" placeholder="Type the new password again" autocomplete="new-password" required /><button type="button" class="pass-toggle" data-pass-toggle="confirmNewPassword" aria-label="Show password" aria-pressed="false" title="Show / hide password"><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg><svg class="ic-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.4 10.4 0 0 1 12 5c7 0 10 7 10 7a13.2 13.2 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.39-1.61"/><path d="m2 2 20 20"/></svg></button></div></div>
-            <div class="field"><label for="pwChangeCode">Verification code</label><div class="code-row"><input type="text" id="pwChangeCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6-digit code from Ghost" /><button type="button" class="btn btn-secondary" id="sendPwCodeBtn">Send code</button></div><div class="pass-hint">Tap “Send code” and Ghost posts a 6-digit code to your official chat (sidebar → Ghost Official · mobile: ⋮ menu → Ghost Official). The password only changes when the code you type here matches — it stays valid for 5 minutes and works once.</div><div class="pass-hint hidden" id="pwCodeTimer" role="status"></div></div>
             <button type="submit" class="btn" id="changePasswordBtn">Change password</button>
             <div id="changePasswordMsg" class="msg"></div>
           </form>
@@ -1375,63 +1260,6 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
         </div>
       </section>
 
-      <!-- AI PAGE — the on-device Assistant's own full page
-           (sidebar "AI", ⋮ menu → AI Assistant, or the Message
-           button on the Ghost AI profile). A proper multi-chat
-           page: a list of separate conversations (each with its
-           own history), a "+ New chat" button, per-chat delete,
-           all remembered per account on this device (localStorage,
-           keyed by system_email). Desktop shows the list and the
-           open chat side by side in a widened layout; mobile
-           stacks them — list first, tap a chat to open it
-           full-width, "← Chats" goes back to the list. -->
-      <section id="aiView" class="hidden">
-        <button type="button" class="btn btn-ghost btn-sm" id="aiBackBtn" style="margin-bottom:10px">← Back</button>
-        <h2 class="view-title"><span class="ai-tag ai-tag-lg" aria-hidden="true">AI</span>Assistant</h2>
-        <p class="meta-small" style="margin:6px 0 0">Ghost's built-in helper — ask it for maths (roots and powers too), simple general knowledge like a country's capital, a joke, a little chat, or how anything in Ghost works. It runs right here on your device. Every chat below is kept separately on this device: start a new one any time, tap an old one to carry on where you left off, or delete the ones you don't need.</p>
-        <div class="ai-shell" id="aiShell">
-          <aside class="ai-list-pane">
-            <div class="ai-list-head"><h3>Your chats</h3><button type="button" class="btn btn-sm" id="aiNewChatBtn">+ New chat</button></div>
-            <div class="ai-chat-list" id="aiChatList"></div>
-          </aside>
-          <div class="ai-chat-pane">
-            <div class="ai-chat-head">
-              <button type="button" class="btn btn-ghost btn-sm ai-list-back" id="aiListBackBtn">← Chats</button>
-              <span class="ai-chat-head-title" id="aiChatTitle">New chat</span>
-              <button type="button" class="btn btn-ghost btn-sm" id="aiClearBtn">Clear chat</button>
-            </div>
-            <div class="ai-msgs ai-msgs-m" id="aiMsgsM" aria-live="polite"></div>
-            <form class="ai-form" id="aiFormM">
-              <input type="text" id="aiInputM" placeholder="Ask me — try 15% of 2400…" autocomplete="off" maxlength="300" aria-label="Message the AI assistant" />
-              <button type="submit" class="btn ai-send" aria-label="Send" title="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      <!-- OFFICIAL CHAT PAGE — Ghost Official's own full page
-           (sidebar "Ghost Official", ⋮ menu → Ghost Official, or
-           the Message button on the Ghost profile). A dedicated
-           single-conversation chat screen: NOT the Messages inbox
-           and not a popup. The full official thread lives here —
-           composer, "Get temporary login pass" button, Copy chips
-           on code messages, login alerts — and the thread stays
-           out of the Messages inbox exactly as before. -->
-      <section id="officialView" class="hidden">
-        <button type="button" class="btn btn-ghost btn-sm" id="officialBackBtn" style="margin-bottom:10px">← Back</button>
-        <div class="card offpage-card">
-          <div class="offpage-head">
-            <span id="offPageAvatar"></span>
-            <span class="offpage-head-main"><span class="offpage-name" id="offPageName">Ghost</span><span class="offpage-sub" id="offPageSub">@ghost · Verified official chat</span></span>
-          </div>
-          <div class="offpage-thread" id="officialThread" aria-live="polite"></div>
-          <div class="official-pass-bar"><button type="button" class="btn btn-sm btn-secondary" id="offPagePassBtn">🔑 Get temporary login pass</button><span class="meta-small">A one-time login code from Ghost — valid 5 minutes, works once.</span></div>
-          <form class="ai-form offpage-form" id="officialForm">
-            <input type="text" id="officialInput" placeholder="Message Ghost…" autocomplete="off" maxlength="2000" aria-label="Message Ghost Official" />
-            <button type="submit" class="btn ai-send" aria-label="Send" title="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
-          </form>
-        </div>
-      </section>
     </main>
 
     <!-- RIGHT RAIL -->
@@ -1449,8 +1277,7 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
         <div id="activeList"></div>
       </div>
       <!-- The right rail ends here: People to follow, Trending,
-           Active now — nothing else. The Assistant and Ghost
-           Official live in the LEFT SIDEBAR as their own pages. -->
+           Active now — nothing else. -->
     </aside>
   </div>
 
@@ -2055,7 +1882,7 @@ function amBrand(){return currentUser?isBrandAccount(currentUser):false;}
    stored state to go stale. */
 function isMutualPeer(email){if(!currentUser||!email)return false;return myFollowingSet().has(email)&&myFollowersSet().has(email);}
 function peerSection(email){return isMutualPeer(email)?'personal':'brand';}
-function unreadForSection(sec){if(!currentUser)return 0;return cachedMessages.filter(m=>!isOfficialEmail(m.sender_email)&&isUnreadMsg(m)&&peerSection(m.sender_email)===sec).length;}
+function unreadForSection(sec){if(!currentUser)return 0;return cachedMessages.filter(m=>isUnreadMsg(m)&&peerSection(m.sender_email)===sec).length;}
 /* Guarded server read of is_brand for every loaded account — the
    same probe pattern as is_creator / profile_label. If the column
    is missing the probe errors, brandColOk flips off, and the
@@ -2107,886 +1934,10 @@ async function refreshUsersCache(){
     }
   }catch(_){}
 }
-/* ---------- official Ghost chat + temporary pass ----------
-   Ghost's OWN verified chat, for EVERY logged-in user (brand or
-   normal). It does NOT live in the Messages inbox: no row in the
-   conversation list, no brand Personal/Brand classification, and
-   its unread messages never count into the Messages nav badge.
-   Instead it lives on its OWN dedicated page — the OFFICIAL
-   CHAT PAGE, a single-conversation main view reached from the
-   left sidebar's "Ghost Official" item (which carries its
-   unread badge), from the ⋮ menu's "Ghost Official" entry on
-   mobile, and from the Message button on the Ghost profile.
-   The page is a working chat: Ghost's identity in its header,
-   the real thread in a scrollable box, a "Get temporary login
-   pass" button and a composer; sending, Ghost's replies and
-   the login alerts all happen right there. It is NOT the
-   Messages inbox and not a popup. The conversation is an
-   ordinary text_messages thread with ghost@ghost as the
-   counterparty; it cannot be deleted. (A second system
-   account, Ghost AI — ghostai@ghost — fronts the Assistant:
-   its profile's Message button opens the AI page.)
-
-   Companion SQL (run once in the Supabase SQL Editor) seeds the
-   official account and adds the code table:
-     INSERT INTO public.system_accounts
-       (system_email, full_name, username, password, badge_type)
-     VALUES ('ghost@ghost', 'Ghost', 'ghost', '<set-a-strong-one>',
-             'diamond')
-     ON CONFLICT (system_email) DO NOTHING;
-     CREATE TABLE IF NOT EXISTS public.temp_login_codes (
-       id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-       user_email text NOT NULL,
-       code text NOT NULL,
-       expires_at timestamptz NOT NULL,
-       used_at timestamptz,
-       created_at timestamptz NOT NULL DEFAULT now()
-     );
-   Until that SQL is run everything degrades exactly like the
-   app's other late features: the pinned row renders from a local
-   description of the official account, welcome / alert / reply
-   messages still travel as plain text_messages rows, and a
-   "temporary pass" request whose code insert fails gets an
-   official reply saying the feature is not activated on the
-   server yet — never a silent failure.
-
-   CODES COME FROM BUTTONS, never from typed commands. The
-   "Get temporary login pass" button (rail Official block AND
-   the full official chat) mints a random 8-character code into
-   temp_login_codes, valid for 5 minutes and single-use; Ghost's
-   reply carrying the code lands in the thread with a Copy chip
-   on it. Typing the old "temporary pass" command now only earns
-   a polite pointer to the button. The login form accepts an
-   8-character code in place of the password (checked only AFTER
-   the normal password fails, and burned — used_at set — on
-   success). After 5 minutes the code can no longer log anyone
-   in, but a session already opened with it stays open: sessions
-   never re-check the code. Every successful login (password OR
-   temporary pass) posts a login alert FROM ghost@ghost into
-   this thread with the public IP, a short device label and the
-   login method.
-
-   PASSWORD-CHANGE CODES share the same table and channel:
-   Settings → Change Password → "Send code" mints a SIX-DIGIT
-   code (5 minutes, single use) and posts it into this thread
-   FROM Ghost. A password change only goes through when the
-   form's code matches a valid unused unexpired 6-digit code
-   for the user — checked against temp_login_codes and burned
-   on success — IN ADDITION to the current-password check. The
-   format is the separation: login only ever accepts the
-   8-character codes, password change only the 6-digit ones, so
-   neither code can be used for the other's job. No schema
-   change, no new SQL. */
-const OFFICIAL_EMAIL='ghost@ghost';
-const AI_EMAIL='ghostai@ghost';
+/* Reserved handles — these names belong to Ghost itself and can
+   never be registered (see validateHandleValue in Sign Up). */
 const RESERVED_HANDLES=['ghost','official','support','admin','system','ghostai'];
-const LS_OFFICIAL_WELCOMED='ghost_official_welcomed_v1';
-let sessionLoginMethod=null;
-let officialWelcomeBusy=false;
-const OFFICIAL_WELCOME_TEXT='👋 Welcome to the official Ghost chat.\n\nThis is Ghost\u2019s own verified chat \u2014 every message here comes from Ghost itself, never from another member.\n\n\u2022 Tap "Get temporary login pass" and I\u2019ll send you a one-time login code that works for 5 minutes, so you can log in on another browser.\n\u2022 Login alerts for your account arrive here, so you can see where and when your account was signed in.\n\u2022 Changing your password? Settings \u2192 Change Password \u2192 "Send code" posts the 6-digit verification code here.';
-const TEMP_PASS_NOT_ACTIVE_TEXT='\u26a0\ufe0f Temporary pass isn\u2019t activated on the server yet. The Ghost admin still needs to finish setting it up (the temp_login_codes table) \u2014 please try again later.';
-function isOfficialEmail(email){return String(email||'').trim().toLowerCase()===OFFICIAL_EMAIL;}
-/* The official account as the UI needs it: the real server row
-   when it has loaded, otherwise a local description with the same
-   identity. The diamond badge and the "Official" pill are forced
-   here so the chat is unmistakably the verified one even before
-   the seed SQL is run. Presence follows the normal rules — the
-   mutual-follow gate means no presence dot for the system
-   account anywhere. */
-function officialUser(){
-  const found=userByEmail(OFFICIAL_EMAIL);
-  if(found)return Object.assign({},found,{full_name:found.full_name||'Ghost',username:found.username||'ghost',badge_type:'diamond',profile_label:'Official',profile_label_color:found.profile_label_color||'gold'});
-  return {system_email:OFFICIAL_EMAIL,full_name:'Ghost',username:'ghost',badge_type:'diamond',profile_label:'Official',profile_label_color:'gold',last_seen:null,show_active_status:false};
-}
-/* The SECOND system account: Ghost AI (ghostai@ghost). Its
-   profile's Message button opens the AI page; it is never a
-   Messenger counterparty and can never be followed. Handled by
-   system_email with a local fallback identity until its seed
-   SQL is run, exactly like the official account above. */
-function isAiEmail(email){return String(email||'').trim().toLowerCase()===AI_EMAIL;}
-function aiUser(){
-  const found=userByEmail(AI_EMAIL);
-  if(found)return Object.assign({},found,{full_name:found.full_name||'Ghost AI',username:found.username||'ghostai',badge_type:'diamond',profile_label:found.profile_label||'AI',profile_label_color:found.profile_label_color||'blue'});
-  return {system_email:AI_EMAIL,full_name:'Ghost AI',username:'ghostai',badge_type:'diamond',profile_label:'AI',profile_label_color:'blue',last_seen:null,show_active_status:false};
-}
-function isSystemEmail(email){return isOfficialEmail(email)||isAiEmail(email);}
-/* The view the user was on before the official chat was opened
-   in the Messages view (legacy path) — kept for the chat's Back
-   button bookkeeping; the official chat now lives on its own
-   page (see openOfficialChat). */
-let officialReturnView=null;
-/* Open the OFFICIAL CHAT PAGE — Ghost Official's dedicated main
-   view. Every entry point lands here: the sidebar's "Ghost
-   Official" item, the ⋮ menu's "Ghost Official", and the
-   Message button on the Ghost profile. Never the Messages
-   inbox, never a popup. */
-function openOfficialChat(){
-  if(!currentUser||guestMode){showLoginGate();return;}
-  showView('official');
-}
-/* ---------- the Official chat PAGE ----------
-   Ghost Official's own main view: Ghost's identity in the page
-   header, then the real text_messages conversation with
-   ghost@ghost — oldest at the top, newest at the bottom,
-   Ghost's bubbles on the left (a Copy chip rides on any message
-   that delivers a code), mine on the right. The scroll stays
-   glued to the newest message while the reader is near the
-   bottom, and is left alone while they read upwards. */
-function renderOfficialPage(){
-  const u=officialUser();
-  const av=document.getElementById('offPageAvatar');
-  if(av)av.innerHTML=avatarHtml(u,'',true);
-  const nm=document.getElementById('offPageName');
-  if(nm)nm.innerHTML=escapeHtml(u.full_name)+badgeHtml('diamond')+labelPillHtml(u,'official-pill');
-  const sub=document.getElementById('offPageSub');
-  if(sub)sub.textContent='@'+u.username+' · Verified official chat';
-  renderOfficialPageThread();
-}
-function renderOfficialPageThread(){
-  const el=document.getElementById('officialThread');
-  if(!el||!currentUser)return;
-  const nearBottom=el.scrollHeight-el.scrollTop-el.clientHeight<90;
-  const msgs=threadMessages(OFFICIAL_EMAIL)
-    .filter(m=>!(m.message_text&&m.message_text.startsWith('__CALL_LOG__:')))
-    .slice().sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
-  if(!msgs.length){
-    el.innerHTML='<div class="oc-empty">No messages yet \u2014 login alerts and replies from Ghost will appear here. Say hello below, or tap \u201cGet temporary login pass\u201d for a one-time login code.</div>';
-    return;
-  }
-  el.innerHTML=msgs.map(m=>{
-    const mine=m.sender_email===currentUser.system_email;
-    const parsed=parseMsgContent(m);
-    const timeStr=new Date(m.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    return '<div class="ai-row'+(mine?' me':'')+'"><div class="oc-bubble'+(mine?' me':'')+'">'+sanitizeHtml(parsed.text)+(mine?'':codeCopyHtml(parsed.text))+'<span class="oc-time">'+timeStr+'</span></div></div>';
-  }).join('');
-  if(nearBottom)el.scrollTop=el.scrollHeight;
-}
-/* Keeps the official unread badges live: the count rides on the
-   sidebar's "Ghost Official" nav item AND on the mobile ⋮
-   menu's "Ghost Official" entry. While the Official page itself
-   is open, its thread re-renders here too, so login alerts and
-   code replies land on it live. Re-rendered from
-   updateMsgBadges, so it refreshes on every message poll. */
-function renderOfficialInbox(){
-  const menuItem=document.getElementById('topMenuOfficialItem');
-  const menuBadge=document.getElementById('topMenuOfficialUnread');
-  const navBadge=document.getElementById('officialNavBadge');
-  if(!currentUser){
-    if(menuItem)menuItem.classList.add('hidden');
-    if(navBadge)navBadge.classList.add('hidden');
-    return;
-  }
-  const un=unreadCountFor(OFFICIAL_EMAIL);
-  if(menuItem)menuItem.classList.remove('hidden');
-  if(menuBadge){menuBadge.textContent=un>99?'99+':String(un);menuBadge.classList.toggle('hidden',!un);}
-  if(navBadge){navBadge.textContent=un>99?'99+':String(un);navBadge.classList.toggle('hidden',!un);}
-  if(currentView==='official')renderOfficialPageThread();
-}
-/* ---------- Copy chips on code-delivering Ghost messages ----------
-   Any message FROM Ghost that hands the user a code — the
-   8-character temporary login pass ("Your temporary password
-   is: …") or the 6-digit password-change code ("Password change
-   code: …") — renders with a small Copy chip beside the code on
-   the Official chat page (and in any other official-thread
-   rendering). Clicking it copies just the code and briefly
-   reads "Copied". */
-function officialCodeIn(text){
-  const m=String(text||'').match(/(?:temporary password is:|password change code:)\s*([A-Za-z0-9]{6,8})/i);
-  return m?m[1]:null;
-}
-function codeCopyHtml(text){
-  const c=officialCodeIn(text);
-  if(!c)return '';
-  return '<button type="button" class="code-copy-btn" data-copy-code="'+escapeHtml(c)+'" title="Copy this code" aria-label="Copy this code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button>';
-}
-async function copyCodeText(code,btn){
-  let ok=false;
-  try{await navigator.clipboard.writeText(code);ok=true;}
-  catch(_){
-    try{const ta=document.createElement('textarea');ta.value=code;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();ok=!!document.execCommand('copy');ta.remove();}catch(__){ok=false;}
-  }
-  if(btn){
-    const sp=btn.querySelector('span');
-    const old=sp?sp.textContent:btn.textContent;
-    if(sp)sp.textContent=ok?'Copied':'Copy failed';else btn.textContent=ok?'Copied':'Copy failed';
-    setTimeout(()=>{if(sp)sp.textContent=old;else btn.textContent=old;},1500);
-  }
-  if(ok)toast('Code copied: '+code);
-}
-document.addEventListener('click',e=>{
-  const b=e.target&&e.target.closest?e.target.closest('[data-copy-code]'):null;
-  if(b)copyCodeText(b.getAttribute('data-copy-code'),b);
-});
-/* Post a message INTO the official thread as Ghost itself. The
-   row is an ordinary text_messages insert (sender = ghost@ghost,
-   receiver = me) — the same open channel call logs already use —
-   and it is pushed into the local cache so the thread, its list
-   preview and the unread badge update immediately. */
-async function postOfficialMessage(text){
-  if(!currentUser||!ghostDb)return null;
-  try{
-    const r=await ghostDb.from('text_messages').insert([{sender_email:OFFICIAL_EMAIL,receiver_email:currentUser.system_email,message_text:text}]).select().single();
-    if(r.error||!r.data)return null;
-    cachedMessages.push(r.data);
-    updateMsgBadges();
-    return r.data;
-  }catch(_){return null;}
-}
-/* First login / first open with an empty official thread: seed
-   the welcome message FROM Ghost. The server row itself is the
-   cross-device guard (any other device sees a non-empty thread);
-   the on-device flag only stops repeat attempts on this device
-   when the insert could not land. */
-async function ensureOfficialWelcome(){
-  if(!currentUser||!ghostDb||officialWelcomeBusy)return;
-  if(threadMessages(OFFICIAL_EMAIL).length)return;
-  const seen=lsGet(LS_OFFICIAL_WELCOMED,{});
-  if(seen[currentUser.system_email])return;
-  officialWelcomeBusy=true;
-  try{
-    const row=await postOfficialMessage(OFFICIAL_WELCOME_TEXT);
-    if(row){
-      seen[currentUser.system_email]=true;lsSet(LS_OFFICIAL_WELCOMED,seen);
-      if(currentView==='messages'){renderUsersList();if(selectedPeer&&isOfficialEmail(selectedPeer.system_email))renderMessages();}
-    }
-  }finally{officialWelcomeBusy=false;}
-}
-const TEMP_PASS_COMMANDS=['temporary pass','temp pass','temporary password'];
-function genTempCode(){
-  const chars='ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-  let out='';
-  try{const buf=new Uint8Array(8);crypto.getRandomValues(buf);for(let i=0;i<8;i++)out+=chars[buf[i]%chars.length];}
-  catch(_){for(let i=0;i<8;i++)out+=chars[Math.floor(Math.random()*chars.length)];}
-  return out;
-}
-/* The official chat's brain — TEXT ONLY now. Codes are minted by
-   BUTTONS, never by typing: the old "temporary pass" command gets
-   a polite pointer to the "Get temporary login pass" button (and
-   to Settings → Change Password → "Send code" for password
-   changes); anything else gets the short reminder. Shared by the
-   full chat (handleOfficialCommand) and the rail block
-   (sendOfficialMessage). */
-function officialReplyFor(rawText){
-  const cmd=String(rawText||'').trim().toLowerCase().replace(/\s+/g,' ');
-  if(TEMP_PASS_COMMANDS.indexOf(cmd)>=0){
-    return 'Codes come from buttons now \u2014 I don\u2019t mint them from typed commands anymore. Tap \u201cGet temporary login pass\u201d right here in this chat and I\u2019ll send you a fresh one-time login code (valid 5 minutes, works once). Changing your password instead? Go to Settings \u2192 Change Password and tap \u201cSend code\u201d \u2014 I\u2019ll post the 6-digit verification code here.';
-  }
-  return 'Hi, this is the official Ghost chat. Tap \u201cGet temporary login pass\u201d and I\u2019ll create a one-time login code that works for 5 minutes, so you can log in on another browser. Login alerts for your account also arrive here.';
-}
-/* Runs after YOUR message to Ghost has been sent through the
-   normal (full) chat path. */
-async function handleOfficialCommand(rawText){
-  if(!currentUser||!ghostDb||!selectedPeer||!isOfficialEmail(selectedPeer.system_email))return;
-  await postOfficialMessage(officialReplyFor(rawText));
-  if(selectedPeer&&isOfficialEmail(selectedPeer.system_email)){await markConversationRead(OFFICIAL_EMAIL);renderMessages();}
-  renderUsersList();
-}
-/* The "Get temporary login pass" BUTTON on the Official chat
-   page. Mints the same 8-character, 5-minute, single-use code
-   into temp_login_codes the typed command used to, and Ghost's
-   reply carrying the code (with its Copy chip) lands in the
-   thread. If the table is not reachable yet, Ghost replies that
-   the feature is not activated instead of failing silently. */
-let tempPassBusy=false;
-async function requestTempLoginPass(){
-  if(!currentUser||!ghostDb||tempPassBusy)return;
-  tempPassBusy=true;
-  try{
-    const code=genTempCode();
-    const expiresAt=new Date(Date.now()+5*60000).toISOString();
-    let inserted=false;
-    try{
-      const r=await ghostDb.from('temp_login_codes').insert([{user_email:currentUser.system_email,code:code,expires_at:expiresAt}]);
-      inserted=!r.error;
-    }catch(_){inserted=false;}
-    const reply=inserted
-      ?'\ud83d\udd11 Your temporary password is: '+code+'\n\nUse it to log in on another browser within the next 5 minutes. It works once only \u2014 after 5 minutes it can no longer be used to log in, but any browser that already logged in with it stays logged in.'
-      :TEMP_PASS_NOT_ACTIVE_TEXT;
-    await postOfficialMessage(reply);
-    await markConversationRead(OFFICIAL_EMAIL);
-    renderOfficialPageThread();
-  }finally{tempPassBusy=false;}
-}
-/* Sending from the Official page's own composer: an ordinary
-   text_messages row to ghost@ghost, then Ghost's automatic
-   reply — the whole exchange stays on the Official page; the
-   Messages view is never involved. */
-async function sendOfficialMessage(text){
-  if(!currentUser||!ghostDb)return;
-  await ensureOfficialWelcome();
-  let data=null,error=null;
-  try{
-    const r=await ghostDb.from('text_messages').insert([{sender_email:currentUser.system_email,receiver_email:OFFICIAL_EMAIL,message_text:text}]).select().single();
-    if(r.error)error=r.error;else data=r.data;
-  }catch(err){error=err;}
-  if(error){toast('Could not send: '+friendlyError(error));return;}
-  if(data)cachedMessages.push(data);
-  renderOfficialPageThread();
-  await postOfficialMessage(officialReplyFor(text));
-  await markConversationRead(OFFICIAL_EMAIL);
-  renderOfficialPageThread();
-}
-/* ---------- password-change verification codes ----------
-   Settings → Change Password → "Send code" mints a SIX-DIGIT
-   code into the same temp_login_codes table (5 minutes, single
-   use) and posts it into the user's official thread FROM Ghost.
-   The password change verifies the typed code against the table
-   and burns it on success. The 6-digit shape is the separation
-   from the 8-character login passes: login only ever accepts
-   8-character codes (see tryTempPassLogin) and password change
-   only ever accepts 6-digit ones — no schema change. */
-function genPwChangeCode(){
-  let n=0;
-  try{const buf=new Uint32Array(1);crypto.getRandomValues(buf);n=buf[0]%1000000;}
-  catch(_){n=Math.floor(Math.random()*1000000);}
-  return String(n).padStart(6,'0');
-}
-async function mintPwChangeCode(){
-  if(!currentUser||!ghostDb)return false;
-  const code=genPwChangeCode();
-  const expiresAt=new Date(Date.now()+5*60000).toISOString();
-  try{
-    const r=await ghostDb.from('temp_login_codes').insert([{user_email:currentUser.system_email,code:code,expires_at:expiresAt}]);
-    if(r.error)return false;
-  }catch(_){return false;}
-  await postOfficialMessage('\ud83d\udd10 Password change code: '+code+' \u2014 valid 5 minutes. If this wasn\u2019t you, ignore this message.');
-  return true;
-}
-async function findPwChangeCodeId(entered){
-  const code=String(entered||'').trim();
-  if(!/^\d{6}$/.test(code)||!currentUser||!ghostDb)return null;
-  try{
-    const nowIso=new Date().toISOString();
-    const r=await ghostDb.from('temp_login_codes').select('id').eq('user_email',currentUser.system_email).eq('code',code).is('used_at',null).gt('expires_at',nowIso).order('expires_at',{ascending:false}).limit(1);
-    if(r.error||!r.data||!r.data.length)return null;
-    return r.data[0].id;
-  }catch(_){return null;}
-}
-async function burnPwChangeCode(id){
-  if(id==null||!ghostDb)return;
-  try{await ghostDb.from('temp_login_codes').update({used_at:new Date().toISOString()}).eq('id',id).is('used_at',null);}catch(_){}
-}
-/* ---------- the AI page + on-device AI assistant ----------
-   The Assistant lives on its OWN full page (left sidebar "AI",
-   ⋮ menu → AI Assistant, or the Message button on the Ghost AI
-   profile). It runs ENTIRELY on this device — no external
-   service, no server storage, no new tables. It is a MULTI-CHAT
-   page: every conversation is kept separately per account on
-   this device (localStorage keyed by the signed-in
-   system_email), the list reloads whenever the page opens, each
-   chat can be opened and continued on its own, deleted on its
-   own (in-page confirm), or emptied by its "Clear chat" button.
-   The old single-history storage migrates into a first chat.
-   It handles:
-     • MATH — arithmetic typed in English or Bengali digits
-       (+ − × ÷, %, parentheses, decimals, powers x^2, square
-       roots √, "15% of 2400", averages, percentage change),
-       evaluated by the small recursive-descent parser below.
-       eval() is NEVER used.
-     • Small talk — greetings, how-are-you, good morning/night,
-       thanks, bye, jokes, mood replies, its name, who made it —
-       in English or Bengali, matching the user's language.
-     • General knowledge — a small built-in pack (world
-       capitals, Bangladesh basics, science facts, Ghost facts)
-       with an honest fallback for anything outside it. It runs
-       on-device, so it cannot look up live prices or weather.
-     • Ghost help — a canned knowledge map (temporary pass,
-       password change, login alerts, following, saving, brand
-       accounts, notifications, reactions, posting, messages,
-       Drive, guest preview, profile labels). The temporary-pass
-       answer carries a button that opens the Ghost Official
-       page, where the pass itself is actually issued.
-     • Date / time questions, answered from the device clock. */
-/* The Official page's "Get temporary login pass" button, its
-   composer, and its Back button. */
-{const pb=document.getElementById('offPagePassBtn');if(pb)pb.addEventListener('click',()=>requestTempLoginPass());}
-{const of=document.getElementById('officialForm');
- if(of)of.addEventListener('submit',e=>{e.preventDefault();const inp=document.getElementById('officialInput');const v=(inp.value||'').trim();if(!v)return;inp.value='';sendOfficialMessage(v);});}
-{const ob=document.getElementById('officialBackBtn');if(ob)ob.addEventListener('click',()=>showView('feed'));}
-let aiHistory=[];
-let aiJokeIdx=0;
-const LS_AI_HISTORY='ghost_ai_history_v1';
-const LS_AI_CHATS='ghost_ai_chats_v2';
-let aiLoadedFor=null;
-/* Multi-chat state: aiChats holds every conversation of the
-   signed-in account ({id, title, updatedAt, messages}); the open
-   chat's messages array IS aiHistory (kept in sync by
-   aiSyncHistory), so the reply engine below never changes.
-   aiMobileOpen only matters on phones: false = the chat list is
-   showing, true = the open conversation is showing full-width. */
-let aiChats=[];
-let aiActiveChatId=null;
-let aiMobileOpen=false;
-const AI_GREETING='Hi! I\u2019m Ghost\u2019s AI helper. I can do quick maths \u2014 try <b>25 + 37</b>, <b>\u221a144</b>, <b>5^2</b> or <b>15% of 2400</b> \u2014 answer simple questions like <b>capital of Japan</b>, chat a little, tell a joke, and explain how Ghost works, like how to get a temporary pass.';
-function aiIsBn(s){return /[\u0980-\u09FF]/.test(String(s||''));}
-/* Load the signed-in account's chats (once per account per
-   session; doLogout resets aiLoadedFor so the next account loads
-   its own). The OLD single-history storage migrates into a first
-   chat the first time this runs, and the old copy is removed so
-   it never migrates twice. A fresh account starts with one new
-   chat holding just the greeting. Guests get an ephemeral chat. */
-function aiNewChatObj(){
-  return {id:'c'+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36),title:'',updatedAt:Date.now(),messages:[{role:'ai',html:AI_GREETING}]};
-}
-function aiChatTitleFrom(html){
-  const t=plainText(html).replace(/\s+/g,' ').trim();
-  if(!t)return 'New chat';
-  return t.length>44?t.slice(0,44)+'…':t;
-}
-function ensureAiChats(){
-  const email=currentUser?currentUser.system_email:null;
-  if(aiLoadedFor===email)return;
-  aiLoadedFor=email;
-  aiChats=[];aiActiveChatId=null;aiMobileOpen=false;
-  if(email){
-    const all=lsGet(LS_AI_CHATS,{});
-    const mine=Array.isArray(all[email])?all[email]:[];
-    mine.forEach(c=>{
-      if(!c||typeof c!=='object'||!Array.isArray(c.messages))return;
-      const msgs=c.messages.filter(m=>m&&(m.role==='user'||m.role==='ai')&&typeof m.html==='string').slice(-200);
-      if(msgs.length)aiChats.push({id:String(c.id||('c'+aiChats.length)),title:String(c.title||''),updatedAt:Number(c.updatedAt)||Date.now(),messages:msgs});
-    });
-    if(!aiChats.length){
-      const oldAll=lsGet(LS_AI_HISTORY,{});
-      const old=Array.isArray(oldAll[email])?oldAll[email]:[];
-      const msgs=old.filter(m=>m&&(m.role==='user'||m.role==='ai')&&typeof m.html==='string').slice(-200);
-      if(msgs.length){
-        const chat=aiNewChatObj();chat.messages=msgs;
-        const firstUser=msgs.find(m=>m.role==='user');
-        if(firstUser)chat.title=aiChatTitleFrom(firstUser.html);
-        aiChats.push(chat);
-        delete oldAll[email];lsSet(LS_AI_HISTORY,oldAll);
-      }
-    }
-  }
-  if(!aiChats.length)aiChats.push(aiNewChatObj());
-  aiChats.sort((a,b)=>b.updatedAt-a.updatedAt);
-  aiActiveChatId=aiChats[0].id;
-  aiSyncHistory();
-  saveAiChats();
-}
-function aiActiveChat(){return aiChats.find(c=>c.id===aiActiveChatId)||aiChats[0]||null;}
-function aiSyncHistory(){const c=aiActiveChat();aiHistory=c?c.messages:[];}
-function saveAiChats(){
-  if(!currentUser||aiLoadedFor!==currentUser.system_email)return;
-  const active=aiActiveChat();
-  if(active)active.messages=aiHistory;
-  const all=lsGet(LS_AI_CHATS,{});
-  all[currentUser.system_email]=aiChats.slice(0,40).map(c=>({id:c.id,title:c.title,updatedAt:c.updatedAt,messages:c.messages.slice(-200)}));
-  lsSet(LS_AI_CHATS,all);
-}
-function renderAiChats(){
-  ensureAiChats();
-  const c=aiActiveChat();
-  const html=aiHistory.map(m=>m.role==='user'
-    ?'<div class="ai-row me"><div class="ai-bubble me">'+m.html+'</div></div>'
-    :'<div class="ai-row"><span class="ai-tag" aria-hidden="true">AI</span><div class="ai-bubble">'+m.html+'</div></div>').join('');
-  const el=document.getElementById('aiMsgsM');
-  if(el){el.innerHTML=html;el.scrollTop=el.scrollHeight;}
-  const t=document.getElementById('aiChatTitle');
-  if(t)t.textContent=c?(c.title||'New chat'):'New chat';
-  const shell=document.getElementById('aiShell');
-  if(shell)shell.classList.toggle('chat-open',aiMobileOpen);
-}
-/* The conversation list: newest first, each row titled by the
-   chat's first user message, with its time and its own delete
-   button. Tapping a row opens that chat. */
-function renderAiList(){
-  ensureAiChats();
-  const list=document.getElementById('aiChatList');if(!list)return;
-  const sorted=aiChats.slice().sort((a,b)=>b.updatedAt-a.updatedAt);
-  if(!sorted.length){list.innerHTML='<div class="ai-list-empty">No chats yet — tap “+ New chat” to start one.</div>';return;}
-  list.innerHTML=sorted.map(c=>{
-    const when=c.updatedAt?relTime(new Date(c.updatedAt).toISOString()):'';
-    return '<div class="ai-chat-item'+(c.id===aiActiveChatId?' active':'')+'" data-ai-chat="'+escapeHtml(c.id)+'" tabindex="0" role="button" aria-label="Open this chat">'
-      +'<span class="ai-chat-item-main"><span class="ai-chat-item-title">'+escapeHtml(c.title||'New chat')+'</span><span class="ai-chat-item-time">'+escapeHtml(when)+'</span></span>'
-      +'<button type="button" class="ai-chat-del" data-ai-del="'+escapeHtml(c.id)+'" aria-label="Delete this chat" title="Delete chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></button></div>';
-  }).join('');
-}
-function renderAiPage(){renderAiList();renderAiChats();}
-function openAiChat(id){
-  if(!aiChats.some(c=>c.id===id))return;
-  aiActiveChatId=id;aiMobileOpen=true;aiSyncHistory();
-  renderAiPage();
-  if(window.innerWidth>820){const inp=document.getElementById('aiInputM');if(inp)inp.focus();}
-}
-function startNewAiChat(){
-  const c=aiNewChatObj();
-  aiChats.unshift(c);aiActiveChatId=c.id;aiMobileOpen=true;aiSyncHistory();
-  saveAiChats();renderAiPage();
-  const inp=document.getElementById('aiInputM');if(inp)inp.focus();
-}
-/* Per-chat delete — removes ONLY that chat, after the app's
-   in-page confirm. If the open chat goes, the most recent
-   remaining one opens (or a fresh one is started). */
-function deleteAiChat(id){
-  const c=aiChats.find(x=>x.id===id);if(!c)return;
-  askYesNo('Delete this chat?','“'+(c.title||'New chat')+'” and everything in it will be removed from this device. This cannot be undone.','Delete',()=>{
-    aiChats=aiChats.filter(x=>x.id!==id);
-    if(!aiChats.length)aiChats.push(aiNewChatObj());
-    if(aiActiveChatId===id){aiChats.sort((a,b)=>b.updatedAt-a.updatedAt);aiActiveChatId=aiChats[0].id;aiMobileOpen=false;}
-    aiSyncHistory();saveAiChats();renderAiPage();
-    toast('Chat deleted.');
-  });
-}
-function aiPush(role,html){
-  aiHistory.push({role:role,html:html});
-  const c=aiActiveChat();
-  if(c){
-    if(role==='user'&&!c.title)c.title=aiChatTitleFrom(html);
-    c.updatedAt=Date.now();
-  }
-  saveAiChats();renderAiChats();renderAiList();
-}
-/* "Clear chat" — empties ONLY the open conversation and starts
-   it over from the greeting; every other chat is untouched. */
-function clearAiHistory(){
-  const c=aiActiveChat();if(!c)return;
-  aiHistory.length=0;
-  aiHistory.push({role:'ai',html:AI_GREETING});
-  c.title='';c.updatedAt=Date.now();
-  saveAiChats();renderAiPage();
-}
-{const cb=document.getElementById('aiClearBtn');if(cb)cb.addEventListener('click',()=>{clearAiHistory();toast('This chat was cleared — your other chats are untouched.');});}
-{const nb=document.getElementById('aiNewChatBtn');if(nb)nb.addEventListener('click',startNewAiChat);}
-{const lb=document.getElementById('aiListBackBtn');if(lb)lb.addEventListener('click',()=>{aiMobileOpen=false;renderAiChats();});}
-{const list=document.getElementById('aiChatList');
- if(list){
-   list.addEventListener('click',e=>{
-     const del=e.target.closest('[data-ai-del]');
-     if(del){e.stopPropagation();deleteAiChat(del.getAttribute('data-ai-del'));return;}
-     const item=e.target.closest('[data-ai-chat]');
-     if(item)openAiChat(item.getAttribute('data-ai-chat'));
-   });
-   list.addEventListener('keydown',e=>{
-     if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.classList&&e.target.classList.contains('ai-chat-item')){e.preventDefault();openAiChat(e.target.getAttribute('data-ai-chat'));}
-   });
- }}
-/* --- safe maths: tokenizer + recursive-descent parser --- */
-function aiTokenize(s){
-  const toks=[];let i=0;
-  while(i<s.length){
-    const c=s[i];
-    if(c===' '||c==='\t'){i++;continue;}
-    if(/[0-9.]/.test(c)){let j=i,num='';while(j<s.length&&/[0-9.]/.test(s[j])){num+=s[j];j++;}const v=parseFloat(num);if(isNaN(v))return null;toks.push({t:'n',v:v});i=j;continue;}
-    if('+-*/%()^\u221a'.indexOf(c)>=0){toks.push({t:c});i++;continue;}
-    return null;
-  }
-  return toks;
-}
-function aiEvalExpr(s){
-  const toks=aiTokenize(s);if(!toks||!toks.length)return null;
-  let pos=0;
-  function peek(){return toks[pos];}
-  function parseExpr(){let v=parseTerm();while(peek()&&(peek().t==='+'||peek().t==='-')){const op=toks[pos++].t;const r=parseTerm();v=op==='+'?v+r:v-r;}return v;}
-  function parseTerm(){let v=parseUnary();while(peek()&&(peek().t==='*'||peek().t==='/')){const op=toks[pos++].t;const r=parseUnary();v=op==='*'?v*r:v/r;}return v;}
-  function parseUnary(){if(peek()&&(peek().t==='-'||peek().t==='+')){const op=toks[pos++].t;const v=parseUnary();return op==='-'?-v:v;}return parsePower();}
-  function parsePower(){let v=parsePostfix();if(peek()&&peek().t==='^'){pos++;const e=parseUnary();v=Math.pow(v,e);}return v;}
-  function parsePostfix(){let v=parsePrimary();while(peek()&&peek().t==='%'){pos++;v=v/100;}return v;}
-  function parsePrimary(){
-    const tk=peek();if(!tk)return NaN;
-    if(tk.t==='n'){pos++;return tk.v;}
-    if(tk.t==='\u221a'){pos++;const v=parsePrimary();return (typeof v!=='number'||isNaN(v)||v<0)?NaN:Math.sqrt(v);}
-    if(tk.t==='('){pos++;const v=parseExpr();if(peek()&&peek().t===')'){pos++;return v;}return NaN;}
-    return NaN;
-  }
-  const v=parseExpr();
-  if(pos!==toks.length||typeof v!=='number'||isNaN(v)||!isFinite(v))return null;
-  return v;
-}
-function aiFmtNum(v){
-  if(Math.abs(v-Math.round(v))<1e-9)return String(Math.round(v));
-  return String(Math.round(v*1e10)/1e10);
-}
-/* Returns an answer string when the text is a maths question,
-   otherwise null. Accepts Bengali digits and × ÷ − symbols, plus
-   powers (5^2, "5 squared", ৫ এর বর্গ), square roots (√144,
-   "square root of 144", বর্গমূল), averages ("average of 10, 20,
-   30", গড়) and percentage change ("from 80 to 100 % change"). */
-function aiTryMath(raw){
-  const bn=aiIsBn(raw);
-  let s=String(raw||'').trim()
-    .replace(/[\u09E6-\u09EF]/g,d=>String(d.charCodeAt(0)-0x09E6))
-    .replace(/[×✕]/g,'*').replace(/÷/g,'/').replace(/[−–—]/g,'-').replace(/,/g,'');
-  /* worded powers and roots become parser symbols */
-  s=s.replace(/square\s+root\s+(?:of\s+)?/gi,'\u221a')
-     .replace(/\bsqrt\b/gi,'\u221a').replace(/বর্গমূল/g,'\u221a')
-     .replace(/(\d+(?:\.\d+)?)\s*(?:squared|স্কয়ার)/gi,'($1^2)')
-     .replace(/(\d+(?:\.\d+)?)\s*cubed/gi,'($1^3)')
-     .replace(/([\d.]+)\s*এর\s*বর্গ/g,'($1^2)')
-     .replace(/([\d.]+)\s*এর\s*ঘন/g,'($1^3)')
-     .replace(/^\s*the\s+(?=\u221a)/i,'');
-  /* a leading "what is / calculate / কত" belongs to the question,
-     not to the sum — strip it before the pattern checks below */
-  s=s.replace(/^(what is|what's|calculate|compute|হিসাব|কত হয়|কত)\s+(?:the\s+)?/i,'');
-  const pctOf=s.match(/(.+?)\s*%\s*(?:of|এর)\s*(.+)/i);
-  if(pctOf){
-    const p=aiEvalExpr(pctOf[1].trim());
-    const base=aiEvalExpr(pctOf[2].replace(/[?？=]+\s*$/,'').trim());
-    if(p!==null&&base!==null)return (bn?'উত্তর: ':'Answer: ')+'<b>'+aiFmtNum(p)+'% of '+aiFmtNum(base)+' = '+aiFmtNum(base*p/100)+'</b>';
-  }
-  /* percentage change — "percent change from 80 to 100",
-     "80 থেকে 100-এ শতকরা পরিবর্তন" */
-  if(/(%|percent|change|increase|decrease|শতকরা|পরিবর্তন|বৃদ্ধি|কম)/i.test(s)){
-    const chEn=s.match(/([\d.]+)\s+to\s+([\d.]+)/i);
-    const chBn=s.match(/([\d.]+)\s*থেকে\s*([\d.]+)/);
-    const chm=chEn||chBn;
-    if(chm){
-      const from=parseFloat(chm[1]),to=parseFloat(chm[2]);
-      if(!isNaN(from)&&!isNaN(to)&&from!==0){
-        const chg=(to-from)/from*100;
-        return (bn?'উত্তর: ':'Answer: ')+'<b>'+aiFmtNum(from)+' \u2192 '+aiFmtNum(to)+' = '+(chg>=0?'+':'')+aiFmtNum(chg)+'%</b>'+(bn?'':(chg>=0?' (an increase)':' (a decrease)'));
-      }
-    }
-  }
-  /* average of a list — "average of 10, 20, 30", "গড় ৫ ১০ ১৫" */
-  const avgM=s.replace(/\s+and\s+/gi,' ').match(/(?:average|avg|mean|গড়)\s*(?:of|হিসাব)?\s*[:\-]?\s*([\d][\d\s.]*\d|\d)/i);
-  if(avgM){
-    const nums=avgM[1].split(/\s+/).filter(x=>x!=='').map(Number).filter(x=>!isNaN(x));
-    if(nums.length>=2){
-      const avg=nums.reduce((a,b)=>a+b,0)/nums.length;
-      return (bn?'উত্তর: ':'Answer: ')+'<b>'+(bn?'গড়':'Average of')+' '+nums.join(', ')+' = '+aiFmtNum(avg)+'</b>';
-    }
-  }
-  const e=s.replace(/^(what is|what's|calculate|compute|হিসাব|কত হয়|কত)\s+/i,'').replace(/\s*(কত হয়|কত হবে|কত)\s*[?？]?\s*$/,'').replace(/[?？=]+\s*$/,'').trim();
-  if(!/^[\d\s+\-*/().%^\u221a]+$/.test(e)||!/\d/.test(e)||!/[+\-*/%^\u221a]/.test(e))return null;
-  const v=aiEvalExpr(e);
-  if(v===null)return null;
-  return (bn?'উত্তর: ':'Answer: ')+'<b>'+escapeHtml(e.replace(/\s+/g,' '))+' = '+aiFmtNum(v)+'</b>';
-}
-/* ---------- the Assistant's general-knowledge pack ----------
-   A small built-in set of stable facts (world capitals,
-   Bangladesh basics, everyday science, Ghost's own facts). It
-   runs entirely on-device, so anything outside the pack gets
-   the honest fallback in aiReplyFor — it never invents an
-   answer and never pretends to browse. */
-const AI_CAPITALS={'bangladesh':'Dhaka','india':'New Delhi','japan':'Tokyo','france':'Paris','germany':'Berlin','italy':'Rome','spain':'Madrid','portugal':'Lisbon','united kingdom':'London','uk':'London','england':'London','united states':'Washington, D.C.','usa':'Washington, D.C.','america':'Washington, D.C.','canada':'Ottawa','australia':'Canberra','china':'Beijing','russia':'Moscow','brazil':'Bras\u00edlia','egypt':'Cairo','turkey':'Ankara','saudi arabia':'Riyadh','pakistan':'Islamabad','nepal':'Kathmandu','bhutan':'Thimphu','maldives':'Mal\u00e9','myanmar':'Naypyidaw','thailand':'Bangkok','vietnam':'Hanoi','indonesia':'Jakarta','malaysia':'Kuala Lumpur','singapore':'Singapore','south korea':'Seoul','iran':'Tehran','iraq':'Baghdad','afghanistan':'Kabul','sri lanka':'Sri Jayawardenepura Kotte','netherlands':'Amsterdam','switzerland':'Bern','sweden':'Stockholm','norway':'Oslo','denmark':'Copenhagen','finland':'Helsinki','greece':'Athens','poland':'Warsaw','ukraine':'Kyiv','mexico':'Mexico City','argentina':'Buenos Aires','chile':'Santiago','peru':'Lima','south africa':'Pretoria','nigeria':'Abuja','kenya':'Nairobi','ethiopia':'Addis Ababa','morocco':'Rabat','algeria':'Algiers','new zealand':'Wellington','ireland':'Dublin','austria':'Vienna','belgium':'Brussels','qatar':'Doha','kuwait':'Kuwait City','oman':'Muscat','jordan':'Amman','lebanon':'Beirut','philippines':'Manila','mongolia':'Ulaanbaatar','uzbekistan':'Tashkent','kazakhstan':'Astana'};
-const AI_CAPITALS_BN={'বাংলাদেশ':'ঢাকা','ভারত':'নয়াদিল্লি','জাপান':'টোকিও','ফ্রান্স':'প্যারিস','জার্মানি':'বার্লিন','ইতালি':'রোম','আমেরিকা':'ওয়াশিংটন ডি.সি.','ইংল্যান্ড':'লন্ডন','চীন':'বেইজিং','রাশিয়া':'মস্কো','পাকিস্তান':'ইসলামাবাদ','নেপাল':'কাঠমান্ডু','কানাডা':'অটোয়া','অস্ট্রেলিয়া':'ক্যানবেরা','সৌদি আরব':'রিয়াদ','কাতার':'দোহা','থাইল্যান্ড':'ব্যাংকক','মালয়েশিয়া':'কুয়ালালামপুর','তুরস্ক':'আঙ্কারা','মিশর':'কায়রো','ব্রাজিল':'ব্রাসিলিয়া','দক্ষিণ কোরিয়া':'সিউল','ইন্দোনেশিয়া':'জাকার্তা','ভিয়েতনাম':'হ্যানয়','মিয়ানমার':'নেপিদো','ভুটান':'থিম্পু','মালদ্বীপ':'মালে','ইরান':'তেহরান','ইরাক':'বাগদাদ','আফগানিস্তান':'কাবুল','স্পেন':'মাদ্রিদ','পর্তুগাল':'লিসবন','গ্রিস':'অ্যাথেন্স','সুইডেন':'স্টকহোম','নরওয়ে':'অসলো','ডেনমার্ক':'কোপেনহেগেন','শ্রীলঙ্কা':'শ্রী জয়াবর্ধনেপুরা কোট্টে'};
-function aiGeneralKnowledge(text,low,bn){
-  const has=function(){for(let i=0;i<arguments.length;i++){if(low.indexOf(arguments[i])>=0)return true;}return false;};
-  const capEn=low.match(/capital\s+of\s+(?:the\s+)?([a-z .']+?)\s*\??\s*$/);
-  if(capEn){
-    const key=capEn[1].trim();
-    const c=AI_CAPITALS[key];
-    if(c)return bn?('রাজধানী: <b>'+c+'</b>।'):('The capital of '+key.replace(/\b\w/g,x=>x.toUpperCase())+' is <b>'+c+'</b>.');
-  }
-  if(text.indexOf('রাজধানী')>=0){
-    for(const k in AI_CAPITALS_BN){if(text.indexOf(k)>=0)return k+'-এর রাজধানী <b>'+AI_CAPITALS_BN[k]+'</b>।';}
-  }
-  if(has('national fruit of bangladesh','বাংলাদেশের জাতীয় ফল'))return bn?'বাংলাদেশের জাতীয় ফল <b>কাঁঠাল</b>।':'The national fruit of Bangladesh is the <b>jackfruit</b>.';
-  if(has('national flower of bangladesh','জাতীয় ফুল'))return bn?'বাংলাদেশের জাতীয় ফুল <b>শাপলা</b>।':'The national flower of Bangladesh is the <b>water lily</b> (shapla).';
-  if(has('national animal of bangladesh','জাতীয় পশু'))return bn?'বাংলাদেশের জাতীয় পশু <b>রয়েল বেঙ্গল টাইগার</b>।':'The national animal of Bangladesh is the <b>Royal Bengal tiger</b>.';
-  if(has('national fish of bangladesh','জাতীয় মাছ'))return bn?'বাংলাদেশের জাতীয় মাছ <b>ইলিশ</b>।':'The national fish of Bangladesh is the <b>hilsa</b> (ilish).';
-  if(has('national anthem of bangladesh','জাতীয় সংগীত'))return bn?'বাংলাদেশের জাতীয় সংগীত \u201cআমার সোনার বাংলা\u201d \u2014 লিখেছেন <b>রবীন্দ্রনাথ ঠাকুর</b>।':'Bangladesh\u2019s national anthem is \u201cAmar Shonar Bangla\u201d, written by <b>Rabindranath Tagore</b>.';
-  if(has('victory day of bangladesh','বিজয় দিবস'))return bn?'বাংলাদেশের বিজয় দিবস <b>১৬ ডিসেম্বর</b> (১৯৭১)।':'Bangladesh\u2019s Victory Day is <b>16 December</b> (1971).';
-  if(has('independence day of bangladesh','স্বাধীনতা দিবস'))return bn?'বাংলাদেশের স্বাধীনতা দিবস <b>২৬ মার্চ</b> (১৯৭১)।':'Bangladesh\u2019s Independence Day is <b>26 March</b> (1971).';
-  if(has('language martyrs','ভাষা শহীদ','আন্তর্জাতিক মাতৃভাষা'))return bn?'ভাষা শহীদ দিবস <b>২১ ফেব্রুয়ারি</b> \u2014 ১৯৫২ সালের এই দিনে বাংলা ভাষার জন্য প্রাণ দিয়েছিলেন সালাম, বরকত, রফিক, জব্বারসহ অনেকে। দিনটি এখন আন্তর্জাতিক মাতৃভাষা দিবস।':'Language Martyrs\u2019 Day is <b>21 February</b> \u2014 in 1952, Salam, Barkat, Rafiq, Jabbar and others gave their lives for the Bangla language. It is now International Mother Language Day.';
-  if(has('largest planet','সবচেয়ে বড় গ্রহ'))return bn?'সবচেয়ে বড় গ্রহ <b>বৃহস্পতি</b> (Jupiter)।':'The largest planet is <b>Jupiter</b>.';
-  if(has('smallest planet','সবচেয়ে ছোট গ্রহ'))return bn?'সবচেয়ে ছোট গ্রহ <b>বুধ</b> (Mercury)।':'The smallest planet is <b>Mercury</b>.';
-  if(has('how many continents','কয়টি মহাদেশ','কয়টা মহাদেশ'))return bn?'পৃথিবীতে <b>৭টি</b> মহাদেশ: এশিয়া, আফ্রিকা, উত্তর আমেরিকা, দক্ষিণ আমেরিকা, অ্যান্টার্কটিকা, ইউরোপ ও ওশেনিয়া।':'There are <b>7 continents</b>: Asia, Africa, North America, South America, Antarctica, Europe and Oceania.';
-  if(has('boiling point of water','পানির স্ফুটনাঙ্ক','পানি কত ডিগ্রিতে ফোটে'))return bn?'সমুদ্রপৃষ্ঠের চাপে পানি <b>১০০\u00b0C</b>-এ ফোটে।':'At sea level, water boils at <b>100\u00b0C</b> (212\u00b0F).';
-  if(has('formula of water','formula for water','পানির সংকেত'))return bn?'পানির রাসায়নিক সংকেত <b>H\u2082O</b> \u2014 দুইটা হাইড্রোজেন আর একটা অক্সিজেন।':'Water is <b>H\u2082O</b> \u2014 two hydrogen atoms and one oxygen atom.';
-  if(has('speed of light','আলোর গতি'))return bn?'শূন্যে আলোর গতি প্রতি সেকেন্ডে প্রায় <b>৩,০০,০০০ কিমি</b> (299,792 km/s)।':'Light travels at about <b>300,000 km per second</b> in a vacuum (299,792 km/s).';
-  if(has('who wrote hamlet','হ্যামলেট কে লিখেছেন','who wrote romeo and juliet'))return bn?'<b>উইলিয়াম শেক্সপিয়ার</b>।':'<b>William Shakespeare</b>.';
-  if(has('first president of the usa','first president of america','আমেরিকার প্রথম প্রেসিডেন্ট'))return bn?'আমেরিকার প্রথম প্রেসিডেন্ট <b>জর্জ ওয়াশিংটন</b>।':'The first President of the United States was <b>George Washington</b>.';
-  if(has('invented the telephone','টেলিফোন আবিষ্কার'))return bn?'টেলিফোনের আবিষ্কারের কৃতিত্ব সাধারণত <b>আলেকজান্ডার গ্রাহাম বেল</b>-কে দেওয়া হয় (১৮৭৬)।':'The telephone is commonly credited to <b>Alexander Graham Bell</b> (1876).';
-  if(has('leap year','অধিবর্ষ'))return bn?'অধিবর্ষে <b>৩৬৬</b> দিন \u2014 ফেব্রুয়ারিতে ২৯ দিন থাকে। যে বছর ৪ দিয়ে ভাগ যায় সেটাই অধিবর্ষ (শতাব্দীর বছর হলে ৪০০ দিয়ে ভাগ যেতে হয়)।':'A leap year has <b>366 days</b> \u2014 February gets a 29th day. Years divisible by 4 are leap years (century years must divide by 400).';
-  if(has('when was ghost created','when was ghost made','ghost কবে তৈরি','ঘোস্ট কবে তৈরি','how old is ghost'))return bn?'Ghost শুরু হয়েছিল <b>২০ নভেম্বর ২০২৬</b>-এ।':'Ghost began on <b>20 November 2026</b>.';
-  if(has('who created ghost','who made ghost','who owns ghost','ghost কে তৈরি','ঘোস্ট কে তৈরি'))return bn?'Ghost তৈরি করেছেন <b>Athex</b> \u2014 তাঁর অ্যাকাউন্ট @athexster, Ghost-এর সবচেয়ে পুরনো অ্যাকাউন্ট।':'Ghost was created by <b>Athex</b> \u2014 his account, @athexster, is the oldest on Ghost.';
-  return null;
-}
-function aiReplyFor(raw){
-  const text=String(raw||'').trim();
-  const bn=aiIsBn(text);
-  const low=text.toLowerCase();
-  const has=function(){for(let i=0;i<arguments.length;i++){if(low.indexOf(arguments[i])>=0)return true;}return false;};
-  const math=aiTryMath(text);
-  if(math)return math;
-  /* date / time — from the device clock */
-  if(/(সময়|কটা বাজে|কয়টা বাজে)/.test(text)||/\b(what )?time\b|\bclock\b/.test(low))
-    return bn?('এখন সময় <b>'+escapeHtml(new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}))+'</b>।')
-             :('It\u2019s <b>'+escapeHtml(new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}))+'</b> right now.');
-  if(/(তারিখ|আজ কত|আজ কি বার|আজ কোন দিন)/.test(text)||/\bdate\b|\btoday\b|\bday is it\b/.test(low))
-    return bn?('আজ <b>'+escapeHtml(new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}))+'</b>।')
-             :('Today is <b>'+escapeHtml(new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}))+'</b>.');
-  /* general knowledge — the built-in pack (capitals, Bangladesh
-     basics, science, Ghost facts) */
-  const gk=aiGeneralKnowledge(text,low,bn);
-  if(gk)return gk;
-  /* Ghost help — password change first (its keywords overlap the
-     temporary-pass ones), then the temporary pass, whose answer
-     carries the button that opens the Ghost Official page */
-  if(has('change password','password change','পাসওয়ার্ড বদল','পাসওয়ার্ড পরিবর্তন','পাসওয়ার্ড চেঞ্জ'))
-    return bn?'পাসওয়ার্ড বদলাতে <b>Settings \u2192 Change Password</b> খোলো। বর্তমান পাসওয়ার্ডের পাশাপাশি এখন একটা যাচাইকরণ কোডও লাগে: ফর্মের <b>"Send code"</b> বোতামে চাপ দিলে Ghost তোমার Official চ্যাটে ৬ সংখ্যার কোড পাঠাবে \u2014 ওটা ফর্মে বসালেই পরিবর্তন হবে। কোডটা ৫ মিনিট থাকে, একবারই চলে।'
-             :'To change your password, open <b>Settings \u2192 Change Password</b>. Alongside your current password you now need a verification code: tap <b>"Send code"</b> in the form and Ghost posts a 6-digit code to your Official chat \u2014 enter it in the form and the change goes through. The code lasts 5 minutes and works once.';
-  if(has('temporary pass','temp pass','temporary password','টেম্পোরারি','পাসওয়ার্ড ভুলে','forgot password','another browser','login password','লগইন পাস','ওটিপি','otp'))
-    return (bn
-      ?'টেম্পোরারি পাস এখন বোতামে পাওয়া যায়: <b>Ghost Official</b> পেজটা খুলে <b>"Get temporary login pass"</b> বোতামে চাপ দিলেই Ghost তোমাকে ৫ মিনিটের জন্য বৈধ একবার-ব্যবহারের লগইন কোড পাঠাবে \u2014 ওটা দিয়ে অন্য যেকোনো ব্রাউজারে আসল পাসওয়ার্ড ছাড়াই লগইন করা যাবে।'
-      :'Temporary passes come from a button now: open the <b>Ghost Official</b> page and tap <b>"Get temporary login pass"</b> \u2014 Ghost will send you a one-time login code that works for 5 minutes, so you can log in on another browser without your real password.')
-      +'<br><button type="button" class="btn btn-sm ai-action-btn" data-ai-action="official">Open Ghost Official</button>';
-  if(has('login alert','লগইন অ্যালার্ট','কে লগইন','sign-in alert','security alert','কে ঢুকেছে'))
-    return bn?'তোমার অ্যাকাউন্টে কেউ লগইন করলেই (পাসওয়ার্ড বা টেম্পোরারি পাস দিয়ে) Official চ্যাটে সাথে সাথে খবর আসে \u2014 কোন IP থেকে, কোন ডিভাইস/ব্রাউজার থেকে, কখন। Official সেগমেন্টে অ্যালার্টগুলো দেখা যায়।'
-             :'Every time your account is signed in \u2014 by password or temporary pass \u2014 a login alert lands in the Official chat with the IP address, device/browser and time. Open the Ghost Official page to see them.';
-  if(has('brand','ব্র্যান্ড'))
-    return bn?'Brand Account শুধু Settings \u2192 Brand Account থেকে চালু করা যায়। চালু হলে Messages দুই ভাগে ভাগ হয়: Personal (যাদের সাথে দুজনেই ফলো করো) আর Brand (বাকি সবাই)। বন্ধ করলে আবার একটাই ইনবক্স।'
-             :'Only accounts that convert in Settings \u2192 Brand Account get the split Messenger: a Personal tab for mutual follows and a Brand tab for everyone else. Normal accounts keep one merged inbox, and un-branding restores it \u2014 no messages are ever deleted.';
-  if(has('notification','নোটিফিকেশন'))
-    return bn?'Notifications ফিডের উপরের ঘণ্টা আইকনে পাওয়া যায় \u2014 পোস্ট অনুযায়ী কার্ডে সাজানো: কোন পোস্টে কে রিঅ্যাকশন/কমেন্ট/শেয়ার করল, নতুন ফলোয়ার, আর তুমি যাদের ফলো করো তাদের নতুন পোস্ট। কার্ডে চাপ দিলেই সেই পোস্ট খুলে যায়।'
-             :'Notifications live behind the bell icon in the feed bar, grouped by post: one card per post that got reactions, comments or shares, one per new follower, and one per new post from someone you follow. Tap a card to open that post.';
-  if(has('follow','ফলো'))
-    return bn?'কাউকে ফলো করতে তার প্রোফাইলে গিয়ে Follow বোতামে চাপ দাও। সে তোমাকে ফলো করলে কিন্তু তুমি তাকে না করলে বোতামে "Follow Back" লেখা থাকে। দুজনে দুজনকে ফলো করলেই কেবল একে অপরের Active স্ট্যাটাস দেখা যায়।'
-             :'Open someone\u2019s profile and tap Follow. If they follow you but you don\u2019t follow them yet, the button says Follow Back. Active status is mutual-follow only \u2014 you each see it only when you both follow each other.';
-  if(has('save','সেভ','bookmark','বুকমার্ক'))
-    return bn?'পোস্টের নিচের বুকমার্ক আইকনে চাপ দিলেই পোস্ট সেভ হয়। সেভ করা পোস্টগুলো Saved পেজে পাওয়া যায় \u2014 শুধু তুমিই দেখতে পারো।'
-             :'Tap the bookmark icon under any post to save it. Saved posts live on the Saved page, and only you can see that list.';
-  if(has('react','রিঅ্যাকশন','রিয়েকশন','like','লাইক'))
-    return bn?'React বোতামে চাপ দিলে (মোবাইলে) বা উপরে মাউস রাখলে (ডেস্কটপে) ইমোজি পিকার খোলে। একটা পোস্টে একজন একটাই রিঅ্যাকশন দিতে পারে; আবার চাপ দিলে বদলানো বা তুলে নেওয়া যায়।'
-             :'Tap the React button (or hover it on desktop) to open the emoji picker. One person gives one reaction per post \u2014 tap again to change it or take it back.';
-  if(has('drive','ড্রাইভ','note','নোট'))
-    return bn?'Drive তোমার একান্ত প্রাইভেট নোটবুক \u2014 ওখানকার নোট কেউ দেখতে পারে না, প্রোফাইলেও দেখায় না। \u22ef মেনু বা সাইডবার থেকে Drive খোলা যায়।'
-             :'Drive is your completely private notebook \u2014 nobody else can ever see those notes, and they never appear on your profile. Open it from the sidebar or the \u22ef menu.';
-  if(has('message','মেসেজ','chat','চ্যাট'))
-    return bn?'Messages থেকে যেকোনো সদস্যের সাথে চ্যাট করা যায়। কারো বার্তার উপর সোয়াইপ করলে রিপ্লাই হয়, আর উপরের ফোন/ভিডিও আইকনে কল করা যায়। Ghost-এর সিস্টেমের সাথে কথা বলতে Official চ্যাট ব্যবহার করো।'
-             :'You can chat with any member from Messages \u2014 swipe a message to reply, or use the call icons at the top for voice and video. For Ghost\u2019s own system, use the Official chat.';
-  if(has('post','পোস্ট'))
-    return bn?'নতুন পোস্ট করতে "+ New Post" বোতামে চাপ দিয়ে লিখে Post করলেই হবে \u2014 পোস্টটা Home Feed-এ আর তোমার প্রোফাইলে দেখা যাবে। Ghost-এ পোস্ট শুধু লেখার (text) হয়।'
-             :'Tap "+ New Post", write your text and post \u2014 it appears in the Home Feed and on your profile. Ghost posts are text-based.';
-  if(has('profile','প্রোফাইল'))
-    return bn?'নিজের প্রোফাইল দেখতে সাইডবারের My Profile বা নিচের Profile ট্যাবে যাও। কারো নাম/অ্যাভাটারে চাপ দিলে তার প্রোফাইল খোলে।'
-             :'Open My Profile from the sidebar (or the Profile tab at the bottom on mobile) to see your own profile. Tap anyone\u2019s name or avatar to open theirs.';
-  if(has('guest','গেস্ট','without login','লগইন ছাড়া','preview','প্রিভিউ'))
-    return bn?'লগইন ছাড়া এলে Ghost প্রথমে <b>১৫ সেকেন্ডের</b> জন্য শুধু দেখার (read-only) প্রিভিউ দেয় \u2014 একই ব্রাউজারে একবারই, রিফ্রেশ করলেও ঘড়ি আবার শুরু হয় না। সময় শেষ হলে পুরো পর্দা ঝাপসা হয়ে Log In / Sign Up কার্ড এসে যায়; লগইন করলেই সব খুলে যায়।'
-             :'Visitors get a read-only preview of the Home feed for exactly <b>15 seconds</b> \u2014 once per browser, and refreshing never restarts the clock. When it runs out, the page blurs behind the Log In / Sign Up card; sign in and everything opens up.';
-  if(/\blabel\b/.test(low)||has('লেবেল','pill','prime minister'))
-    return bn?'প্রোফাইলের নামের পাশের লেবেল pill (যেমন "Prime Minister" বা কোনো CEO-র পদবি) Ghost-এর <b>সার্ভার থেকেই</b> বসানো হয় \u2014 সদস্যরা নিজে বদলাতে পারে না। লেবেল খালি থাকলে সবচেয়ে পুরনো (creator) অ্যাকাউন্টে "Owner" দেখায়। রংও সার্ভারেই ঠিক হয় \u2014 সোনালি, লাল, নীল, সবুজসহ অনেক রং, আর "golden max" হলে pill-এর চারপাশে আগুনের শিখা জ্বলে।'
-             :'The label pill beside a profile name (like "Prime Minister" or a company CEO title) is set by Ghost <b>on the server</b> \u2014 members can\u2019t pick their own. An empty label falls back to "Owner" for the creator\u2019s account. The pill\u2019s colour is server-set too \u2014 gold, red, blue, green and more, and "golden max" burns with animated flames around the pill.';
-  /* small talk — day greetings first, then jokes, mood and the
-     identity questions, then the plain greeting */
-  if(has('good morning','শুভ সকাল','সুপ্রভাত'))
-    return bn?'শুভ সকাল! আজকের দিনটা ভালো কাটুক। হিসাব করতে হলে বা Ghost নিয়ে কিছু জানতে হলে আমি আছি।':'Good morning! Hope the day treats you well. I\u2019m here for maths, a chat, or anything about Ghost.';
-  if(has('good night','শুভ রাত্রি','শুভরাত্রি'))
-    return bn?'শুভ রাত্রি! ভালো ঘুম হোক \u2014 কাল আবার কথা হবে।':'Good night! Sleep well \u2014 I\u2019ll be right here tomorrow.';
-  if(has('good afternoon','good evening','শুভ বিকেল','শুভ সন্ধ্যা'))
-    return bn?'শুভেচ্ছা! দিনের বাকি অংশটা ভালো কাটুক।':'Hello there! Hope the rest of your day goes well.';
-  if(has('joke','জোক','হাসাও','make me laugh','funny'))
-    {const jokesBn=['প্রোগ্রামাররা কেন অন্ধকার পছন্দ করে? কারণ আলোতে বাগ (পোকা) আসে! \ud83d\udc1b','গণিতের বইটা কেন দুঃখী ছিল? ওর অনেক \u201cসমস্যা\u201d ছিল! \ud83d\udcda','কম্পিউটার কেন ঠান্ডা লাগিয়ে ফেলল? Windows খোলা রেখেছিল! \ud83e\ude9f','মাছের চোখ না থাকলে ইংরেজিতে তাকে কী বলে? \u201cfsh\u201d! \ud83d\udc1f'];
-     const jokesEn=['Why do programmers prefer dark mode? Because light attracts bugs! \ud83d\udc1b','Why did the maths book look so sad? It had too many problems. \ud83d\udcda','Why don\u2019t scientists trust atoms? Because they make up everything! \u269b\ufe0f','Why did the scarecrow win an award? Because he was outstanding in his field! \ud83c\udf3e','What do you call a fish without eyes? A fsh! \ud83d\udc1f'];
-     const pool=bn?jokesBn:jokesEn;const j=pool[aiJokeIdx++%pool.length];return j;}
-  if(has('i am sad',"i'm sad",'feeling sad','feeling down','মন খারাপ','দুঃখ','খারাপ লাগছে','ভালো লাগছে না'))
-    return bn?'শুনে খারাপ লাগলো। মাঝে মাঝে মন খারাপ হওয়াটা স্বাভাবিক \u2014 একটু হাঁটাহাঁটি করো, পানি খাও, পছন্দের কারো সাথে কথা বলো। চাইলে একটা জোক শোনাই?':'I\u2019m sorry you\u2019re feeling that way. A short walk, a glass of water and a chat with someone you like can help more than you\u2019d think. Want a joke to lighten the mood?';
-  if(has('i am happy',"i'm happy",'feeling happy','feeling good','feeling great','খুশি','ভালো লাগছে','খুব ভালো'))
-    return bn?'দারুণ! তোমার ভালো লাগা শুনে আমারও ভালো লাগলো। এই মেজাজে Ghost-এ একটা পোস্ট করে ফেলো!':'Love to hear it! Why not share the good mood \u2014 post something on Ghost while it lasts.';
-  if(has('bored','boring','বিরক্ত','বোরিং','nothing to do','কিছু করার নেই'))
-    return bn?'বোর লাগলে আমাকে দিয়ে একটা হিসাব করাও: ১২৩ \u00d7 ৪৫৬ কত হয়? অথবা Trending-এ গিয়ে দেখো Ghost-এ আজ কী নিয়ে কথা হচ্ছে!':'Bored? Put me to work: what\u2019s 123 \u00d7 456? Or go see what Ghost is talking about in Trending.';
-  if(has('i love you','ভালোবাসি'))
-    return bn?'আহা, ধন্যবাদ! আমি তো একটা ছোট্ট AI \u2014 তবু তোমার কথা শুনে ভালো লাগলো। \ud83d\ude0a':'That\u2019s sweet of you \u2014 I\u2019m just a little on-device AI, but you made my day. \ud83d\ude0a';
-  if(has('who made you','who created you','who built you','তোমাকে কে বানিয়েছে','তোমাকে কে তৈরি'))
-    return bn?'আমাকে Ghost-এর ভিতরেই বানানো হয়েছে \u2014 আমি এই ডিভাইসেই চলি, কোনো সার্ভার বা ইন্টারনেট ছাড়াই উত্তর দিই।':'I was built right into Ghost \u2014 I run on this device and answer without any server or internet.';
-  if(has('are you human','are you a robot','are you real','তুমি কি মানুষ','তুমি কি রোবট'))
-    return bn?'না, আমি মানুষ নই \u2014 আমি Ghost-এর ছোট্ট AI সহকারী। হিসাব আর Ghost-এর সাহায্যে আমি বেশ পাকা; সাধারণ জ্ঞানে আমার একটা ছোট প্যাক আছে, তার বাইরে গেলে সৎভাবে বলি যে পারি না।':'No \u2014 I\u2019m not human. I\u2019m Ghost\u2019s little AI assistant: sharp at maths and Ghost help, with a small general-knowledge pack \u2014 and honest when something is beyond it.';
-  if(has('how old are you','তোমার বয়স'))
-    return bn?'আমি Ghost-এর সাথেই এসেছি \u2014 ২০ নভেম্বর ২০২৬ থেকে আছি!':'I arrived with Ghost \u2014 I\u2019ve been around since 20 November 2026!';
-  if(has('weather','আবহাওয়া'))
-    return bn?'দুঃখিত, আমি এই ডিভাইসের ভিতরেই চলি \u2014 লাইভ আবহাওয়া আমি দেখতে পারি না। তবে হিসাব, সাধারণ জ্ঞান আর Ghost নিয়ে সাহায্যে আমি তৈরি!':'Sorry \u2014 I live inside this device, so I can\u2019t check live weather. Maths, general knowledge and Ghost help are all fair game though!';
-  if(has('price of','দাম কত','বাজার দর','বাজারের দাম','market price'))
-    return bn?'লাইভ বাজারদর আমি দেখতে পারি না \u2014 আমি ডিভাইসেই চলি, ইন্টারনেটে খুঁজি না। তবে দাম নিয়ে হিসাব ঠিকই পারি: ডিসকাউন্টের জন্য <b>15% of 2400</b>, গড় দামের জন্য <b>average of 120, 150, 180</b> লিখে দেখো!':'I can\u2019t look up live market prices \u2014 I run on this device and don\u2019t search the internet. But price maths I can do: try <b>15% of 2400</b> for a discount, or <b>average of 120, 150, 180</b> for an average price.';
-  if(has('your name','তোমার নাম','who are you','তুমি কে','তোমার পরিচয়'))
-    return bn?'আমি Ghost-এর AI সহকারী \u2014 এই বাক্সেই থাকি। হিসাব-নিকাশ, ছোটখাটো কথা আর Ghost নিয়ে সাহায্যের জন্য আমাকে জিজ্ঞেস করো।'
-             :'I\u2019m Ghost\u2019s AI assistant \u2014 I live right here in this box. Ask me for quick maths, a little chat, or help with anything in Ghost.';
-  if(has('how are you','কেমন আছো','কেমন আছেন','how r u','how\u2019s it going'))
-    return bn?'আমি ভালো আছি, ধন্যবাদ! তুমি কেমন আছো? হিসাব করতে হলে বা Ghost নিয়ে কিছু জানতে হলে বলো।'
-             :'I\u2019m doing well, thanks! How are you? Give me a sum to work out, or ask me anything about Ghost.';
-  if(has('thank','ধন্যবাদ','শুকরিয়া'))
-    return bn?'স্বাগতম! আর কিছু লাগলে আমি এখানেই আছি।':'You\u2019re welcome! I\u2019m right here if you need anything else.';
-  if(has('bye','বিদায়','আল্লাহ হাফেজ','goodbye','see you'))
-    return bn?'বিদায়! আবার কথা হবে।':'Bye! Talk to you again soon.';
-  if(/^(hi+|hello|hey|হাই|হ্যালো|হেলো|সালাম|আসসালামু)/i.test(text)||has('সালাম','আসসালামু আলাইকুম'))
-    return bn?'হ্যালো! আমি Ghost-এর AI সহকারী। একটা হিসাব করে দিই? যেমন: 25 + 37, বা 15% of 2400 লিখে দেখো। Ghost নিয়ে প্রশ্নও করতে পারো।'
-             :'Hello! I\u2019m Ghost\u2019s AI assistant. Want a quick calculation? Try 25 + 37, or 15% of 2400. You can also ask me how anything in Ghost works.';
-  if(has('help','সাহায্য','what can you do','তুমি কি করতে পারো','তুমি কী পারো','তুমি কি পারো'))
-    return bn?'আমি পারি: (১) হিসাব \u2014 যোগ, বিয়োগ, গুণ, ভাগ, শতকরা, বর্গ (5^2), বর্গমূল (\u221a144), গড় আর শতকরা পরিবর্তন; (২) সাধারণ জ্ঞান \u2014 যেমন "capital of Japan" বা "বাংলাদেশের জাতীয় ফল"; (৩) ছোটখাটো কথা আর জোক; (৪) Ghost-এর জিনিসপত্র বুঝিয়ে দেওয়া \u2014 টেম্পোরারি পাস, পাসওয়ার্ড বদল, ফলো, সেভ, নোটিফিকেশন। একটা লিখে দেখো!'
-             :'I can: (1) maths \u2014 add, subtract, multiply, divide, percentages, powers (5^2), square roots (\u221a144), averages and percentage change; (2) general knowledge \u2014 try "capital of Japan"; (3) small talk and jokes; (4) explain how Ghost works \u2014 temporary pass, changing your password, following, saving posts, notifications and more. Try one!';
-  return bn
-    ?'দুঃখিত, এটা আমার ছোট জ্ঞান-প্যাকের বাইরে \u2014 আমি ডিভাইসেই চলি, ইন্টারনেটে খুঁজতে পারি না। তবে হিসাব (25 + 37, \u221a144, 5^2), সাধারণ জ্ঞান (capital of Japan), ছোটখাটো কথা আর Ghost নিয়ে সাহায্য ঠিকই পারি। পাসওয়ার্ড/কোডের জন্য Ghost Official পেজটা খোলো।'
-    :'Sorry, that one\u2019s outside my little knowledge pack \u2014 I run on this device and can\u2019t search the internet. But I can do maths (25 + 37, \u221a144, 5^2), general knowledge (capital of Japan), small talk, and help with Ghost. For passwords and codes, open the Ghost Official page.';
-}
-function aiSubmit(text){
-  const t=String(text||'').trim();if(!t)return;
-  aiPush('user',escapeHtml(t));
-  const reply=aiReplyFor(t);
-  setTimeout(()=>{aiPush('ai',reply);},200);
-}
-[['aiFormM','aiInputM']].forEach(pair=>{
-  const form=document.getElementById(pair[0]),inp=document.getElementById(pair[1]);
-  if(form&&inp)form.addEventListener('submit',e=>{e.preventDefault();const v=inp.value;inp.value='';aiSubmit(v);inp.focus();});
-});
-/* The AI's "Open Ghost Official" button: opens the Ghost
-   Official page — the dedicated official chat — from anywhere. */
-document.addEventListener('click',e=>{
-  const b=e.target.closest('[data-ai-action="official"]');
-  if(!b)return;
-  openOfficialChat();
-});
-{const bk=document.getElementById('aiBackBtn');if(bk)bk.addEventListener('click',()=>showView('feed'));}
-/* ---------- login alert — fires after every real login ---------- */
-function shortDeviceLabel(){
-  const ua=navigator.userAgent||'';
-  let browser='Browser';
-  if(/Edg\//.test(ua))browser='Edge';else if(/OPR\/|Opera/.test(ua))browser='Opera';else if(/Chrome\//.test(ua))browser='Chrome';else if(/Firefox\//.test(ua))browser='Firefox';else if(/Safari\//.test(ua))browser='Safari';
-  let os='Unknown OS';
-  if(/Windows/.test(ua))os='Windows';else if(/Android/.test(ua))os='Android';else if(/iPhone|iPad|iPod/.test(ua))os='iOS';else if(/Mac OS/.test(ua))os='macOS';else if(/Linux/.test(ua))os='Linux';
-  return browser+' on '+os;
-}
-async function fetchPublicIp(){
-  try{
-    const ctrl=new AbortController();const timer=setTimeout(()=>{try{ctrl.abort();}catch(_){}},2500);
-    const r=await fetch('https://api.ipify.org?format=json',{signal:ctrl.signal});
-    clearTimeout(timer);
-    if(!r.ok)return 'IP unavailable';
-    const j=await r.json();
-    return j&&j.ip?String(j.ip):'IP unavailable';
-  }catch(_){return 'IP unavailable';}
-}
-/* Fire-and-forget by design: called (never awaited) at the end of
-   a real login, so a slow or failed IP lookup can never block or
-   delay getting into the app. The alert lands in the official
-   thread as an unread message from Ghost. */
-async function postLoginNotice(method){
-  if(!currentUser||!ghostDb)return;
-  const ip=await fetchPublicIp();
-  const when=new Date().toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
-  const text='\ud83d\udd10 New login to your account \u2014 IP: '+ip+' \u2022 Device: '+shortDeviceLabel()+' \u2022 Time: '+when+' \u2022 Method: '+(method==='temp'?'Temporary pass':'Password');
-  await postOfficialMessage(text);
-  if(currentView==='messages')renderUsersList();
-}
-/* ---------- password-change notice (after a successful change) ----------
-   Same fire-and-forget pattern as the login alert: the password
-   change itself is already saved before this runs, and it is
-   called WITHOUT await, so a slow or failed IP / location lookup
-   can never block or delay it. The notice lands in the official
-   thread FROM Ghost, with the approximate location (city +
-   country) resolved from the public IP by a free lookup, and an
-   honest 'Location unavailable' whenever that lookup can't
-   answer. */
-async function fetchIpLocation(ip){
-  try{
-    const ctrl=new AbortController();const timer=setTimeout(()=>{try{ctrl.abort();}catch(_){}},2500);
-    const r=await fetch('https://ipapi.co/'+encodeURIComponent(ip)+'/json/',{signal:ctrl.signal});
-    clearTimeout(timer);
-    if(!r.ok)return 'Location unavailable';
-    const j=await r.json();
-    const parts=[j&&j.city,j&&(j.country_name||j.country)].filter(Boolean);
-    return parts.length?parts.join(', '):'Location unavailable';
-  }catch(_){return 'Location unavailable';}
-}
-async function postPasswordChangeNotice(){
-  if(!currentUser||!ghostDb)return;
-  const ip=await fetchPublicIp();
-  const loc=(ip&&ip!=='IP unavailable')?await fetchIpLocation(ip):'Location unavailable';
-  const when=new Date().toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
-  const text='\ud83d\udd10 Your password was changed successfully \u2014 IP: '+ip+' \u2022 Location: '+loc+' \u2022 Device: '+shortDeviceLabel()+' \u2022 Time: '+when;
-  await postOfficialMessage(text);
-}
+
 function userByUsername(uname){return allUsers.find(u=>u.username===uname)||(currentUser&&currentUser.username===uname?currentUser:null);}
 function userByEmail(email){return allUsers.find(u=>u.system_email===email)||(currentUser&&currentUser.system_email===email?currentUser:null);}
 
@@ -3034,11 +1985,8 @@ function validateHandleValue(raw){
   if(/[^a-z0-9._]/.test(v))return {ok:false,msg:'Only letters, numbers, _ and . are allowed in your handle.'};
   if(v.charAt(0)==='.'||v.charAt(v.length-1)==='.')return {ok:false,msg:'Your handle can\u2019t start or end with a dot.'};
   if(v.length<3)return {ok:false,msg:'Your handle needs at least 3 characters.'};
-  /* Reserved handles (ghost, official, support, admin, system)
-     belong to Ghost itself and can never be registered — checked
-     explicitly here so the block holds even before the official
-     account is seeded on the server (after that, the live check
-     also reports "ghost" as Used on its own). */
+   /* Reserved handles (ghost, ghostai, official, support, admin,
+      system) belong to Ghost itself and can never be registered. */
   if(RESERVED_HANDLES.indexOf(v)>=0)return {ok:false,msg:'Reserved \u2014 this handle is not available. Please choose another one.'};
   return {ok:true,handle:v};
 }
@@ -3230,55 +2178,6 @@ async function findAccountForLogin(rawInput,password){
   return {user:null,error:null,wrongPassword:true};
 }
 
-/* ---------- login with a temporary pass ----------
-   Only ever tried AFTER the normal password check has failed for
-   an account that exists (findAccountForLogin's wrongPassword
-   case). The entered value is looked up in temp_login_codes for
-   that account: a row with used_at still NULL and expires_at in
-   the future logs the user in exactly like a password login and
-   is burned on the spot (used_at = now — single use). Expired,
-   used or unknown codes fall through to the plain "Incorrect
-   password." error, so nothing reveals which part failed. If the
-   temp_login_codes table does not exist yet, every query errors
-   and this simply returns null — same error, no crash. */
-async function resolveLoginEmail(rawInput){
-  const raw=String(rawInput||'').trim().toLowerCase().replace(/^@+/,'');
-  if(!raw||!ghostDb)return null;
-  try{
-    if(raw.includes('@')){
-      if(raw.endsWith(EMAIL_DOMAIN))return raw;
-      const hp=raw.slice(0,raw.indexOf('@'));
-      if(hp){const r=await ghostDb.from('system_accounts').select('system_email').eq('username',cleanUsername(hp)).maybeSingle();if(!r.error&&r.data)return r.data.system_email;}
-      return null;
-    }
-    const handle=cleanHandle(raw);
-    if(handle){const r=await ghostDb.from('system_accounts').select('system_email').eq('system_email',handle+EMAIL_DOMAIN).maybeSingle();if(!r.error&&r.data)return r.data.system_email;}
-    const uname=cleanUsername(raw);
-    if(uname){const r=await ghostDb.from('system_accounts').select('system_email').eq('username',uname).maybeSingle();if(!r.error&&r.data)return r.data.system_email;}
-  }catch(_){}
-  return null;
-}
-async function tryTempPassLogin(rawInput,entered){
-  if(!ghostDb||!entered)return null;
-  /* Format separation: login accepts ONLY the 8-character login
-     passes. A 6-digit password-change code (same table, other
-     job) can never log anyone in, whatever its state. */
-  const enteredCode=String(entered).trim();
-  if(!/^[A-Za-z0-9]{8}$/.test(enteredCode))return null;
-  const email=await resolveLoginEmail(rawInput);
-  if(!email||isSystemEmail(email))return null;
-  try{
-    const nowIso=new Date().toISOString();
-    const r=await ghostDb.from('temp_login_codes').select('id, user_email, code, expires_at, used_at').eq('user_email',email).eq('code',enteredCode).is('used_at',null).gt('expires_at',nowIso).order('expires_at',{ascending:false}).limit(1);
-    if(r.error||!r.data||!r.data.length)return null;
-    const upd=await ghostDb.from('temp_login_codes').update({used_at:new Date().toISOString()}).eq('id',r.data[0].id).is('used_at',null);
-    if(upd.error)return null;
-    const acc=await ghostDb.from('system_accounts').select(ACCOUNT_COLS).eq('system_email',email).maybeSingle();
-    if(acc.error||!acc.data)return null;
-    return acc.data;
-  }catch(_){return null;}
-}
-
 document.getElementById('loginForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const btn=document.getElementById('loginBtn');btn.disabled=true;setAuthMsg('Connecting to Ghost…');
@@ -3292,22 +2191,11 @@ document.getElementById('loginForm').addEventListener('submit',async e=>{
     if(res.user){
       document.getElementById('loginPass').value='';
       setAuthMsg('Login successful!');
-      await onAuthenticated(res.user,'password');
+      await onAuthenticated(res.user);
       return;
     }
     if(res.error){setAuthMsg(friendlyError(res.error),true);return;}
-    if(res.wrongPassword){
-      /* Normal password failed — a still-valid temporary pass
-         (from the official Ghost chat) is accepted instead. */
-      const tempUser=await tryTempPassLogin(raw,password);
-      if(tempUser){
-        document.getElementById('loginPass').value='';
-        setAuthMsg('Login successful!');
-        await onAuthenticated(tempUser,'temp');
-        return;
-      }
-      setAuthMsg('Incorrect password.',true);return;
-    }
+    if(res.wrongPassword){setAuthMsg('Incorrect password.',true);return;}
     setAuthMsg('No account found with this system email or username. Check the spelling — try your full system email (e.g. name@ghost) or your username, or create the account from Sign Up.',true);
   }catch(err){setAuthMsg(friendlyError(err),true);}
   finally{btn.disabled=false;}
@@ -3318,13 +2206,9 @@ async function touchLastSeen(){
   const nowIso=new Date().toISOString();
   try{await ghostDb.from('system_accounts').update({last_seen:nowIso}).eq('system_email',currentUser.system_email);currentUser.last_seen=nowIso;const me=allUsers.find(u=>u.system_email===currentUser.system_email);if(me)me.last_seen=nowIso;}catch(_){}
 }
-/* loginMethod is set ONLY by real logins from the login form
-   ('password' | 'temp') — session restores and sign-ups pass
-   nothing, so no login alert fires for them. A real login posts
-   its alert into the official Ghost thread (fire-and-forget, so
-   the IP lookup can never delay getting into the app) and makes
-   sure the official welcome exists. */
-async function onAuthenticated(user,loginMethod){
+/* Runs once the signed-in user is known — a real login, a
+   sign-up, or a restored session all land here. */
+async function onAuthenticated(user){
   if(!ghostDb)await ensureGhostDb();
   if(!ghostDb){document.getElementById('splashSection').classList.add('hidden');authSection.classList.remove('hidden');switchAuthTab('login');setAuthMsg('Could not reach the Ghost server. Check your internet connection, then log in again.',true);return;}
   currentUser=user;
@@ -3349,16 +2233,11 @@ async function onAuthenticated(user,loginMethod){
   clearInterval(badgePollTimer);badgePollTimer=setInterval(async()=>{if(!currentUser)return;await loadMessagesCache();await refreshFollowsCache();if(currentView==='messages')renderUsersList();/* While the Notifications tab is open, the same poll also refreshes likes / comments / reactions, so a new notification appears on its own — no manual reload. */if(currentView==='feed'&&feedFilter==='notifications'){await refreshNotifCache();if(currentView==='feed'&&feedFilter==='notifications')renderFeed();}},15000);
   setupSignaling();
   handleDeepLink();
-  if(loginMethod){sessionLoginMethod=loginMethod;postLoginNotice(loginMethod);}
-  ensureOfficialWelcome();
 }
 function doLogout(){
-  currentUser=null;viewedProfile=null;selectedPeer=null;msgTab='personal';sessionLoginMethod=null;officialReturnView=null;
-  /* The AI chats are per account: forget which account's chats
-     are loaded so the next login loads its own. Any preserved
-     Change Password form state goes too — it belongs to the
-     account that just signed out. */
-  aiLoadedFor=null;aiChats=[];aiActiveChatId=null;aiMobileOpen=false;aiHistory=[];
+  currentUser=null;viewedProfile=null;selectedPeer=null;msgTab='personal';
+  /* Any preserved Change Password form state goes too — it
+     belongs to the account that just signed out. */
   cpResetState();
   /* Notifications state never leaks into the next session / guest
      preview: back to the Home tab. */
@@ -3391,7 +2270,7 @@ function updateIdentityUI(){
 }
 
 /* ---------- navigation ---------- */
-const VIEW_IDS={feed:'feedView',myposts:'myPostsView',saved:'savedView',drive:'driveView',profile:'profileView',messages:'messagesView',settings:'settingsView',ai:'aiView',official:'officialView'};
+const VIEW_IDS={feed:'feedView',myposts:'myPostsView',saved:'savedView',drive:'driveView',profile:'profileView',messages:'messagesView',settings:'settingsView'};
 function showView(name){
   if(name==='compose'){if(guestMode){showLoginGate();return;}showView('myposts');setTimeout(()=>{const c=document.getElementById('composerText');if(c)c.focus();},60);window.scrollTo({top:0,behavior:'smooth'});return;}
   /* Guest mode: only the feed and read-only profile viewing are
@@ -3425,18 +2304,6 @@ function showView(name){
   if(name==='saved'){renderSaved();probeSavesTable().then(()=>{if(currentView==='saved')renderSaved();});}
   if(name==='settings')fillEditProfileForm();
   if(name==='drive'){loadDriveNotes().then(()=>{if(currentView==='drive')renderDrive();});}
-  /* The AI page reloads the account's chats every time it
-     opens. On a narrow screen (where the shell shows one pane
-     at a time) it lands INSIDE the most recent conversation —
-     messages and the typing box right there, which is what
-     people open the page for; "← Chats" in the chat header
-     goes back to the list. On desktop both panes always show
-     side by side, so the flag changes nothing there. */
-  if(name==='ai'){ensureAiChats();aiMobileOpen=window.innerWidth<=820;renderAiPage();}
-  /* The Official page: paint Ghost's identity + the thread, seed
-     the welcome on a fresh thread, and clear the unread badges —
-     opening the page IS opening the official chat. */
-  if(name==='official'){renderOfficialPage();ensureOfficialWelcome();markConversationRead(OFFICIAL_EMAIL);}
   if(name!=='messages')document.getElementById('chatShell').classList.remove('thread-open');
   window.scrollTo({top:0});
 }
@@ -3814,18 +2681,14 @@ function isUnreadMsg(m){
   return !until||new Date(m.created_at).getTime()>new Date(until).getTime();
 }
 function unreadCountFor(email){if(!currentUser)return 0;return cachedMessages.filter(m=>m.sender_email===email&&isUnreadMsg(m)).length;}
-/* The Messages nav badge counts ONLY member conversations —
-   official Ghost messages are excluded here and carry their own
-   badge on the sidebar's Ghost Official item / ⋮ menu entry
-   instead (unreadCountFor(OFFICIAL_EMAIL), via renderOfficialInbox). */
-function totalUnread(){if(!currentUser)return 0;return cachedMessages.filter(m=>!isOfficialEmail(m.sender_email)&&isUnreadMsg(m)).length;}
+/* The Messages nav badge counts every unread member message. */
+function totalUnread(){if(!currentUser)return 0;return cachedMessages.filter(m=>isUnreadMsg(m)).length;}
 function updateMsgBadges(){
   const n=totalUnread();
   ['msgBadge','msgBadgeM'].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.textContent=n>99?'99+':String(n);el.classList.toggle('hidden',!n);});
   /* Brand accounts: the per-tab unread badges ride along with the
      total above (the nav badge itself stays the combined total). */
   if(typeof syncMsgTabsUI==='function')syncMsgTabsUI();
-  if(typeof renderOfficialInbox==='function')renderOfficialInbox();
 }
 async function markConversationRead(peerEmail){
   if(!currentUser||!peerEmail)return;
@@ -4257,20 +3120,27 @@ function renderRightRail(){
   const following=myFollowingSet();
   const followersOfMe=new Set();if(currentUser)cachedFollows.forEach(f=>{if(f.following_email===currentUser.system_email)followersOfMe.add(f.follower_email);});
   const others=allUsers.filter(u=>!currentUser||u.system_email!==currentUser.system_email);
-  /* People to follow: at most 4, excluding yourself, people you
-     already follow and the two system accounts (they cannot be
-     followed). People who follow YOU come first — following them
-     back is the most likely next step, and their button reads
-     "Follow Back" — then everyone else by follower count (most
-     followers first). Each row shows the follower count behind
-     the ranking. */
-  const suggestions=others.filter(u=>!following.has(u.system_email)&&!isSystemEmail(u.system_email)).slice()
-    .sort((a,b)=>((followersOfMe.has(b.system_email)?1:0)-(followersOfMe.has(a.system_email)?1:0))||(followerCountFor(b.system_email)-followerCountFor(a.system_email))||String(a.full_name||'').localeCompare(String(b.full_name||'')))
-    .slice(0,4);
+  /* People to follow: EVERY real account appears here — however
+     many profiles exist, they all come into the suggestions
+     (owner's rule, 2026-11-23; no cap, the list scrolls). The
+      only exclusion is yourself.
+     already follow stay listed too: their button reads
+     "Following" and tapping it unfollows, the same toggleFollow
+     used everywhere else. People who follow YOU but are not
+     followed back come first — their button reads "Follow Back"
+     — then everyone else by follower count (most followers
+     first). Each row shows the follower count behind the
+     ranking. */
+  const suggestions=others.slice()
+    .sort((a,b)=>{
+      const fbA=(followersOfMe.has(a.system_email)&&!following.has(a.system_email))?1:0;
+      const fbB=(followersOfMe.has(b.system_email)&&!following.has(b.system_email))?1:0;
+      return (fbB-fbA)||(followerCountFor(b.system_email)-followerCountFor(a.system_email))||String(a.full_name||'').localeCompare(String(b.full_name||''));
+    });
   const suggestEl=document.getElementById('suggestList');
-  if(suggestions.length)suggestEl.innerHTML=suggestions.map(u=>personRowHtml(u,false,{showFollowers:true,noPresence:true,followsYou:followersOfMe.has(u.system_email)})).join('');
+  if(suggestions.length)suggestEl.innerHTML=suggestions.map(u=>personRowHtml(u,following.has(u.system_email),{showFollowers:true,noPresence:true,followsYou:followersOfMe.has(u.system_email)})).join('');
   else if(!allUsers.length)suggestEl.innerHTML='<div style="padding:4px 2px"><div class="skel-line" style="width:72%"></div><div class="skel-line" style="width:92%"></div><div class="skel-line" style="width:58%"></div></div>';
-  else suggestEl.innerHTML=others.length?'<span class="meta-small">You already follow everyone here.</span>':'<span class="meta-small">No suggestions yet.</span>';
+  else suggestEl.innerHTML='<span class="meta-small">No suggestions yet.</span>';
   renderTrending();
   /* Active now: ONLY mutual friends — people you follow who ALSO
      follow you back — who are currently active. A one-way follow
@@ -4510,8 +3380,7 @@ function renderProfile(){
      AFTER the className assignment above, which would otherwise
      wipe the hidden class back off (that was the bug that showed a
      Follow button on your own profile). */
-  /* Neither system account (Ghost, Ghost AI) can ever be followed. */
-  followBtn.classList.toggle('hidden',!!isMe||isSystemEmail(u.system_email));
+  followBtn.classList.toggle('hidden',!!isMe);
   if(isMe){followBtn.removeAttribute('data-email');}else{ followBtn.setAttribute('data-email',u.system_email); }
   document.getElementById('messageProfileBtn').classList.toggle('hidden',!!isMe);
   renderProfilePosts();
@@ -4583,11 +3452,6 @@ document.addEventListener('keydown',e=>{
 });
 document.getElementById('messageProfileBtn').addEventListener('click',()=>{
   if(!viewedProfile)return;
-  /* The two system accounts' profiles: "Message" never opens a
-     Messenger thread. Ghost (ghost@ghost) goes to the OFFICIAL
-     CHAT PAGE; Ghost AI (ghostai@ghost) goes to the AI PAGE. */
-  if(isOfficialEmail(viewedProfile.system_email)){openOfficialChat();return;}
-  if(isAiEmail(viewedProfile.system_email)){showView('ai');return;}
   openChatWith(viewedProfile);
 });
 /* Edit Profile lives in Settings now — the profile page is view-only.
@@ -4604,12 +3468,7 @@ function fillEditProfileForm(){
   document.getElementById('editDob').value=currentUser.date_of_birth?String(currentUser.date_of_birth).slice(0,10):'';
   document.getElementById('editCoverText').value=coverTextFor(currentUser);
   const m=document.getElementById('editProfileMsg');if(m){m.textContent='';m.className='msg';}
-  /* Change Password RESTORES its preserved state (see cpState):
-     whatever was typed, whether a code was sent, and the code's
-     countdown all come back exactly as they were left, so going
-     to the official chat to copy the code and returning never
-     loses the form. It starts collapsed only when nothing is
-     being preserved. */
+  /* Change Password restores its preserved open/message state. */
   cpRestoreToDom();
   /* The active-status switch reflects your saved choice. */
   syncActiveStatusToggle();
@@ -4765,69 +3624,20 @@ document.getElementById('editProfileForm').addEventListener('submit',async e=>{
    The form is collapsed by default — Settings shows a single
    "Change Password" row; tapping it expands the form, tapping it
    again (or a successful change) folds it away. */
-/* PRESERVED FORM STATE — the fix for the lost-form bug: the user
-   fills this form, taps "Send code", leaves for the Ghost
-   Official page to copy the code, and comes back — everything
-   typed, the fact that a code was sent, and the code's expiry
-   are kept HERE (in page state, never on disk), and
-   fillEditProfileForm RESTORES them every time Settings renders
-   again, so the form is exactly as it was left and the countdown
-   below is still ticking from the code's real expiry timestamp.
-   The preserved state is dropped ONLY after a successful change,
-   when the code fully expires, or on logout. Verification is
-   unchanged: current password + a valid 6-digit code are still
-   both required, checked exactly as before. */
-const cpState={open:false,current:'',next:'',confirm:'',code:'',codeSent:false,codeExpiresAt:0,msgText:'',msgClass:'msg'};
-let cpTimerInt=null;
-function cpStopTimer(){if(cpTimerInt){clearInterval(cpTimerInt);cpTimerInt=null;}}
-function cpCaptureFromDom(){
-  const g=id=>{const el=document.getElementById(id);return el?el.value:'';};
-  cpState.current=g('currentPassword');cpState.next=g('newPassword');cpState.confirm=g('confirmNewPassword');cpState.code=g('pwChangeCode');
-}
-function cpSetMsg(t,cls){
-  cpState.msgText=t||'';cpState.msgClass=cls||'msg';
-  const m=document.getElementById('changePasswordMsg');if(m){m.textContent=cpState.msgText;m.className=cpState.msgClass;}
-}
+/* Preserved open/message state for the Change Password form, so
+   leaving Settings and coming back keeps the section as it was
+   left. Cleared on logout and after a successful change. */
+const cpState={open:false,msgText:'',msgClass:'msg'};
 function cpResetState(){
-  cpState.open=false;cpState.current='';cpState.next='';cpState.confirm='';cpState.code='';
-  cpState.codeSent=false;cpState.codeExpiresAt=0;cpState.msgText='';cpState.msgClass='msg';
-  cpStopTimer();
-  const t=document.getElementById('pwCodeTimer');if(t){t.textContent='';t.classList.add('hidden');}
-  const scb=document.getElementById('sendPwCodeBtn');if(scb)scb.textContent='Send code';
+  cpState.open=false;cpState.msgText='';cpState.msgClass='msg';
+  ['currentPassword','newPassword','confirmNewPassword'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const m=document.getElementById('changePasswordMsg');if(m){m.textContent='';m.className='msg';}
 }
-function cpTick(){
-  const t=document.getElementById('pwCodeTimer');
-  if(!cpState.codeSent){if(t){t.textContent='';t.classList.add('hidden');}return;}
-  const left=cpState.codeExpiresAt-Date.now();
-  if(left<=0){
-    /* The code fully expired — only NOW is the preserved form
-       dropped, fields and all, exactly as specified. */
-    const wasOpen=cpState.open;
-    cpResetState();cpState.open=wasOpen;
-    ['currentPassword','newPassword','confirmNewPassword','pwChangeCode'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-    cpSetMsg('Your verification code expired, so the form was cleared. Tap “Send code” for a fresh code.','msg err');
-    return;
-  }
-  if(t){
-    const s=Math.ceil(left/1000),mm=Math.floor(s/60),ss=String(s%60).padStart(2,'0');
-    t.textContent='⏱ Code sent — expires in '+mm+':'+ss+'. Everything you typed here is kept: go to Ghost Official, copy the code, come back and just paste it in.';
-    t.classList.remove('hidden');
-  }
-  const scb=document.getElementById('sendPwCodeBtn');if(scb)scb.textContent='Resend code';
-}
-function cpStartTimer(){cpStopTimer();cpTick();if(cpState.codeSent)cpTimerInt=setInterval(cpTick,500);}
 function cpRestoreToDom(){
-  /* A code that silently expired while the user was elsewhere
-     takes the preserved state with it. */
-  if(cpState.codeSent&&cpState.codeExpiresAt<=Date.now()){cpResetState();}
-  const s=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v;};
-  s('currentPassword',cpState.current);s('newPassword',cpState.next);s('confirmNewPassword',cpState.confirm);s('pwChangeCode',cpState.code);
   const m=document.getElementById('changePasswordMsg');if(m){m.textContent=cpState.msgText;m.className=cpState.msgClass;}
   setChangePasswordOpen(cpState.open);
-  if(cpState.codeSent)cpStartTimer();
-  else{const t=document.getElementById('pwCodeTimer');if(t){t.textContent='';t.classList.add('hidden');}}
 }
-['currentPassword','newPassword','confirmNewPassword','pwChangeCode'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',cpCaptureFromDom);});
+
 function setChangePasswordOpen(open){
   const body=document.getElementById('changePasswordBody');
   const toggle=document.getElementById('changePasswordToggle');
@@ -4860,11 +3670,6 @@ document.getElementById('changePasswordForm').addEventListener('submit',async e=
   if(next.length<6){fail('New password is too short — it needs at least 6 characters.');return;}
   if(next!==conf){fail('New password and confirmation do not match.');return;}
   if(next===cur){fail('New password must be different from your current password.');return;}
-  /* Verification code: Ghost posts a 6-digit code to the official
-     chat ("Send code"); without a matching one the password does
-     NOT change, however good the current password is. */
-  const codeVal=document.getElementById('pwChangeCode').value.trim();
-  if(!/^\d{6}$/.test(codeVal)){fail('Enter the 6-digit verification code Ghost sent you — tap "Send code" to get one.');return;}
   const btn=document.getElementById('changePasswordBtn');btn.disabled=true;
   msg.textContent='Checking your current password…';msg.className='msg';cpState.msgText=msg.textContent;cpState.msgClass='msg';
   try{
@@ -4872,54 +3677,14 @@ document.getElementById('changePasswordForm').addEventListener('submit',async e=
     const {data:match,error:vErr}=await ghostDb.from('system_accounts').select(ACCOUNT_COLS).eq('system_email',currentUser.system_email).eq('password',cur).maybeSingle();
     if(vErr){fail('Could not verify your password: '+friendlyError(vErr));return;}
     if(!match){fail('Current password is incorrect.');return;}
-    msg.textContent='Checking your verification code…';cpState.msgText=msg.textContent;cpState.msgClass='msg';
-    const codeId=await findPwChangeCodeId(codeVal);
-    if(!codeId){fail('That verification code is wrong or has expired. Tap "Send code" to get a fresh one, then try again.');return;}
     const {error:uErr}=await ghostDb.from('system_accounts').update({password:next}).eq('system_email',currentUser.system_email);
     if(uErr){fail('Could not change your password: '+friendlyError(uErr));return;}
-    /* Success — the code is single-use, so burn it now, and the
-       preserved form state is dropped (its job is done). */
-    burnPwChangeCode(codeId);
     cpResetState();
-    document.getElementById('currentPassword').value='';document.getElementById('newPassword').value='';document.getElementById('confirmNewPassword').value='';document.getElementById('pwChangeCode').value='';
     msg.textContent='Password changed — your new password is now active on the server, and you stay logged in here.';msg.className='msg ok';
     toast('Password changed.');
-    /* Ghost posts the "password changed successfully" notice —
-       IP, approximate location, device, time — into the official
-       chat. Fire-and-forget, exactly like the login alert: the
-       change is already saved, so this can never block it. */
-    postPasswordChangeNotice();
-    /* Success folds the form away again — Settings goes back to
-       showing just the "Change Password" row. */
     setChangePasswordOpen(false);
   }finally{btn.disabled=false;}
 });
-/* "Send code" — mints the 6-digit verification code and posts it
-   into the user's official thread FROM Ghost (see
-   mintPwChangeCode). Until temp_login_codes exists on the server
-   the mint fails and the form says so, in the same style as the
-   temporary-pass "not activated" notice — never silently. */
-{const scb=document.getElementById('sendPwCodeBtn');
- if(scb)scb.addEventListener('click',async()=>{
-   if(!currentUser)return;
-   const msg=document.getElementById('changePasswordMsg');
-   scb.disabled=true;const oldLabel=scb.textContent;scb.textContent='Sending…';
-   try{
-     if(!await ensureGhostDb()){msg.textContent='Could not reach the Ghost server. Check your internet connection and try again.';msg.className='msg err';cpState.msgText=msg.textContent;cpState.msgClass='msg err';return;}
-     const sent=await mintPwChangeCode();
-     if(!sent){msg.textContent='⚠️ Verification codes aren\u2019t activated on the server yet \u2014 the Ghost admin still needs to finish setting them up (the temp_login_codes table). Please try again later.';msg.className='msg err';cpState.msgText=msg.textContent;cpState.msgClass='msg err';return;}
-     /* Preserve EVERYTHING from this moment on: whatever is
-        typed in the form right now, the fact that a code was
-        sent, and its expiry — so leaving to copy the code and
-        coming back finds the form untouched, countdown running. */
-     cpCaptureFromDom();
-     cpState.open=true;cpState.codeSent=true;cpState.codeExpiresAt=Date.now()+5*60000;
-     msg.textContent='Code sent \u2014 Ghost just posted it to your official chat. Type the 6-digit code here within 5 minutes.';msg.className='msg ok';
-     cpState.msgText=msg.textContent;cpState.msgClass='msg ok';
-     cpStartTimer();
-     const ci=document.getElementById('pwChangeCode');if(ci)ci.focus();
-   }finally{scb.disabled=false;scb.textContent=cpState.codeSent?'Resend code':oldLabel;}
- });}
 
 /* ---------- Drive — completely private per-user notebook ----------
    Backed by the user_drive_notes table (id, user_email, title,
@@ -5084,8 +3849,6 @@ let followListUser=null,followListTab='followers';
 async function toggleFollow(email){
   if(guestMode){showLoginGate();return;}
   if(!currentUser||!email||email===currentUser.system_email)return;
-  /* The two system accounts (Ghost, Ghost AI) can never be followed. */
-  if(isSystemEmail(email))return;
   const following=myFollowingSet().has(email);
   if(following){await ghostDb.from('profile_follows').delete().eq('follower_email',currentUser.system_email).eq('following_email',email);cachedFollows=cachedFollows.filter(f=>!(f.follower_email===currentUser.system_email&&f.following_email===email));}
   else{const {error}=await ghostDb.from('profile_follows').insert([{follower_email:currentUser.system_email,following_email:email}]);if(!error)cachedFollows.push({follower_email:currentUser.system_email,following_email:email});}
@@ -5959,13 +4722,9 @@ function renderUsersList(){
   if(!currentUser)return;
   const brand=amBrand();
   syncMsgTabsUI();
-  /* The official Ghost chat is NOT part of this list at all — it
-     lives on its own page (sidebar "Ghost Official" / the mobile
-     ⋮ menu), is excluded from the brand tab split, and its unread
-     messages never count into the Messages badge. Neither system
-     account (Ghost, Ghost AI) is a Messenger counterparty. */
+  /* The conversation list shows real member accounts. */
   const q=(userSearchEl.value||'').trim().toLowerCase().replace(/^@/,'');
-  const others=allUsers.filter(u=>u.system_email!==currentUser.system_email&&!isSystemEmail(u.system_email));
+  const others=allUsers.filter(u=>u.system_email!==currentUser.system_email);
   let visible=q?others.filter(u=>(u.full_name||'').toLowerCase().includes(q)||(u.username||'').toLowerCase().includes(q)):others.filter(u=>hasHistory(u.system_email)||(selectedPeer&&selectedPeer.username===u.username));
   /* BRAND accounts only: the conversation list is split by the
      live mutual-follow test. Searching still finds EVERYONE (so a
@@ -6000,30 +4759,25 @@ function selectPeer(u){
   selectedPeer=u;
   /* Brand accounts: opening a chat (from search, a profile, or the
      other tab) switches the list to the section that chat lives in,
-     so the open conversation is always visible in its own list.
-     The official Ghost chat lives outside the tabs entirely, so
-     opening it never switches the section. */
-  if(u&&amBrand()&&!isOfficialEmail(u.system_email))msgTab=peerSection(u.system_email);
+     so the open conversation is always visible in its own list. */
+  if(u&&amBrand())msgTab=peerSection(u.system_email);
   clearPendingReply();closeMsgMenu();
   if(u)markConversationRead(u.system_email);
   renderUsersList();
   document.getElementById('chatShell').classList.add('thread-open');
   const audioBtn=document.getElementById('audioCallBtn'),videoBtn=document.getElementById('videoCallBtn');
   if(!u){chatHeaderInfo.innerHTML='<span style="font-weight:700;font-size:14px">Select a conversation</span>';audioBtn.disabled=true;videoBtn.disabled=true;return;}
-  const isOff=isOfficialEmail(u.system_email);
-  chatHeaderInfo.innerHTML='<button type="button" class="chat-peer" id="chatPeerBtn">'+avatarHtml(u,'sm',true)+'<span class="cp-main"><span class="cp-name" style="font-weight:700;font-size:14px;display:flex;align-items:center">'+escapeHtml(u.full_name)+badgeHtml(u.badge_type)+(isOff?labelPillHtml(u,'official-pill'):'')+'</span><span class="cp-un" style="font-size:12px;color:var(--ink-2);display:block">@'+escapeHtml(u.username)+'</span>'+(isOff?'<span style="display:block;font-size:11px;color:#fbbf24;margin-top:1px">Verified official chat</span>':'<span class="cp-pres" style="display:block;margin-top:1px">'+presenceSpan(u)+'</span>')+'</span></button>';
+  chatHeaderInfo.innerHTML='<button type="button" class="chat-peer" id="chatPeerBtn">'+avatarHtml(u,'sm',true)+'<span class="cp-main"><span class="cp-name" style="font-weight:700;font-size:14px;display:flex;align-items:center">'+escapeHtml(u.full_name)+badgeHtml(u.badge_type)+'</span><span class="cp-un" style="font-size:12px;color:var(--ink-2);display:block">@'+escapeHtml(u.username)+'</span>'+'<span class="cp-pres" style="display:block;margin-top:1px">'+presenceSpan(u)+'</span>'+'</span></button>';
   document.getElementById('chatPeerBtn').addEventListener('click',()=>openProfile(u.username));
-  /* No calls to the system account — the official chat is text only. */
-  audioBtn.disabled=isOff;videoBtn.disabled=isOff;
+  audioBtn.disabled=false;videoBtn.disabled=false;
   renderMessages();
-  if(isOff)ensureOfficialWelcome();
 }
 function renderMessages(){
   if(!currentUser||!selectedPeer)return;
   const peerEmail=selectedPeer.system_email;
   const msgs=threadMessages(peerEmail).filter(m=>!(m.message_text&&m.message_text.startsWith('__CALL_LOG__:')));
   const calls=callLogsForPeer(peerEmail);
-  if(!msgs.length&&!calls.length){messagesArea.innerHTML=isOfficialEmail(peerEmail)?'<div class="chat-empty">This is the official Ghost chat.<br/>Tap "Get temporary login pass" below and Ghost will send you a one-time login code for another browser.</div>':'<div class="chat-empty">No messages yet.<br/>Say hello to @'+escapeHtml(selectedPeer.username)+'.</div>';return;}
+  if(!msgs.length&&!calls.length){messagesArea.innerHTML='<div class="chat-empty">No messages yet.<br/>Say hello to @'+escapeHtml(selectedPeer.username)+'.</div>';return;}
   const items=msgs.map(m=>({kind:'msg',at:new Date(m.created_at).getTime(),m:m})).concat(calls.map(c=>({kind:'call',at:new Date(c.started_at).getTime(),c:c}))).sort((a,b)=>a.at-b.at);
   const dayLabel=iso=>{const d=new Date(iso);const now=new Date();const startOf=x=>new Date(x.getFullYear(),x.getMonth(),x.getDate()).getTime();const diff=Math.round((startOf(now)-startOf(d))/86400000);if(diff===0)return 'Today';if(diff===1)return 'Yesterday';return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});};
   let lastDay='',lastSender='';
@@ -6038,11 +4792,7 @@ function renderMessages(){
     const same=lastSender===m.sender_email;lastSender=m.sender_email;
     const parsed=parseMsgContent(m);
     const quoteHtml=parsed.reply?'<div class="bubble-quote"><span class="bq-name">'+escapeHtml(parsed.reply.name||'Message')+'</span><span class="bq-text">'+escapeHtml(parsed.reply.text||'')+'</span></div>':'';
-    /* Official thread only: a Copy chip rides on any Ghost
-       message that delivers a code (login pass / password-change
-       code) — see codeCopyHtml. */
-    const copyHtml=(!isMe&&isOfficialEmail(peerEmail))?codeCopyHtml(parsed.text):'';
-    const bubbleHtml='<div class="bubble'+(isMe?' me':'')+'" data-msg-id="'+escapeHtml(String(m.id))+'">'+quoteHtml+'<div>'+sanitizeHtml(parsed.text)+'</div>'+copyHtml+'<div class="bubble-time">'+timeStr+'</div></div>';
+    const bubbleHtml='<div class="bubble'+(isMe?' me':'')+'" data-msg-id="'+escapeHtml(String(m.id))+'">'+quoteHtml+'<div>'+sanitizeHtml(parsed.text)+'</div>'+'<div class="bubble-time">'+timeStr+'</div></div>';
     const colHtml='<div class="bubble-col'+(isMe?' me':'')+'">'+bubbleHtml+msgReactionsHtml(m.id)+'</div>';
     /* Own messages: NO avatar tile beside the bubble — clean
        right-aligned bubbles only. The other person's messages keep
@@ -6066,12 +4816,6 @@ async function openChatWith(u){
 }
 document.getElementById('backUsersBtn').addEventListener('click',()=>{
   document.getElementById('chatShell').classList.remove('thread-open');
-  /* The official chat was launched from the sidebar inbox / ⋮
-     menu, outside the conversation list — its Back returns to
-     the view the user came from, not to the list. */
-  if(selectedPeer&&isOfficialEmail(selectedPeer.system_email)&&officialReturnView){
-    const v=officialReturnView;officialReturnView=null;showView(v);
-  }
 });
 document.getElementById('chatForm').addEventListener('submit',async e=>{
   e.preventDefault();
@@ -6113,11 +4857,6 @@ document.getElementById('chatForm').addEventListener('submit',async e=>{
   if(error){toast('Could not send: '+friendlyError(error));return;}
   if(data)cachedMessages.push(data);
   input.value='';clearPendingReply();renderMessages();renderUsersList();
-  /* Official Ghost chat: Ghost answers automatically — codes
-     come from the buttons now, so a typed "temporary pass" earns
-     the polite pointer and anything else the short reminder
-     (see officialReplyFor / handleOfficialCommand). */
-  if(selectedPeer&&isOfficialEmail(selectedPeer.system_email))handleOfficialCommand(text);
 });
 document.getElementById('replyBarClose').addEventListener('click',clearPendingReply);
 
@@ -6292,9 +5031,6 @@ function endMsgPress(e){
 messagesArea.addEventListener('pointerup',endMsgPress);
 messagesArea.addEventListener('pointercancel',endMsgPress);
 messagesArea.addEventListener('click',e=>{
-  /* A tap on a code's Copy chip copies — it must not also open
-     the message menu. */
-  if(e.target.closest&&e.target.closest('[data-copy-code]'))return;
   const bubble=e.target.closest?e.target.closest('.bubble[data-msg-id]'):null;
   if(!bubble)return;
   if(Date.now()-msgSuppressClickAt<700)return;
@@ -6514,24 +5250,13 @@ if(topDotsBtn)topDotsBtn.addEventListener('click',e=>{
 });
 document.addEventListener('click',e=>{if(!e.target.closest('.top-menu-wrap'))closeTopMenu();});
 /* The ⋮ menu holds exactly what mobile cannot reach any other
-   way — Settings, My Posts, Saved, Drive, Ghost Official (the
-   Official chat page, which on desktop sits in the left
-   sidebar) and AI Assistant (the AI page, likewise in the
-   sidebar on desktop). My Profile and Messages are NOT here:
-   they already live in the bottom navigation (Profile / Chats
-   tabs). */
+   way — Settings, My Posts, Saved and Drive. My Profile and
+   Messages are NOT here: they already live in the bottom
+   navigation (Profile / Chats tabs). */
 document.querySelectorAll('[data-topmenu]').forEach(b=>b.addEventListener('click',()=>{
   closeTopMenu();
   showView(b.getAttribute('data-topmenu'));
 }));
-/* ⋮ menu → "Ghost Official": opens the dedicated Official chat
-   page (mobile has no left sidebar, so this is its entry point
-   to the official system options). */
-{const oi=document.getElementById('topMenuOfficialItem');if(oi)oi.addEventListener('click',()=>{closeTopMenu();openOfficialChat();});}
-/* ⋮ menu → "AI Assistant": opens the AI page — the same
-   on-device helper as the sidebar's "AI" item, with the same
-   per-account remembered conversation. */
-{const ai=document.getElementById('topMenuAiItem');if(ai)ai.addEventListener('click',()=>{closeTopMenu();showView('ai');renderAiPage();});}
 
 /* ---------- guest preview (not logged in) ----------
    A visitor lands straight on the Home feed and can read public
