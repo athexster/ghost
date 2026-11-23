@@ -97,16 +97,29 @@ svg.ic{width:19px;height:19px;flex-shrink:0}
    the member has hidden their active status in Settings. */
 .profile-presence-dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#64748b;vertical-align:middle}
 .profile-presence-dot.online{background:var(--ok);box-shadow:0 0 8px rgba(34,197,94,.9)}
+/* Profile presence dot lives on the big avatar itself — anchored at
+   its bottom-right corner (same corner pattern as post-card avatars),
+   on mobile and desktop alike. No standalone row under the Joined
+   pill any more, so nothing dangles or floats on its own line. */
+.profile-avatar-wrap{position:relative;display:inline-flex;flex-shrink:0;line-height:0}
+.profile-avatar-wrap [data-profile-dot]{position:absolute;right:1px;bottom:1px;z-index:6;display:inline-flex}
+.profile-avatar-wrap .profile-dot-wrap{width:30px;height:30px;padding:0;margin:0;background:var(--bg-card);border:2px solid var(--bg-card);box-shadow:0 2px 8px rgba(0,0,0,.45)}
+.profile-avatar-wrap .profile-presence-dot{width:17px;height:17px;border:2px solid rgba(255,255,255,.14)}
+.profile-avatar-wrap .profile-presence-dot.online{box-shadow:0 0 9px rgba(34,197,94,.95)}
 /* The profile dot stays dot-only by default — hovering it (desktop),
    focusing it, or tapping it (mobile, .tip-open) reveals a small
    tooltip with the status text ("Active now" / "Last active …").
    Moving the mouse away, tapping elsewhere, or pressing Escape
-   dismisses it. No dot (status hidden) = nothing to reveal. */
+   dismisses it. No dot (status hidden) = nothing to reveal.
+   The tooltip opens BELOW-RIGHT of the dot (top + left:0, never
+   centred over it), so from the avatar corner it grows into the
+   card instead of running off the left edge of a narrow phone.
+   max-width + wrapping keep its right edge inside the viewport too. */
 .profile-dot-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;padding:6px;margin:-6px;border-radius:50%;cursor:pointer;vertical-align:middle;-webkit-tap-highlight-color:transparent}
 .profile-dot-wrap:focus-visible{outline:2px solid var(--line-focus);outline-offset:1px}
-.profile-presence-tip{position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%) translateY(3px);background:#141c2e;border:1px solid var(--line-strong);color:var(--ink);font-size:12px;font-weight:600;line-height:1.35;padding:6px 11px;border-radius:9px;white-space:nowrap;box-shadow:0 12px 26px rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .15s ease,transform .15s ease;z-index:40}
-.profile-presence-tip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#141c2e}
-.profile-dot-wrap:hover .profile-presence-tip,.profile-dot-wrap:focus-visible .profile-presence-tip,.profile-dot-wrap.tip-open .profile-presence-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+.profile-presence-tip{position:absolute;top:calc(100% + 8px);bottom:auto;left:0;transform:translateY(3px);background:#141c2e;border:1px solid var(--line-strong);color:var(--ink);font-size:12px;font-weight:600;line-height:1.35;padding:6px 11px;border-radius:9px;white-space:normal;max-width:min(220px,72vw);box-shadow:0 12px 26px rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .15s ease,transform .15s ease;z-index:60}
+.profile-presence-tip::after{content:"";position:absolute;bottom:100%;top:auto;left:14px;transform:none;border:5px solid transparent;border-bottom-color:#141c2e}
+.profile-dot-wrap:hover .profile-presence-tip,.profile-dot-wrap:focus-visible .profile-presence-tip,.profile-dot-wrap.tip-open .profile-presence-tip{opacity:1;transform:translateY(0)}
 @media (prefers-reduced-motion:reduce){.profile-presence-tip{transition:none}}
 /* "Follow Back" on a profile: they follow me, I don't follow them
    yet — same follow action as Follow, told apart by a cyan tint
@@ -608,6 +621,13 @@ body.guest-locked #authSection .auth-card{width:100%;max-width:460px;animation:g
 .feed-tab.active{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 4px 14px rgba(99,102,241,.3)}
 .feed-tab .ft-count{font-size:11px;opacity:.85;font-weight:600}
 .feed-tabs .feed-tab{white-space:nowrap;min-width:0}
+/* Main feed tab bar: icon + label structure. Desktop shows the word
+   labels exactly as before (icons hidden); on mobile (≤820px, see
+   the block below) the labels hide and clean SVG symbols take over. */
+.feed-main-tabs .feed-tab{display:inline-flex;align-items:center;justify-content:center;gap:6px;position:relative}
+.ft-icon{display:none;align-items:center;justify-content:center;line-height:0;flex-shrink:0}
+.ft-icon svg{width:22px;height:22px}
+.ft-label{display:inline}
 /* The notification filter bar sits in normal flow under the
    Notifications heading — it must not become a second sticky bar
    on mobile the way the main feed tab bar does. */
@@ -778,6 +798,18 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
   .post-card{padding:14px 13px 10px}
   .post-actions{grid-template-columns:repeat(5,1fr)}
   .feed-tabs{position:sticky;top:57px;z-index:30}
+  /* Mobile ONLY: the main feed tab bar (Home / Following / Trending /
+     Notifications) shows icons instead of words — evenly spaced,
+     comfortably tappable, active tab keeps its highlighted pill.
+     Other tab bars (notification filters, My Posts, followers) are
+     not .feed-main-tabs and keep their text labels. */
+  .feed-main-tabs{gap:6px;padding:5px}
+  .feed-main-tabs .feed-tab{min-height:2.85rem;padding:10px 4px}
+  .feed-main-tabs .ft-label{display:none}
+  .feed-main-tabs .ft-icon{display:inline-flex}
+  .feed-main-tabs .ft-icon svg{width:23px;height:23px}
+  .feed-main-tabs .ft-count{position:absolute;top:4px;right:calc(50% - 21px);min-width:17px;height:15px;padding:0 4px;border-radius:999px;background:#0b0f19;border:1px solid rgba(255,255,255,.35);color:#fff;font-size:9px;font-weight:800;line-height:13px;display:inline-flex;align-items:center;justify-content:center;opacity:1;pointer-events:none}
+  .feed-main-tabs .feed-tab.active .ft-count{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.5)}
   .modal-box{padding:18px;border-radius:16px}
   .profile-stats{gap:16px;flex-wrap:wrap}
   .profile-id-row{margin-top:-34px}
@@ -894,7 +926,7 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
       <section id="feedView">
         <div id="guestNote" class="guest-note hidden"><span class="pdot"></span><span>You are browsing as a <b>guest</b> — log in to react, comment, follow, post and message.</span></div>
         <div id="peopleResults" class="hidden"></div>
-        <div class="feed-tabs" role="tablist" aria-label="Feed filter"><button type="button" class="feed-tab active" data-feed-filter="all" role="tab" aria-selected="true">Home</button><button type="button" class="feed-tab" data-feed-filter="following" role="tab" aria-selected="false">Following <span class="ft-count" id="followingCount"></span></button><button type="button" class="feed-tab" data-feed-filter="trending" role="tab" aria-selected="false">Trending</button><button type="button" class="feed-tab" data-feed-filter="notifications" role="tab" aria-selected="false">Notifications</button></div>
+        <div class="feed-tabs feed-main-tabs" role="tablist" aria-label="Feed filter"><button type="button" class="feed-tab active" data-feed-filter="all" role="tab" aria-selected="true" aria-label="Home" title="Home"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span><span class="ft-label">Home</span></button><button type="button" class="feed-tab" data-feed-filter="following" role="tab" aria-selected="false" aria-label="Following" title="Following"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="ft-label">Following</span> <span class="ft-count" id="followingCount"></span></button><button type="button" class="feed-tab" data-feed-filter="trending" role="tab" aria-selected="false" aria-label="Trending" title="Trending"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span><span class="ft-label">Trending</span></button><button type="button" class="feed-tab" data-feed-filter="notifications" role="tab" aria-selected="false" aria-label="Notifications" title="Notifications"><span class="ft-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span><span class="ft-label">Notifications</span></button></div>
         <h2 class="view-title" id="feedTitle" style="margin-top:14px">Home Feed</h2>
         <div id="notifFilterBar" class="feed-tabs hidden" role="tablist" aria-label="Notification filter" style="margin-top:12px"><button type="button" class="feed-tab" data-notif-filter="likes" role="tab" aria-selected="false">Likes <span class="ft-count" id="notifCountLikes"></span></button><button type="button" class="feed-tab" data-notif-filter="comments" role="tab" aria-selected="false">Comments <span class="ft-count" id="notifCountComments"></span></button><button type="button" class="feed-tab" data-notif-filter="follows" role="tab" aria-selected="false">Follows <span class="ft-count" id="notifCountFollows"></span></button></div>
         <div id="feedList" style="display:flex;flex-direction:column;gap:14px;margin-top:12px"></div>
@@ -982,7 +1014,7 @@ body.msg-swipe-active{user-select:none;-webkit-user-select:none}
               <span class="label-pill hidden" id="profileLabelPill"></span>
             </div>
             <div class="profile-handle" id="detailUsername"></div>
-            <div class="profile-joined"><span id="detailJoined" class="joined-detail" title=""></span><span id="detailPresence"></span></div>
+            <div class="profile-joined"><span id="detailJoined" class="joined-detail" title=""></span></div>
             <div class="profile-stats">
               <div class="stat"><b id="statPosts">0</b><span>Posts</span></div>
               <button type="button" class="stat stat-btn" id="statFollowingBtn" aria-haspopup="dialog" title="See who this member follows"><b id="statFollowing">0</b><span>Following</span></button>
@@ -2843,7 +2875,12 @@ function renderProfile(){
   const coverTxt=coverTextFor(u).trim();
   coverEl.textContent=coverTxt;
   coverEl.classList.toggle('hidden',!coverTxt);
-  document.getElementById('detailAvatarWrap').innerHTML=avatarHtml(u,'xl');
+  /* Presence dot is anchored to the big avatar's bottom-right
+     corner (see .profile-avatar-wrap) — the wrapper carries
+     data-profile-dot so the 60-second presence refresh can
+     repaint the dot in place. Privacy OFF returns '' from
+     profilePresenceDotHtml, so no dot and no tooltip at all. */
+  document.getElementById('detailAvatarWrap').innerHTML='<span class="profile-avatar-wrap">'+avatarHtml(u,'xl')+'<span data-profile-dot="'+escapeHtml(u.username)+'">'+profilePresenceDotHtml(isMe?Object.assign({},u,{last_seen:new Date().toISOString()}):u)+'</span></span>';
   document.getElementById('detailFullName').innerHTML=escapeHtml(u.full_name)+badgeHtml(u.badge_type);
   /* One unified label pill on the profile: the server's
      profile_label text in the profile_label_color scheme; the
@@ -2869,9 +2906,9 @@ function renderProfile(){
      while not, and nothing at all when the member has hidden their
      active status in Settings. No status wording shows by default;
      hovering the dot (desktop) or tapping it (mobile) reveals it in
-     the dot's tooltip. The wrapper carries data-profile-dot so the
-     60-second presence refresh can repaint the dot in place. */
-  document.getElementById('detailPresence').innerHTML='<span data-profile-dot="'+escapeHtml(u.username)+'">'+profilePresenceDotHtml(isMe?Object.assign({},u,{last_seen:new Date().toISOString()}):u)+'</span>';
+     the dot's tooltip. The dot itself now lives on the avatar
+     (set above with detailAvatarWrap) — there is no standalone
+     presence row under the Joined pill any more. */
   const followers=cachedFollows.filter(f=>f.following_email===u.system_email).length;
   const following=cachedFollows.filter(f=>f.follower_email===u.system_email).length;
   const posts=cachedPosts.filter(p=>p.author_username===u.username&&!isPostHidden(p)&&!isPostDeleted(p));
