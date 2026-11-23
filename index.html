@@ -97,6 +97,22 @@ svg.ic{width:19px;height:19px;flex-shrink:0}
    the member has hidden their active status in Settings. */
 .profile-presence-dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#64748b;vertical-align:middle}
 .profile-presence-dot.online{background:var(--ok);box-shadow:0 0 8px rgba(34,197,94,.9)}
+/* The profile dot stays dot-only by default — hovering it (desktop),
+   focusing it, or tapping it (mobile, .tip-open) reveals a small
+   tooltip with the status text ("Active now" / "Last active …").
+   Moving the mouse away, tapping elsewhere, or pressing Escape
+   dismisses it. No dot (status hidden) = nothing to reveal. */
+.profile-dot-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;padding:6px;margin:-6px;border-radius:50%;cursor:pointer;vertical-align:middle;-webkit-tap-highlight-color:transparent}
+.profile-dot-wrap:focus-visible{outline:2px solid var(--line-focus);outline-offset:1px}
+.profile-presence-tip{position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%) translateY(3px);background:#141c2e;border:1px solid var(--line-strong);color:var(--ink);font-size:12px;font-weight:600;line-height:1.35;padding:6px 11px;border-radius:9px;white-space:nowrap;box-shadow:0 12px 26px rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .15s ease,transform .15s ease;z-index:40}
+.profile-presence-tip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#141c2e}
+.profile-dot-wrap:hover .profile-presence-tip,.profile-dot-wrap:focus-visible .profile-presence-tip,.profile-dot-wrap.tip-open .profile-presence-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){.profile-presence-tip{transition:none}}
+/* "Follow Back" on a profile: they follow me, I don't follow them
+   yet — same follow action as Follow, told apart by a cyan tint
+   (Follow is the brand gradient, Following is the green tint). */
+.btn-follow-back{background:rgba(34,211,238,.13);border-color:rgba(34,211,238,.5);color:#67e8f9}
+.btn-follow-back:hover{background:rgba(34,211,238,.22);filter:none}
 .react-wrap{position:relative;display:flex}
 .react-wrap>.act-btn{flex:1}
 .react-wrap .act-btn.reacted{color:#fbbf24}
@@ -257,6 +273,15 @@ svg.ic{width:19px;height:19px;flex-shrink:0}
 .post-card{padding:17px 18px 13px;transition:border-color .16s, box-shadow .16s;position:relative}
 .post-card:hover{border-color:var(--line-strong);box-shadow:0 10px 26px rgba(2,6,23,.35)}
 .post-card.flash{border-color:var(--line-focus);box-shadow:0 0 0 3px rgba(99,102,241,.25)}
+/* shared-to-profile cards: a "X shared" line above the ORIGINAL post
+   card, which keeps the original author's name / avatar / badges /
+   label pill, its own date and its own counts — the sharer is only
+   credited with the share, never as the author. */
+.shared-card{display:flex;flex-direction:column}
+.shared-by{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);padding:1px 4px 7px}
+.shared-by svg{width:14px;height:14px;flex-shrink:0;color:var(--ink-3)}
+.shared-by b{color:var(--ink)}
+.shared-time{color:var(--ink-3);white-space:nowrap}
 .post-head{display:flex;align-items:flex-start;gap:11px}
 .post-author{display:flex;align-items:center;gap:11px;min-width:0;flex:1;background:none;border:none;cursor:pointer;text-align:left;color:var(--ink);padding:0}
 .author-name{font-size:15px;font-weight:700;line-height:1.3;display:flex;align-items:center;flex-wrap:nowrap}
@@ -329,6 +354,19 @@ svg.ic{width:19px;height:19px;flex-shrink:0}
 .stat{text-align:left;background:none;border:none;color:var(--ink);padding:0;cursor:default}
 .stat b{font-size:16.5px;font-weight:800;display:block}
 .stat span{font-size:12px;color:var(--ink-2)}
+.stat-btn{cursor:pointer;font:inherit;border-radius:10px;padding:6px 10px;margin:-6px -10px}
+.stat-btn:hover{background:var(--bg-hover)}
+.stat-btn:hover span{color:var(--ink)}
+.stat-btn:focus-visible{outline:2px solid var(--line-focus);outline-offset:2px}
+/* followers / following popup */
+.fl-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.fl-head h3{margin:0}
+.fl-close{background:var(--bg-input);border:1px solid var(--line);color:var(--ink-2);width:32px;height:32px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;padding:0}
+.fl-close:hover{background:var(--bg-hover);color:var(--ink)}
+.fl-close svg{width:16px;height:16px}
+.follow-list-body{max-height:54dvh;overflow-y:auto;margin:0 -6px;padding:0 6px}
+.modal-box .follow-tabs{position:static}
+.fl-nm{flex-wrap:wrap;row-gap:4px;column-gap:6px}
 .edit-box{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
 
 /* messages */
@@ -381,6 +419,12 @@ svg.ic{width:19px;height:19px;flex-shrink:0}
 .modal-box .sub{color:var(--ink-2);font-size:13px;margin:0 0 16px;line-height:1.55}
 .share-link-row{display:flex;gap:8px}
 .share-link-row input{flex:1;font-size:13px}
+.share-choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.share-choice{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 10px;border-radius:12px;border:1px solid var(--line);background:var(--bg-input);color:var(--ink);cursor:pointer;font-size:13.5px;font-weight:700;min-height:2.6rem;font-family:inherit}
+.share-choice:hover{background:var(--bg-hover)}
+.share-choice svg{width:17px;height:17px;color:var(--cyan);flex-shrink:0}
+.share-choice.on{border-color:var(--line-focus);color:#a5b4fc}
+@media (max-width:520px){.share-choices{grid-template-columns:1fr}}
 .share-preview{background:var(--bg-input);border:1px solid var(--line);border-radius:12px;padding:12px 13px;font-size:13.5px;line-height:1.55;color:#cbd5e1;margin-bottom:14px;max-height:110px;overflow:hidden}
 .modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
 .call-box{max-width:470px;text-align:center}
@@ -445,12 +489,44 @@ kbd{background:var(--bg-card-alt);border:1px solid var(--line-strong);border-bot
 .splash-sub{color:var(--ink-2);font-size:13.5px;margin:2px 0 0}
 
 /* ---------- guest preview → login prompt ---------- */
+body.guest-prompt{overflow:hidden}
 body.guest-prompt #authSection{position:fixed;inset:0;z-index:130;overflow-y:auto;background:rgba(4,6,12,.55);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);animation:guestFadeIn .4s ease;align-content:center}
 body.guest-prompt #authSection .auth-card{animation:guestSlideUp .45s cubic-bezier(.2,.8,.25,1)}
 @keyframes guestFadeIn{from{opacity:0}to{opacity:1}}
 @keyframes guestSlideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 .guest-note{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);background:var(--bg-card);border:1px solid var(--line);border-radius:999px;padding:7px 13px;margin-bottom:12px}
 .guest-note .pdot{width:8px;height:8px;border-radius:50%;background:var(--warn);flex-shrink:0}
+/* ---------- guest preview EXPIRED (15s) → locked auth over blurred home ----------
+   After exactly 15 seconds the preview ends completely. The full
+   existing auth panel (both tabs, all fields, eye toggles, submit
+   buttons — the same single auth card used everywhere) floats
+   centered over the homepage. The homepage behind is heavily
+   blurred AND dimmed twice over (a filter on the app itself plus
+   the overlay's backdrop blur), so nothing behind is readable;
+   pointer-events:none + body overflow:hidden make it unclickable
+   and unscrollable. There is NO close / dismiss / continue-as-guest
+   in this state — the only way forward is signing up / logging in
+   right here in the card; on success onAuthenticated() removes
+   every guest class and opens the full app. */
+body.guest-locked{overflow:hidden}
+body.guest-locked #appSection{filter:blur(16px) brightness(.5) saturate(.65);-webkit-filter:blur(16px) brightness(.5) saturate(.65);pointer-events:none!important;user-select:none}
+body.guest-locked #authSection{position:fixed;inset:0;z-index:140;overflow-y:auto;background:rgba(3,5,10,.74);backdrop-filter:blur(22px) brightness(.62) saturate(.7);-webkit-backdrop-filter:blur(22px) brightness(.62) saturate(.7);animation:guestFadeIn .35s ease;align-content:center;grid-template-columns:1fr;justify-items:center;max-width:none;padding:28px 16px}
+body.guest-locked #authSection .auth-brand{display:none}
+body.guest-locked #authSection .auth-card{width:100%;max-width:460px;animation:guestSlideUp .45s cubic-bezier(.2,.8,.25,1)}
+.guest-lock-note{display:flex;flex-direction:column;gap:5px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.42);border-radius:14px;padding:13px 15px;margin-bottom:16px}
+/* Guest-only corner button: fixed at the top-right corner for the
+   WHOLE 15-second preview (the topbar guest slot is repositioned
+   fixed so it never scrolls away and never gets lost in the bar).
+   It is hidden in the markup by default, shown only by
+   startGuestPreview(), and hidden again for good by
+   onAuthenticated() — a logged-in member never sees it. It sits
+   below the auth overlay (z 130/140), so when its click opens the
+   full auth panel the panel cleanly covers it. On narrow screens
+   it shifts left of the corner menu button so nothing overlaps. */
+#guestLoginBtn:not(.hidden){position:fixed;top:13px;right:16px;z-index:120;padding:11px 20px;min-height:2.75rem;font-size:14.5px;font-weight:800;border-radius:999px;box-shadow:0 10px 26px rgba(99,102,241,.5)}
+@media (max-width:820px){#guestLoginBtn:not(.hidden){top:9px;right:62px;padding:9px 15px;font-size:13.5px}}
+.guest-lock-note b{font-size:15.5px;font-weight:800;color:#fcd34d;line-height:1.35}
+.guest-lock-note span{font-size:13px;color:var(--ink-2);line-height:1.55}
 
 /* ---------- settings ---------- */
 .settings-card{padding:18px 20px}
@@ -482,6 +558,23 @@ body.guest-prompt #authSection .auth-card{animation:guestSlideUp .45s cubic-bezi
 .switch .switch-knob{position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;background:#94a3b8;transition:transform .18s ease,background .18s ease}
 .switch.on{background:rgba(34,197,94,.25);border-color:rgba(34,197,94,.6)}
 .switch.on .switch-knob{transform:translateX(21px);background:var(--ok);box-shadow:0 0 8px rgba(34,197,94,.8)}
+/* ---------- brand account ---------- */
+.brand-status-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border-radius:999px;font-size:12.5px;font-weight:800;letter-spacing:.02em;background:linear-gradient(135deg,rgba(245,158,11,.22),rgba(236,72,153,.18));border:1px solid rgba(245,158,11,.5);color:#fcd34d}
+.brand-status-pill .pdot{width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 7px rgba(245,158,11,.9);flex-shrink:0}
+.brand-points{display:flex;flex-direction:column;gap:8px;margin:0 0 14px;padding:0;list-style:none}
+.brand-points li{display:flex;gap:9px;font-size:13.5px;color:var(--ink-2);line-height:1.55}
+.brand-points li b{color:var(--ink)}
+.brand-points li svg{width:16px;height:16px;flex-shrink:0;margin-top:2px;color:#fbbf24}
+/* Brand accounts only: Personal / Brand tabs at the top of the
+   conversation list. Normal accounts never see this element. */
+.brand-msg-tabs{display:flex;gap:5px;background:var(--bg-input);border:1px solid var(--line);border-radius:12px;padding:4px}
+.brand-msg-tab{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;border:none;background:transparent;color:var(--ink-2);padding:8px 6px;border-radius:9px;cursor:pointer;font-weight:700;font-size:13px;min-height:2.3rem;font-family:inherit}
+.brand-msg-tab.active{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 4px 14px rgba(99,102,241,.3)}
+.brand-msg-tab .tab-unread{min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--heart);color:#fff;font-size:10.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center}
+.brand-msg-tab.active .tab-unread{background:#fff;color:var(--heart)}
+.peer-section-tag{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;flex-shrink:0}
+.peer-section-tag.personal{background:rgba(34,197,94,.13);color:#4ade80;border:1px solid rgba(34,197,94,.35)}
+.peer-section-tag.brand{background:rgba(245,158,11,.12);color:#fbbf24;border:1px solid rgba(245,158,11,.38)}
 
 /* ---------- drive (private notebook) ---------- */
 .drive-meter-card{padding:16px 20px;margin-top:14px}
@@ -514,6 +607,31 @@ body.guest-prompt #authSection .auth-card{animation:guestSlideUp .45s cubic-bezi
 .feed-tab{flex:1;border:none;background:transparent;color:var(--ink-2);padding:8px 10px;border-radius:9px;cursor:pointer;font-weight:700;font-size:13.5px;min-height:2.3rem}
 .feed-tab.active{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 4px 14px rgba(99,102,241,.3)}
 .feed-tab .ft-count{font-size:11px;opacity:.85;font-weight:600}
+.feed-tabs .feed-tab{white-space:nowrap;min-width:0}
+/* The notification filter bar sits in normal flow under the
+   Notifications heading — it must not become a second sticky bar
+   on mobile the way the main feed tab bar does. */
+#notifFilterBar{position:relative;top:auto}
+
+/* ---------- notifications ---------- */
+.notif-panel{padding:6px 0;overflow:hidden}
+.notif-item{display:flex;gap:12px;align-items:flex-start;width:100%;padding:13px 16px;background:transparent;border:none;border-top:1px solid var(--line);color:var(--ink);text-align:left;cursor:pointer;font-family:inherit}
+.notif-item:first-child{border-top:none}
+.notif-item:hover{background:var(--bg-card-alt)}
+.notif-av{position:relative;flex-shrink:0}
+.notif-type{position:absolute;right:-4px;bottom:-4px;width:21px;height:21px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;line-height:1;border:2px solid var(--bg-card);color:#fff}
+.notif-type svg{width:11px;height:11px}
+.notif-type.like{background:var(--heart)}
+.notif-type.react{background:var(--bg-card-alt);border-color:var(--line-strong)}
+.notif-type.comment{background:var(--brand)}
+.notif-type.follow{background:var(--ok)}
+.notif-main{flex:1;min-width:0}
+.notif-name{font-size:14px;font-weight:700;display:flex;align-items:center;flex-wrap:wrap;gap:2px 6px;line-height:1.3}
+.notif-action{display:block;font-size:13.5px;color:#cbd5e1;margin-top:1px;line-height:1.45}
+.notif-snippet{margin-top:6px;font-size:13px;color:var(--ink-2);background:var(--bg-input);border:1px solid var(--line);border-radius:9px;padding:7px 10px;line-height:1.5;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.notif-postline{margin-top:5px;font-size:12px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.notif-time{font-size:12px;color:var(--ink-3);white-space:nowrap;padding-top:2px}
+@media (max-width:520px){.feed-tab{font-size:12px;padding:8px 4px}.notif-item{padding:12px;gap:10px}}
 
 /* chat polish: date separators, grouped bubbles, avatars */
 .date-sep{align-self:center;font-size:11px;font-weight:700;color:var(--ink-2);background:var(--bg-card);border:1px solid var(--line);padding:4px 12px;border-radius:999px;margin:8px 0 4px}
@@ -529,8 +647,19 @@ body.guest-prompt #authSection .auth-card{animation:guestSlideUp .45s cubic-bezi
 .chat-input-wrap{flex:1;position:relative;display:flex}
 .chat-input-wrap input{flex:1}
 /* message reactions, quoted replies, tap menu */
-.bubble-row{touch-action:pan-y}
-.bubble-col{display:flex;flex-direction:column;min-width:0;max-width:100%}
+.bubble-row{touch-action:pan-y;position:relative}
+.bubble-col{display:flex;flex-direction:column;min-width:0;max-width:100%;position:relative;z-index:1}
+/* swipe-to-reply hint: the reply arrow that slides in on the side the
+   bubble is being dragged AWAY from (left for an incoming bubble —
+   swipe right; right for your own bubble — swipe left). It stays put
+   while the bubble follows the finger (the drag code counter-moves
+   it), grows with the drag, and lights up once past the threshold. */
+.swipe-hint{position:absolute;top:50%;width:30px;height:30px;border-radius:50%;background:var(--bg-card-alt);border:1px solid var(--line-strong);color:var(--ink-2);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;z-index:0}
+.swipe-hint svg{width:16px;height:16px}
+.swipe-hint.left{left:2px}
+.swipe-hint.right{right:2px}
+.swipe-hint.ready{background:var(--brand);border-color:transparent;color:#fff}
+body.msg-swipe-active{user-select:none;-webkit-user-select:none}
 .bubble-col .bubble{max-width:100%}
 .bubble-row.me .bubble-col{align-items:flex-end}
 .bubble-quote{background:rgba(2,6,23,.28);border-left:3px solid var(--cyan);border-radius:6px;padding:6px 9px;margin-bottom:7px;text-align:left}
@@ -682,6 +811,7 @@ body.guest-prompt #authSection .auth-card{animation:guestSlideUp .45s cubic-bezi
   <div class="auth-card">
     <div class="auth-logo"><span class="logo-mark">G</span><span class="logo-name">Ghost</span></div>
     <p class="sub">Create your unique system email or sign in to continue.</p>
+    <div id="guestLockNote" class="guest-lock-note hidden" role="alert"><b>Your guest preview has ended</b><span>Sign up or log in below to continue to Ghost — it happens right here, no need to go anywhere else.</span></div>
     <div class="tabs">
       <button type="button" id="tabSignup" class="tab-btn active">Sign Up</button>
       <button type="button" id="tabLogin" class="tab-btn">Log In</button>
@@ -764,8 +894,9 @@ body.guest-prompt #authSection .auth-card{animation:guestSlideUp .45s cubic-bezi
       <section id="feedView">
         <div id="guestNote" class="guest-note hidden"><span class="pdot"></span><span>You are browsing as a <b>guest</b> — log in to react, comment, follow, post and message.</span></div>
         <div id="peopleResults" class="hidden"></div>
-        <div class="feed-tabs" role="tablist" aria-label="Feed filter"><button type="button" class="feed-tab active" data-feed-filter="all" role="tab" aria-selected="true">Home</button><button type="button" class="feed-tab" data-feed-filter="following" role="tab" aria-selected="false">Following <span class="ft-count" id="followingCount"></span></button><button type="button" class="feed-tab" data-feed-filter="trending" role="tab" aria-selected="false">Trending</button></div>
+        <div class="feed-tabs" role="tablist" aria-label="Feed filter"><button type="button" class="feed-tab active" data-feed-filter="all" role="tab" aria-selected="true">Home</button><button type="button" class="feed-tab" data-feed-filter="following" role="tab" aria-selected="false">Following <span class="ft-count" id="followingCount"></span></button><button type="button" class="feed-tab" data-feed-filter="trending" role="tab" aria-selected="false">Trending</button><button type="button" class="feed-tab" data-feed-filter="notifications" role="tab" aria-selected="false">Notifications</button></div>
         <h2 class="view-title" id="feedTitle" style="margin-top:14px">Home Feed</h2>
+        <div id="notifFilterBar" class="feed-tabs hidden" role="tablist" aria-label="Notification filter" style="margin-top:12px"><button type="button" class="feed-tab" data-notif-filter="likes" role="tab" aria-selected="false">Likes <span class="ft-count" id="notifCountLikes"></span></button><button type="button" class="feed-tab" data-notif-filter="comments" role="tab" aria-selected="false">Comments <span class="ft-count" id="notifCountComments"></span></button><button type="button" class="feed-tab" data-notif-filter="follows" role="tab" aria-selected="false">Follows <span class="ft-count" id="notifCountFollows"></span></button></div>
         <div id="feedList" style="display:flex;flex-direction:column;gap:14px;margin-top:12px"></div>
       </section>
 
@@ -854,8 +985,8 @@ body.guest-prompt #authSection .auth-card{animation:guestSlideUp .45s cubic-bezi
             <div class="profile-joined"><span id="detailJoined" class="joined-detail" title=""></span><span id="detailPresence"></span></div>
             <div class="profile-stats">
               <div class="stat"><b id="statPosts">0</b><span>Posts</span></div>
-              <div class="stat"><b id="statFollowing">0</b><span>Following</span></div>
-              <div class="stat"><b id="statFollowers">0</b><span>Followers</span></div>
+              <button type="button" class="stat stat-btn" id="statFollowingBtn" aria-haspopup="dialog" title="See who this member follows"><b id="statFollowing">0</b><span>Following</span></button>
+              <button type="button" class="stat stat-btn" id="statFollowersBtn" aria-haspopup="dialog" title="See this member's followers"><b id="statFollowers">0</b><span>Followers</span></button>
             </div>
           </div>
         </div>
@@ -889,6 +1020,26 @@ body.guest-prompt #authSection .auth-card{animation:guestSlideUp .45s cubic-bezi
           <div id="showActiveMsg" class="msg"></div>
         </div>
         <div class="card settings-card" style="margin-top:14px">
+          <h3>Brand Account</h3>
+          <!-- Personal (normal) account: convert offer -->
+          <div id="brandPersonalBlock">
+            <p class="sub">Made for people with a big audience. Convert to a Brand Account and your Messages split in two, so the people closest to you never get buried under thousands of follower messages.</p>
+            <ul class="brand-points">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span><b>Personal</b> — chats with people you follow <b>and</b> who follow you back. Your close circle, always separate.</span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-7-7 18-2.5-7.5L3 11z"/></svg><span><b>Brand</b> — everyone else: followers you haven't followed back, and anyone new who messages you.</span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg><span>Chats move <b>automatically</b>: when someone you follow follows you back, their chat moves to Personal. If either of you unfollows, it moves back to Brand.</span></li>
+            </ul>
+            <button type="button" class="btn" id="convertBrandBtn">Convert to Brand Account</button>
+          </div>
+          <!-- Brand account: status + switch back -->
+          <div id="brandActiveBlock" class="hidden">
+            <p style="margin:0 0 10px"><span class="brand-status-pill"><span class="pdot"></span>Brand Account — Active</span></p>
+            <p class="sub">Your Messages are split into <b style="color:var(--ink)">Personal</b> (people you follow who follow you back) and <b style="color:var(--ink)">Brand</b> (everyone else). Chats move between the two automatically as follows change — nothing is ever deleted or hidden, only grouped. Switch back any time and every conversation returns to one single list, exactly like a normal account.</p>
+            <button type="button" class="btn btn-secondary" id="unbrandBtn">Switch back to Personal Account</button>
+          </div>
+          <div id="brandMsg" class="msg"></div>
+        </div>
+        <div class="card settings-card" style="margin-top:14px">
           <button type="button" class="expand-row" id="changePasswordToggle" aria-expanded="false" aria-controls="changePasswordBody">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             <span class="expand-row-main"><span class="expand-row-title">Change Password</span><span class="expand-row-sub">Update the password you use to log in to Ghost.</span></span>
@@ -917,6 +1068,13 @@ body.guest-prompt #authSection .auth-card{animation:guestSlideUp .45s cubic-bezi
         <div class="chat-shell" id="chatShell">
           <aside class="chat-side">
             <h3>Conversations</h3>
+            <!-- Brand accounts only: the Personal / Brand split.
+                 Hidden for normal accounts — their list stays one
+                 single merged list, exactly as before. -->
+            <div class="brand-msg-tabs hidden" id="brandMsgTabs" role="tablist" aria-label="Conversation sections">
+              <button type="button" class="brand-msg-tab active" id="msgTabPersonal" data-msg-tab="personal" role="tab" aria-selected="true">Personal<span class="tab-unread hidden" id="msgTabPersonalUnread"></span></button>
+              <button type="button" class="brand-msg-tab" id="msgTabBrand" data-msg-tab="brand" role="tab" aria-selected="false">Brand<span class="tab-unread hidden" id="msgTabBrandUnread"></span></button>
+            </div>
             <input type="text" id="userSearch" placeholder="Search people to message…" autocomplete="off" />
             <div id="usersList" class="user-list"></div>
           </aside>
@@ -974,8 +1132,13 @@ body.guest-prompt #authSection .auth-card{animation:guestSlideUp .45s cubic-bezi
 <div id="shareModal" class="modal-overlay hidden">
   <div class="modal-box">
     <h3>Share this post</h3>
-    <p class="sub">Send it directly to a friend on Ghost, copy the text, or use your device's share sheet. Sharing to a friend sends it as a message.</p>
-    <div id="shareFriendsWrap"><div class="search-sec" style="padding-left:2px">Share with friends</div><div id="shareFriendsList" style="max-height:240px;overflow-y:auto;margin-bottom:12px"></div></div>
+    <p class="sub">Send it to a friend as a message, share it to your own profile — the original author stays credited there — or copy the post's unique link: anyone who opens it lands right on this post.</p>
+    <div class="share-choices">
+      <button type="button" class="share-choice" id="shareProfileBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg><span id="shareProfileBtnText">Share to my profile</span></button>
+      <button type="button" class="share-choice" id="shareLinkBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copy link</span></button>
+    </div>
+    <div class="share-link-row" style="margin-bottom:14px"><input type="text" id="shareLinkInput" readonly aria-label="This post's unique link" /></div>
+    <div id="shareFriendsWrap"><div class="search-sec" style="padding-left:2px">Send to a friend</div><div id="shareFriendsList" style="max-height:240px;overflow-y:auto;margin-bottom:12px"></div></div>
     <div class="share-preview" id="sharePreview"></div>
     <div class="modal-actions">
       <button type="button" class="btn" id="shareCopyBtn">Copy post text</button>
@@ -1021,6 +1184,24 @@ body.guest-prompt #authSection .auth-card{animation:guestSlideUp .45s cubic-bezi
       <button type="button" class="btn btn-secondary" id="confirmCancelBtn">Cancel</button>
       <button type="button" class="btn btn-danger" id="confirmOkBtn">Delete</button>
     </div>
+  </div>
+</div>
+
+<!-- FOLLOWERS / FOLLOWING MODAL -->
+<div id="followListModal" class="modal-overlay hidden">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="followListTitle">
+    <div class="fl-head">
+      <div style="min-width:0">
+        <h3 id="followListTitle">Followers</h3>
+        <p class="sub" id="followListSub" style="margin:2px 0 0"></p>
+      </div>
+      <button type="button" class="fl-close" id="followListCloseBtn" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="feed-tabs follow-tabs" role="tablist" aria-label="Followers or following" style="margin-top:0;margin-bottom:10px">
+      <button type="button" class="feed-tab" data-follow-tab="followers" role="tab" aria-selected="false">Followers <span class="ft-count" id="followTabCountFollowers"></span></button>
+      <button type="button" class="feed-tab" data-follow-tab="following" role="tab" aria-selected="false">Following <span class="ft-count" id="followTabCountFollowing"></span></button>
+    </div>
+    <div id="followListBody" class="follow-list-body"></div>
   </div>
 </div>
 
@@ -1205,10 +1386,16 @@ function showsActiveStatus(u){
 }
 /* Profile pages show presence as a DOT ONLY — bright green while the
    person is active, plain grey when they are not, and nothing at all
-   when they have hidden their active status. No wording, ever. */
+   when they have hidden their active status. No wording by default:
+   the status text ("Active now" / "Last active …", from the same
+   lastActiveText used everywhere else) lives only inside the dot's
+   tooltip, revealed by hovering the dot on desktop or tapping it on
+   mobile (see .profile-dot-wrap / .profile-presence-tip and the
+   tap-toggle listener by the follow button). */
 function profilePresenceDotHtml(u){
   if(!u||!showsActiveStatus(u))return '';
-  return '<span class="profile-presence-dot'+(isActive(u)?' online':'')+'"></span>';
+  const status=lastActiveText(u);
+  return '<span class="profile-dot-wrap" tabindex="0" role="button" aria-label="'+escapeHtml(status)+'"><span class="profile-presence-dot'+(isActive(u)?' online':'')+'"></span><span class="profile-presence-tip" role="tooltip">'+escapeHtml(status)+'</span></span>';
 }
 function isActive(u){if(!u||!u.last_seen||!showsActiveStatus(u))return false;const t=new Date(u.last_seen).getTime();return !isNaN(t)&&(Date.now()-t)<300000;}
 function lastActiveText(u){
@@ -1322,6 +1509,19 @@ let cachedMsgReactions=[]; let msgReactionsTableOk=true;
 let replyColsOk=true; let pendingReply=null; let msgMenuMsgId=null;
 let coverTextColOk=true; const LS_COVER_TEXTS='ghost_cover_texts_v1';
 let showActiveColOk=true; const LS_SHOW_ACTIVE='ghost_show_active_v1';
+/* ---------- brand account state ----------
+   system_accounts.is_brand (boolean, default false) is the server
+   switch behind Settings → Brand Account. SQL to add it (run once
+   in the Supabase SQL Editor):
+     ALTER TABLE public.system_accounts
+       ADD COLUMN IF NOT EXISTS is_brand boolean NOT NULL DEFAULT false;
+   Until that SQL is run the column does not exist — every select /
+   update that touches it is guarded exactly like show_active_status:
+   the app falls back to a per-account preference kept on this device
+   (LS_BRAND), so converting / switching back still works here, and
+   the server value takes over the moment the column is available. */
+let brandColOk=true; const LS_BRAND='ghost_is_brand_v1';
+let msgTab='personal';
 function coverTextFor(u){
   if(!u)return '';
   /* A cover_text value loaded from the server is authoritative —
@@ -1347,12 +1547,54 @@ async function loadCoverTexts(){
 let msgReadColOk=true; let badgePollTimer=null;
 const openReplyIds=new Set();
 let currentView='feed'; let previousView='feed';
-let guestMode=false; let guestPromptTimer=null; let guestPromptShown=false;
+let guestMode=false; let guestPromptTimer=null; let guestPromptShown=false; let guestStartedAt=0; let guestExpired=false; const GUEST_PREVIEW_MS=15000;
 let viewedProfile=null; let selectedPeer=null;
 let feedQuery=''; let activeTag=''; let feedFilter='all';
+/* Notifications: a fourth feed tab (feedFilter==='notifications').
+   notifFilter is the sub-filter under the Notifications heading —
+   null = combined (likes + comments + follows together), or one of
+   'likes' | 'comments' | 'follows'. Tapping the active sub-filter
+   again returns to null (combined). No notifications table exists:
+   everything is computed live from post_likes, post_reactions,
+   post_comments and profile_follows already in the caches. */
+let notifFilter=null;
 const openCommentIds=new Set();
 let editingPostId=null; let sharePostId=null; let confirmCb=null;
 let serverSaves=null; let serverShareCounts=null; let savesTableOk=true; let sharesTableOk=true;
+/* ---------- profile shares (post_shares.share_scope = 'profile') ----------
+   "Share to my profile" records a row in post_shares with
+   sharer = me, shared_to_email = NULL and share_scope = 'profile'
+   (new column — SQL: ALTER TABLE public.post_shares
+   ADD COLUMN IF NOT EXISTS share_scope text;). Until that SQL is
+   run the column does not exist: every read / write that touches it
+   is guarded exactly like the app's other late columns — the insert
+   falls back to the plain share record and the share is ALSO kept
+   in an on-device mirror (LS_PROFILE_SHARES), which is what profile
+   rendering uses until the server column takes over. The mirror is
+   kept even after the column exists, so a share made on this device
+   shows on your profile instantly, before any reload. */
+let cachedProfileShares=[]; let shareScopeColOk=true; const LS_PROFILE_SHARES='ghost_profile_shares_v1';
+function localProfileShares(){return lsGet(LS_PROFILE_SHARES,[]);}
+function rememberLocalProfileShare(row){
+  if(!row||!row.sharer_email||row.post_id==null)return;
+  const list=localProfileShares().filter(s=>!(s.sharer_email===row.sharer_email&&String(s.post_id)===String(row.post_id)));
+  list.push({post_id:row.post_id,sharer_email:row.sharer_email,sharer_name:row.sharer_name||'',created_at:row.created_at||new Date().toISOString()});
+  lsSet(LS_PROFILE_SHARES,list);
+}
+function forgetLocalProfileShare(email,pid){
+  lsSet(LS_PROFILE_SHARES,localProfileShares().filter(s=>!(s.sharer_email===email&&String(s.post_id)===String(pid))));
+}
+/* All profile shares BY one person: server rows (share_scope =
+   'profile') when the column exists, unioned with this device's
+   mirror, newest share first. */
+function profileSharesFor(email){
+  if(!email)return [];
+  const map=new Map();
+  if(shareScopeColOk)cachedProfileShares.forEach(s=>{if(s&&s.sharer_email===email)map.set(String(s.post_id),s);});
+  localProfileShares().forEach(s=>{if(s&&s.sharer_email===email&&!map.has(String(s.post_id)))map.set(String(s.post_id),s);});
+  return Array.from(map.values()).sort((a,b)=>(new Date(b.created_at||0).getTime()||0)-(new Date(a.created_at||0).getTime()||0));
+}
+function iSharedToProfile(pid){return !!(currentUser&&profileSharesFor(currentUser.system_email).some(s=>String(s.post_id)===String(pid)));}
 let cachedViews={}; let viewsTableOk=true; let hiddenColOk=true; let deletedColOk=true; let reactionsTableOk=true;
 let myPostsTab='public';
 let msgPollTimer=null; let heartbeatTimer=null; let presenceTimer=null;
@@ -1360,9 +1602,82 @@ let msgPollTimer=null; let heartbeatTimer=null; let presenceTimer=null;
 function lsGet(key,fallback){try{const v=JSON.parse(localStorage.getItem(key)||'null');return v==null?fallback:v;}catch(_){return fallback;}}
 function lsSet(key,val){try{localStorage.setItem(key,JSON.stringify(val));}catch(_){}}
 function getHiddenIds(){return new Set((lsGet(LS_HIDDEN,[])).map(String));}
-function getSavedIds(){if(serverSaves)return new Set(serverSaves.map(String));return new Set((lsGet(LS_SAVED,[])).map(String));}
+/* The saved set is the UNION of the server list (post_saves) and the
+   on-device mirror (LS_SAVED). The mirror is written on EVERY save —
+   before the server call — so a save can never vanish just because a
+   server write failed, used a column the table does not have, or the
+   probe came back empty: whatever was saved shows under Saved, and
+   probeSavesTable keeps pushing mirror-only saves up to the server
+   until they land there too. Unsave removes the id from both. */
+function getSavedIds(){const s=new Set((lsGet(LS_SAVED,[])).map(String));if(serverSaves)serverSaves.forEach(x=>s.add(String(x)));return s;}
+/* The email a save belongs to. Normally currentUser.system_email —
+   but after a session restore currentUser can briefly (or, with an
+   older saved copy, persistently) lack system_email while the stored
+   session still has it. Every save-path function repairs the identity
+   from the stored session first, so a save is never silently written
+   for "undefined" or dropped because the in-memory user was thin. */
+function saverEmail(){
+  if(currentUser&&currentUser.system_email)return currentUser.system_email;
+  const stored=lsGet(LS_USER,null);
+  if(stored&&stored.system_email){
+    if(!currentUser)currentUser=stored;
+    else if(!currentUser.system_email)currentUser.system_email=stored.system_email;
+    if(currentUser&&!currentUser.full_name&&stored.full_name)currentUser.full_name=stored.full_name;
+    return stored.system_email;
+  }
+  return null;
+}
 function getShareCounts(){if(serverShareCounts)return serverShareCounts;return lsGet(LS_SHARES,{});}
 function myFollowingSet(){const s=new Set();if(!currentUser)return s;cachedFollows.forEach(f=>{if(f.follower_email===currentUser.system_email)s.add(f.following_email);});return s;}
+function myFollowersSet(){const s=new Set();if(!currentUser)return s;cachedFollows.forEach(f=>{if(f.following_email===currentUser.system_email)s.add(f.follower_email);});return s;}
+/* ---------- brand account helpers ----------
+   isBrandAccount mirrors showsActiveStatus: a boolean loaded from
+   the server wins; until the is_brand column exists, your own
+   choice is kept as a per-account preference on this device. */
+function isBrandAccount(u){
+  if(!u)return false;
+  if(typeof u.is_brand==='boolean')return u.is_brand;
+  if(currentUser&&u.system_email===currentUser.system_email){
+    const prefs=lsGet(LS_BRAND,{});const v=prefs[u.system_email];
+    if(typeof v==='boolean')return v;
+  }
+  return false;
+}
+function amBrand(){return currentUser?isBrandAccount(currentUser):false;}
+/* A conversation is PERSONAL only when the follow is mutual: I
+   follow them AND they follow me back. Everyone else — followers I
+   haven't followed back, people I follow who haven't followed back,
+   strangers — is on the Brand side. Computed live from
+   profile_follows every time the list renders, so a follow-back (or
+   an unfollow) moves the chat on the very next list refresh with no
+   stored state to go stale. */
+function isMutualPeer(email){if(!currentUser||!email)return false;return myFollowingSet().has(email)&&myFollowersSet().has(email);}
+function peerSection(email){return isMutualPeer(email)?'personal':'brand';}
+function unreadForSection(sec){if(!currentUser)return 0;return cachedMessages.filter(m=>isUnreadMsg(m)&&peerSection(m.sender_email)===sec).length;}
+/* Guarded server read of is_brand for every loaded account — the
+   same probe pattern as is_creator / profile_label. If the column
+   is missing the probe errors, brandColOk flips off, and the
+   on-device preference keeps the toggle working. */
+async function loadBrandFlags(){
+  if(!ghostDb)return;
+  try{
+    const r=await ghostDb.from('system_accounts').select('system_email, is_brand');
+    if(!r.error&&r.data){
+      const bmap={};r.data.forEach(x=>{bmap[x.system_email]=x.is_brand;});
+      allUsers.forEach(u=>{if(u.system_email in bmap)u.is_brand=bmap[u.system_email];});
+      if(currentUser&&currentUser.system_email in bmap){currentUser.is_brand=bmap[currentUser.system_email];lsSet(LS_USER,currentUser);}
+      if(viewedProfile&&viewedProfile.system_email in bmap)viewedProfile.is_brand=bmap[viewedProfile.system_email];
+      brandColOk=true;
+    }else brandColOk=false;
+  }catch(_){brandColOk=false;}
+}
+/* Follows drive the Personal/Brand split, so the polls refresh them
+   too — a follow-back then moves the chat within seconds, live,
+   without a page reload. */
+async function refreshFollowsCache(){
+  if(!currentUser||!ghostDb)return;
+  try{let r=await ghostDb.from('profile_follows').select('follower_email, following_email, created_at');if(r.error)r=await ghostDb.from('profile_follows').select('follower_email, following_email');if(!r.error&&r.data)cachedFollows=r.data;}catch(_){}
+}
 function userByUsername(uname){return allUsers.find(u=>u.username===uname)||(currentUser&&currentUser.username===uname?currentUser:null);}
 function userByEmail(email){return allUsers.find(u=>u.system_email===email)||(currentUser&&currentUser.system_email===email?currentUser:null);}
 
@@ -1527,9 +1842,9 @@ async function onAuthenticated(user){
   currentUser=user;
   /* Leaving guest mode (if this login came from the guest preview):
      the prompt, its timer and all guest chrome go away for good. */
-  guestMode=false;guestPromptShown=false;clearTimeout(guestPromptTimer);guestPromptTimer=null;
-  document.body.classList.remove('guest-prompt');
-  ['guestContinueBtn','guestLoginBtn','guestNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('hidden');});
+  guestMode=false;guestPromptShown=false;guestExpired=false;guestStartedAt=0;clearTimeout(guestPromptTimer);guestPromptTimer=null;
+  document.body.classList.remove('guest-prompt');document.body.classList.remove('guest-locked');
+  ['guestContinueBtn','guestLoginBtn','guestNote','guestLockNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('hidden');});
   ['railUserBtn','composeBtn'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('hidden');});
   lsSet(LS_USER,user);
   document.getElementById('splashSection').classList.add('hidden');
@@ -1543,12 +1858,19 @@ async function onAuthenticated(user){
   clearInterval(presenceTimer);presenceTimer=setInterval(refreshPresence,60000);
   /* Unread-message badge poll — runs in every view, so a new message
      lights up the Messages badge live while the app is open. */
-  clearInterval(badgePollTimer);badgePollTimer=setInterval(async()=>{if(!currentUser)return;await loadMessagesCache();if(currentView==='messages')renderUsersList();},15000);
+  clearInterval(badgePollTimer);badgePollTimer=setInterval(async()=>{if(!currentUser)return;await loadMessagesCache();await refreshFollowsCache();if(currentView==='messages')renderUsersList();/* While the Notifications tab is open, the same poll also refreshes likes / comments / reactions, so a new notification appears on its own — no manual reload. */if(currentView==='feed'&&feedFilter==='notifications'){await refreshNotifCache();if(currentView==='feed'&&feedFilter==='notifications')renderFeed();}},15000);
   setupSignaling();
   handleDeepLink();
 }
 function doLogout(){
-  currentUser=null;viewedProfile=null;selectedPeer=null;
+  currentUser=null;viewedProfile=null;selectedPeer=null;msgTab='personal';
+  /* Notifications state never leaks into the next session / guest
+     preview: back to the combined sub-filter and the Home tab. */
+  notifFilter=null;
+  if(feedFilter==='notifications'){feedFilter='all';document.querySelectorAll('[data-feed-filter]').forEach(b=>{const on=b.getAttribute('data-feed-filter')==='all';b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false');});const nb=document.getElementById('notifFilterBar');if(nb)nb.classList.add('hidden');}
+  guestMode=false;guestPromptShown=false;guestExpired=false;guestStartedAt=0;clearTimeout(guestPromptTimer);guestPromptTimer=null;
+  document.body.classList.remove('guest-prompt');document.body.classList.remove('guest-locked');
+  {const _ln=document.getElementById('guestLockNote');if(_ln)_ln.classList.add('hidden');}
   try{localStorage.removeItem(LS_USER);}catch(_){}
   clearInterval(heartbeatTimer);clearInterval(msgPollTimer);clearInterval(presenceTimer);clearInterval(badgePollTimer);
   updateMsgBadges();
@@ -1586,6 +1908,16 @@ function showView(name){
   document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.getAttribute('data-nav')===name||(name==='profile'&&b.getAttribute('data-nav')==='profile'&&viewedProfile&&currentUser&&viewedProfile.username===currentUser.username)));
   if(name==='messages'){renderUsersList();startMsgPolling();}else{clearInterval(msgPollTimer);}
   if(name==='myposts'){renderMyPosts();purgeExpiredDeletedPosts().then(()=>{if(currentView==='myposts')renderMyPosts();});}
+  /* Entering Saved MUST repaint the list from the current saved-id
+     union right away — previously showView never called renderSaved
+     (and renderAll only did so when the view was already open), so
+     the Saved page kept its initial empty markup forever and a post
+     saved minutes earlier looked like it had never been saved. The
+     list is drawn instantly from the union (server ids + on-device
+     mirror, which toggleSave updates synchronously on every tap),
+     then re-probed against post_saves and drawn again so saves from
+     other devices / earlier sessions appear too. */
+  if(name==='saved'){renderSaved();probeSavesTable().then(()=>{if(currentView==='saved')renderSaved();});}
   if(name==='settings')fillEditProfileForm();
   if(name==='drive'){loadDriveNotes().then(()=>{if(currentView==='drive')renderDrive();});}
   if(name!=='messages')document.getElementById('chatShell').classList.remove('thread-open');
@@ -1644,16 +1976,60 @@ document.addEventListener('click',e=>{if(!e.target.closest('.top-search'))closeS
 
 /* ---------- feed filter tabs ---------- */
 function setFeedFilter(f){
+  /* Notifications are personal — a guest tapping the tab gets the
+     same login prompt as any other member action, and the tab does
+     not switch. */
+  if(f==='notifications'&&!currentUser){showLoginPrompt();return;}
   feedFilter=f;
   document.querySelectorAll('[data-feed-filter]').forEach(b=>{
     const on=b.getAttribute('data-feed-filter')===f;
     b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false');
   });
   renderFeed();
+  /* Opening Notifications pulls a fresh copy of the four source
+     tables first, then repaints — so the list is current the
+     moment it opens, not only after the next poll tick. */
+  if(f==='notifications')refreshNotifCache().then(()=>{if(feedFilter==='notifications'&&currentView==='feed')renderFeed();});
 }
 document.querySelectorAll('[data-feed-filter]').forEach(b=>b.addEventListener('click',()=>setFeedFilter(b.getAttribute('data-feed-filter'))));
+/* Notifications sub-filters — Likes / Comments / Follows, in that
+   order, directly under the Notifications heading. Tapping one
+   filters to that type only; tapping the active one again returns
+   to the combined view (notifFilter back to null). */
+document.querySelectorAll('[data-notif-filter]').forEach(b=>b.addEventListener('click',()=>{
+  const f=b.getAttribute('data-notif-filter');
+  notifFilter=(notifFilter===f)?null:f;
+  renderFeed();
+}));
 
 /* ---------- data loading ---------- */
+/* post_shares powers BOTH the per-post share counts and the
+   profile shares. The select cascades from the fullest column set
+   (with share_scope) down to post_id only, so the counts keep
+   working on any database shape; shareScopeColOk records whether
+   the share_scope column was actually there. */
+async function loadPostShares(){
+  if(!ghostDb)return;
+  const attempts=[
+    'id, post_id, sharer_email, sharer_name, shared_to_email, created_at, share_scope',
+    'id, post_id, sharer_email, sharer_name, shared_to_email, created_at',
+    'id, post_id, sharer_email, sharer_name, created_at, share_scope',
+    'id, post_id, sharer_email, sharer_name, created_at',
+    'post_id'
+  ];
+  try{
+    let rows=null,usedCols='';
+    for(const cols of attempts){
+      const res=await ghostDb.from('post_shares').select(cols);
+      if(!res.error&&res.data){rows=res.data;usedCols=cols;break;}
+    }
+    if(!rows){sharesTableOk=false;return;}
+    sharesTableOk=true;
+    const cc={};rows.forEach(r=>{cc[String(r.post_id)]=(cc[String(r.post_id)]||0)+1;});serverShareCounts=cc;
+    shareScopeColOk=usedCols.indexOf('share_scope')!==-1;
+    cachedProfileShares=shareScopeColOk?rows.filter(r=>r.share_scope==='profile'):[];
+  }catch(_){sharesTableOk=false;}
+}
 async function loadAllData(){
   if(!currentUser||!ghostDb)return;
   try{
@@ -1667,9 +2043,9 @@ async function loadAllData(){
     let usersRes=await ghostDb.from('system_accounts').select('id, system_email, full_name, username, date_of_birth, created_at, badge_type, username_changed, last_seen, show_active_status');
     if(usersRes.error){showActiveColOk=false;usersRes=await ghostDb.from('system_accounts').select('id, system_email, full_name, username, date_of_birth, created_at, badge_type, username_changed, last_seen');}
     const [likesRes,commentsRes,followsRes]=await Promise.all([
-      ghostDb.from('post_likes').select('post_id, user_email, user_name'),
+      ghostDb.from('post_likes').select('post_id, user_email, user_name, created_at'),
       ghostDb.from('post_comments').select('id, post_id, author_email, author_name, author_username, comment_text, created_at, parent_comment_id').order('created_at',{ascending:true}),
-      ghostDb.from('profile_follows').select('follower_email, following_email')
+      ghostDb.from('profile_follows').select('follower_email, following_email, created_at')
     ]);
     const firstErr=usersRes.error||postsRes.error;
     if(firstErr&&!usersRes.data&&!postsRes.data)throw firstErr;
@@ -1680,13 +2056,22 @@ async function loadAllData(){
        the column and keep replies on this device until it is run. */
     let commentsData=commentsRes.data;
     if(commentsRes.error){commentParentColOk=false;const retry=await ghostDb.from('post_comments').select('id, post_id, author_email, author_name, author_username, comment_text, created_at').order('created_at',{ascending:true});commentsData=retry.data||[];}
-    cachedPosts=postsRes.data||[];cachedLikes=likesRes.data||[];cachedComments=commentsData||[];cachedFollows=followsRes.data||[];
+    /* created_at rides along on likes / follows so Notifications can
+       date each event; if an older database lacks one of those
+       columns the select errors — retry without it and notifications
+       for that type simply carry no timestamp. */
+    let likesData=likesRes.data;
+    if(likesRes.error){const lr2=await ghostDb.from('post_likes').select('post_id, user_email, user_name');likesData=lr2.data||[];}
+    let followsData=followsRes.data;
+    if(followsRes.error){const fr2=await ghostDb.from('profile_follows').select('follower_email, following_email');followsData=fr2.data||[];}
+    cachedPosts=postsRes.data||[];cachedLikes=likesData||[];cachedComments=commentsData||[];cachedFollows=followsData||[];
     if(!commentParentColOk){const localReplies=lsGet(LS_COMMENT_REPLIES,[]);const have=new Set(cachedComments.map(c=>String(c.id)));localReplies.forEach(r=>{if(!have.has(String(r.id)))cachedComments.push(r);});cachedComments.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));}
     /* Optional new tables (post_saves / post_shares) + is_creator — used when present, silently skipped when the SQL hasn't been run yet. */
     await probeSavesTable();
-    try{const sh=await ghostDb.from('post_shares').select('post_id');if(!sh.error&&sh.data){const cc={};sh.data.forEach(r=>{cc[String(r.post_id)]=(cc[String(r.post_id)]||0)+1;});serverShareCounts=cc;sharesTableOk=true;}else sharesTableOk=false;}catch(_){sharesTableOk=false;}
+    await loadPostShares();
     try{const vw=await ghostDb.from('post_views').select('post_id');if(!vw.error&&vw.data){const vc={};vw.data.forEach(r=>{vc[String(r.post_id)]=(vc[String(r.post_id)]||0)+1;});cachedViews=vc;viewsTableOk=true;}else viewsTableOk=false;}catch(_){viewsTableOk=false;}
     try{const cr=await ghostDb.from('system_accounts').select('system_email, is_creator');if(!cr.error&&cr.data){const cmap={};cr.data.forEach(r=>{cmap[r.system_email]=r.is_creator;});allUsers.forEach(u=>{if(u.system_email in cmap)u.is_creator=cmap[u.system_email];});if(currentUser&&currentUser.system_email in cmap)currentUser.is_creator=cmap[currentUser.system_email];}}catch(_){}
+    await loadBrandFlags();
     await loadProfileLabels();
     await loadCoverTexts();
     await loadDriveNotes();
@@ -1910,6 +2295,9 @@ function totalUnread(){if(!currentUser)return 0;return cachedMessages.filter(isU
 function updateMsgBadges(){
   const n=totalUnread();
   ['msgBadge','msgBadgeM'].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.textContent=n>99?'99+':String(n);el.classList.toggle('hidden',!n);});
+  /* Brand accounts: the per-tab unread badges ride along with the
+     total above (the nav badge itself stays the combined total). */
+  if(typeof syncMsgTabsUI==='function')syncMsgTabsUI();
 }
 async function markConversationRead(peerEmail){
   if(!currentUser||!peerEmail)return;
@@ -1950,7 +2338,11 @@ async function refreshPresence(){
 function renderAll(){
   renderFeed();renderRightRail();
   if(currentView==='myposts')renderMyPosts();
-  if(currentView==='saved')renderSaved();
+  /* The Saved list is repainted on EVERY full render, not only while
+     the view is open — its markup lives in a hidden section, so this
+     is cheap, and it guarantees the list is already correct the
+     moment the user switches to Saved. */
+  renderSaved();
   if(currentView==='profile'&&viewedProfile)renderProfilePosts();
   if(currentView==='messages')renderUsersList();
 }
@@ -2050,6 +2442,141 @@ function emptyState(iconSvg,title,text){
   return '<div class="card empty-state"><span class="e-ic">'+iconSvg+'</span><h4>'+escapeHtml(title)+'</h4><p>'+escapeHtml(text)+'</p></div>';
 }
 
+/* ---------- notifications ----------
+   Built ONLY from tables the app already loads — no notifications
+   table, no new SQL:
+   • Likes    = post_likes rows on MY posts by other people, plus
+                post_reactions rows on my posts (shown with their
+                emoji). A legacy Like from someone who has since
+                reacted with an emoji is not shown twice — the
+                reaction supersedes it, exactly like the reaction
+                summary on the post itself.
+   • Comments = post_comments rows on MY posts by other people
+                (with the comment text), plus replies to MY comments
+                (parent_comment_id pointing at one of my comments).
+   • Follows  = profile_follows rows where following_email is me.
+   My own actions are always excluded. Each type keeps its latest
+   50 events, newest first; the combined view merges the three. */
+async function refreshNotifCache(){
+  if(!currentUser||!ghostDb)return;
+  try{
+    const [lr,cr,rr,fr]=await Promise.all([
+      ghostDb.from('post_likes').select('post_id, user_email, user_name, created_at'),
+      ghostDb.from('post_comments').select('id, post_id, author_email, author_name, author_username, comment_text, created_at, parent_comment_id').order('created_at',{ascending:true}),
+      ghostDb.from('post_reactions').select('post_id, user_email, user_name, emoji, created_at'),
+      ghostDb.from('profile_follows').select('follower_email, following_email, created_at')
+    ]);
+    if(!lr.error&&lr.data)cachedLikes=lr.data;
+    else if(lr.error){const r2=await ghostDb.from('post_likes').select('post_id, user_email, user_name');if(!r2.error&&r2.data)cachedLikes=r2.data;}
+    if(!cr.error&&cr.data)cachedComments=cr.data;
+    else if(cr.error){const r2=await ghostDb.from('post_comments').select('id, post_id, author_email, author_name, author_username, comment_text, created_at').order('created_at',{ascending:true});if(!r2.error&&r2.data)cachedComments=r2.data;}
+    if(!rr.error&&rr.data){cachedReactions=rr.data;reactionsTableOk=true;}
+    if(!fr.error&&fr.data)cachedFollows=fr.data;
+    else if(fr.error){const r2=await ghostDb.from('profile_follows').select('follower_email, following_email');if(!r2.error&&r2.data)cachedFollows=r2.data;}
+  }catch(_){/* the next poll tick retries */}
+}
+function buildNotifications(){
+  const empty={likes:[],comments:[],follows:[],all:[]};
+  if(!currentUser)return empty;
+  const me=currentUser.system_email;
+  const myPosts=new Map();
+  cachedPosts.forEach(p=>{if(p.author_email===me&&!isPostDeleted(p))myPosts.set(String(p.id),p);});
+  const tval=v=>{const t=v?new Date(v).getTime():NaN;return isNaN(t)?0:t;};
+  const actorFor=(email,name,username)=>{
+    const u=userByEmail(email);
+    if(u)return u;
+    return {full_name:name||'Someone',username:username||'',system_email:email,badge_type:'none'};
+  };
+  const postSnippet=p=>plainText(p&&p.content).slice(0,140);
+  const reactedKeys=new Set(cachedReactions.map(r=>String(r.post_id)+'|'+r.user_email));
+  const likes=[];
+  cachedLikes.forEach(l=>{
+    if(!l||l.user_email===me)return;
+    const post=myPosts.get(String(l.post_id));if(!post)return;
+    if(reactedKeys.has(String(l.post_id)+'|'+l.user_email))return;
+    likes.push({cat:'likes',kind:'like',actor:actorFor(l.user_email,l.user_name,null),time:l.created_at||null,post:post,snippet:postSnippet(post)});
+  });
+  cachedReactions.forEach(r=>{
+    if(!r||r.user_email===me||!REACTIONS.includes(r.emoji))return;
+    const post=myPosts.get(String(r.post_id));if(!post)return;
+    likes.push({cat:'likes',kind:'reaction',emoji:r.emoji,actor:actorFor(r.user_email,r.user_name,null),time:r.created_at||null,post:post,snippet:postSnippet(post)});
+  });
+  likes.sort((a,b)=>tval(b.time)-tval(a.time));
+  const myCommentIds=new Set(cachedComments.filter(c=>c.author_email===me).map(c=>String(c.id)));
+  const comments=[];
+  cachedComments.forEach(c=>{
+    if(!c||c.author_email===me)return;
+    const post=myPosts.get(String(c.post_id));
+    if(post){comments.push({cat:'comments',kind:'comment',actor:actorFor(c.author_email,c.author_name,c.author_username),time:c.created_at||null,post:post,commentText:plainText(c.comment_text).slice(0,180),snippet:postSnippet(post)});return;}
+    if(c.parent_comment_id&&myCommentIds.has(String(c.parent_comment_id))){
+      const parentPost=cachedPosts.find(p=>String(p.id)===String(c.post_id))||null;
+      comments.push({cat:'comments',kind:'reply',actor:actorFor(c.author_email,c.author_name,c.author_username),time:c.created_at||null,post:parentPost,commentText:plainText(c.comment_text).slice(0,180),snippet:parentPost?postSnippet(parentPost):''});
+    }
+  });
+  comments.sort((a,b)=>tval(b.time)-tval(a.time));
+  const follows=[];
+  cachedFollows.forEach(f=>{
+    if(!f||f.following_email!==me||f.follower_email===me)return;
+    follows.push({cat:'follows',kind:'follow',actor:actorFor(f.follower_email,null,null),time:f.created_at||null,post:null,snippet:''});
+  });
+  follows.sort((a,b)=>tval(b.time)-tval(a.time));
+  const L=likes.slice(0,50),C=comments.slice(0,50),F=follows.slice(0,50);
+  return {likes:L,comments:C,follows:F,all:[...L,...C,...F].sort((a,b)=>tval(b.time)-tval(a.time))};
+}
+const NOTIF_BELL_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>';
+const NOTIF_FOLLOW_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>';
+function notifItemHtml(n){
+  const a=n.actor||{};
+  const uname=a.username||'';
+  let action='';
+  if(n.kind==='like')action='liked your post';
+  else if(n.kind==='reaction')action='reacted '+n.emoji+' to your post';
+  else if(n.kind==='comment')action='commented on your post';
+  else if(n.kind==='reply')action='replied to your comment';
+  else if(n.kind==='follow')action='started following you';
+  let typeBadge='';
+  if(n.kind==='like')typeBadge='<span class="notif-type like">'+IC.heart+'</span>';
+  else if(n.kind==='reaction')typeBadge='<span class="notif-type react">'+escapeHtml(n.emoji)+'</span>';
+  else if(n.kind==='comment'||n.kind==='reply')typeBadge='<span class="notif-type comment">'+IC.comment+'</span>';
+  else if(n.kind==='follow')typeBadge='<span class="notif-type follow">'+NOTIF_FOLLOW_ICON+'</span>';
+  let snippetHtml='';
+  if(n.kind==='comment'||n.kind==='reply'){
+    if(n.commentText)snippetHtml+='<span class="notif-snippet">&ldquo;'+escapeHtml(n.commentText)+'&rdquo;</span>';
+    if(n.snippet)snippetHtml+='<span class="notif-postline">Your post: &ldquo;'+escapeHtml(n.snippet)+'&rdquo;</span>';
+  }else if(n.snippet){
+    snippetHtml+='<span class="notif-snippet">&ldquo;'+escapeHtml(n.snippet)+'&rdquo;</span>';
+  }
+  /* Follows open the follower's profile. Likes / Comments open the
+     post in the feed (the app's existing scroll-and-flash mechanism,
+     via data-action="notif-open"); if that post is no longer in the
+     feed, notif-open falls back to the actor's profile. */
+  const attrs=(n.cat==='follows')
+    ?'data-action="open-profile" data-username="'+escapeHtml(uname)+'"'
+    :'data-action="notif-open" data-id="'+escapeHtml(n.post?String(n.post.id):'')+'" data-username="'+escapeHtml(uname)+'"';
+  return '<button type="button" class="notif-item" '+attrs+'>'
+    +'<span class="notif-av">'+avatarHtml(a,'',false)+typeBadge+'</span>'
+    +'<span class="notif-main"><span class="notif-name">'+escapeHtml(a.full_name||'Someone')+badgeHtml(a.badge_type)+labelPillHtml(a)+'</span>'
+    +'<span class="notif-action">'+escapeHtml(action)+'</span>'
+    +snippetHtml+'</span>'
+    +(n.time?'<span class="notif-time" title="'+escapeHtml(formatDateTime(n.time))+'">'+escapeHtml(relTime(n.time))+'</span>':'')
+    +'</button>';
+}
+function notificationsListHtml(){
+  const data=buildNotifications();
+  const cl=document.getElementById('notifCountLikes');if(cl)cl.textContent='('+data.likes.length+')';
+  const cc=document.getElementById('notifCountComments');if(cc)cc.textContent='('+data.comments.length+')';
+  const cf=document.getElementById('notifCountFollows');if(cf)cf.textContent='('+data.follows.length+')';
+  document.querySelectorAll('[data-notif-filter]').forEach(b=>{const on=b.getAttribute('data-notif-filter')===notifFilter;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false');});
+  const items=notifFilter?data[notifFilter]:data.all;
+  if(!items.length){
+    if(notifFilter==='likes')return emptyState(IC.heart,'No likes yet','When someone likes or reacts to one of your posts, it will show up here.');
+    if(notifFilter==='comments')return emptyState(IC.comment,'No comments yet','When someone comments on one of your posts, it will show up here.');
+    if(notifFilter==='follows')return emptyState(NOTIF_FOLLOW_ICON,'No new followers yet','When someone starts following you, they will show up here.');
+    return emptyState(NOTIF_BELL_ICON,'No notifications yet','Likes, comments and new followers on your posts will appear here.');
+  }
+  return '<div class="card notif-panel">'+items.map(notifItemHtml).join('')+'</div>';
+}
+
 /* ---------- feed ---------- */
 function filteredPosts(){
   let posts=cachedPosts.filter(p=>!isPostHidden(p)&&!isPostDeleted(p));
@@ -2076,6 +2603,19 @@ function renderFeed(){
   const list=document.getElementById('feedList');
   const title=document.getElementById('feedTitle');
   const fc=document.getElementById('followingCount');if(fc&&currentUser)fc.textContent='('+cachedPosts.filter(p=>!isPostDeleted(p)&&myFollowingSet().has(p.author_email)).length+')';
+  /* Notifications tab: the same feed list area becomes the
+     Notifications view — heading, Likes/Comments/Follows filter
+     bar directly under it, then the event list. A live search or
+     #tag still takes over the feed exactly as on the other tabs. */
+  const nbar=document.getElementById('notifFilterBar');
+  const isNotif=feedFilter==='notifications'&&!!currentUser&&!activeTag&&!feedQuery;
+  if(nbar)nbar.classList.toggle('hidden',!isNotif);
+  if(isNotif){
+    title.textContent='Notifications';
+    renderPeopleResults();
+    list.innerHTML=notificationsListHtml();
+    return;
+  }
   title.textContent=activeTag?('Posts tagged '+activeTag):(feedQuery?('Results for "'+(globalSearch.value.trim())+'"'):(feedFilter==='following'?'Following':(feedFilter==='trending'?'Trending':'Home Feed')));
   renderPeopleResults();
   const posts=filteredPosts();
@@ -2139,9 +2679,13 @@ function renderRightRail(){
     .slice(0,4);
   document.getElementById('suggestList').innerHTML=suggestions.length?suggestions.map(u=>personRowHtml(u,false,{showFollowers:true,noPresence:true})).join(''):(others.length?'<span class="meta-small">You already follow everyone here.</span>':'<span class="meta-small">No suggestions yet.</span>');
   renderTrending();
-  /* Active now: ONLY people you follow (your friends) who are
-     currently active — never strangers. */
-  const actives=others.filter(u=>following.has(u.system_email)&&isActive(u)).slice(0,8);
+  /* Active now: ONLY mutual friends — people you follow who ALSO
+     follow you back — who are currently active. A one-way follow
+     in either direction never appears here. isMutualPeer is the
+     same mutual set the Brand Account Personal tab uses, computed
+     live from profile_follows; isActive() still enforces each
+     person's show_active_status choice on top of it. */
+  const actives=others.filter(u=>isMutualPeer(u.system_email)&&isActive(u)).slice(0,8);
   document.getElementById('activeList').innerHTML=actives.length?actives.map(u=>personRowHtml(u,true)).join(''):'<span class="meta-small">None of your friends are active right now.</span>';
 }
 
@@ -2232,13 +2776,17 @@ document.querySelectorAll('[data-myposts-tab]').forEach(b=>b.addEventListener('c
 /* Saved order: most recently saved first. The server list arrives
    ordered by save time (newest first); the on-device list is stored
    oldest-first, so it is reversed. */
-function savedOrderIds(){if(serverSaves)return serverSaves.map(String);return (lsGet(LS_SAVED,[])).map(String).reverse();}
+function savedOrderIds(){const out=[];const seen=new Set();if(serverSaves)serverSaves.forEach(x=>{const s=String(x);if(!seen.has(s)){seen.add(s);out.push(s);}});(lsGet(LS_SAVED,[])).map(String).reverse().forEach(s=>{if(!seen.has(s)){seen.add(s);out.push(s);}});return out;}
 function renderSaved(){
   const saved=getSavedIds();
   const rank={};savedOrderIds().forEach((id,i)=>{rank[id]=i;});
   const posts=cachedPosts.filter(p=>saved.has(String(p.id))&&!isPostDeleted(p));
   posts.sort((a,b)=>((rank[String(a.id)]!=null?rank[String(a.id)]:99999)-(rank[String(b.id)]!=null?rank[String(b.id)]:99999)));
-  document.getElementById('savedList').innerHTML=posts.length?posts.map(p=>postCardHtml(p,{savedView:true})).join(''):emptyState(IC.bookmark,'Nothing saved yet','Tap Save on any post — yours or anyone else\'s — and it will be waiting for you here.');
+  /* The "Nothing saved yet" empty state is shown ONLY when there are
+     truly no saved ids. If ids exist but their posts are still being
+     fetched from home_posts, say so instead — claiming "nothing
+     saved" while saves exist is exactly what made Save look broken. */
+  document.getElementById('savedList').innerHTML=posts.length?posts.map(p=>postCardHtml(p,{savedView:true})).join(''):(saved.size?emptyState(IC.bookmark,'Loading your saved posts…','You have '+saved.size+' saved post'+(saved.size===1?'':'s')+' — fetching '+(saved.size===1?'it':'them')+' now.'):emptyState(IC.bookmark,'Nothing saved yet','Tap Save on any post — yours or anyone else\'s — and it will be waiting for you here.'));
   observePostCards();
   ensureSavedPostsLoaded();
 }
@@ -2319,21 +2867,31 @@ function renderProfile(){
   const joinedEl=document.getElementById('detailJoined');const joinedParts=formatJoinedParts(u.created_at);if(joinedParts){joinedEl.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Joined <b>'+escapeHtml(joinedParts.date)+'</b> <span style="color:var(--ink-2)">('+escapeHtml(joinedParts.weekday)+')</span></span><span class="joined-sep" aria-hidden="true"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span class="joined-time">'+escapeHtml(joinedParts.time)+'</span>';joinedEl.title=formatJoinedFull(u.created_at);}else{joinedEl.textContent='Joined date unavailable';joinedEl.title='';}
   /* Presence on the profile is a DOT ONLY — green while active, grey
      while not, and nothing at all when the member has hidden their
-     active status in Settings. The old "Active now" / "Last active"
-     wording never appears here. The wrapper carries data-profile-dot
-     so the 60-second presence refresh can repaint the dot in place. */
+     active status in Settings. No status wording shows by default;
+     hovering the dot (desktop) or tapping it (mobile) reveals it in
+     the dot's tooltip. The wrapper carries data-profile-dot so the
+     60-second presence refresh can repaint the dot in place. */
   document.getElementById('detailPresence').innerHTML='<span data-profile-dot="'+escapeHtml(u.username)+'">'+profilePresenceDotHtml(isMe?Object.assign({},u,{last_seen:new Date().toISOString()}):u)+'</span>';
   const followers=cachedFollows.filter(f=>f.following_email===u.system_email).length;
   const following=cachedFollows.filter(f=>f.follower_email===u.system_email).length;
   const posts=cachedPosts.filter(p=>p.author_username===u.username&&!isPostHidden(p)&&!isPostDeleted(p));
-  document.getElementById('statPosts').textContent=posts.length;
+  /* The profile list also carries the posts this person shared to
+     their profile — they count toward the profile's post total. */
+  const sharedVisible=profileSharesFor(u.system_email).filter(s=>{const sp=cachedPosts.find(x=>String(x.id)===String(s.post_id));return sp&&!isPostHidden(sp)&&!isPostDeleted(sp);}).length;
+  document.getElementById('statPosts').textContent=posts.length+sharedVisible;
   document.getElementById('statFollowing').textContent=following;
   document.getElementById('statFollowers').textContent=followers;
-  document.getElementById('profilePostsHeading').textContent=(isMe?'Your posts':'Posts by '+u.full_name.split(' ')[0])+' ('+posts.length+')';
+  document.getElementById('profilePostsHeading').textContent=(isMe?'Your posts':'Posts by '+u.full_name.split(' ')[0])+' ('+(posts.length+sharedVisible)+')';
   const followBtn=document.getElementById('followProfileBtn');
-  const isFollowing=currentUser&&cachedFollows.some(f=>f.follower_email===currentUser.system_email&&f.following_email===u.system_email);
-  followBtn.textContent=isFollowing?'Following':'Follow';
-  followBtn.className='btn btn-sm '+(isFollowing?'btn-following':'');
+  /* Relationship-aware label, same helpers as the Followers /
+     Following popup rows: I follow them → "Following" (unchanged);
+     they follow me but I don't follow them → "Follow Back" (like
+     answering a friend request — same toggleFollow action, just
+     the label and a distinct tint); neither → "Follow". */
+  const isFollowing=!!(currentUser&&myFollowingSet().has(u.system_email));
+  const isFollowBack=!isFollowing&&!!(currentUser&&myFollowersSet().has(u.system_email));
+  followBtn.textContent=isFollowing?'Following':(isFollowBack?'Follow Back':'Follow');
+  followBtn.className='btn btn-sm '+(isFollowing?'btn-following':(isFollowBack?'btn-follow-back':''));
   /* Own profile: NO Follow button, ever. The hidden toggle must run
      AFTER the className assignment above, which would otherwise
      wipe the hidden class back off (that was the bug that showed a
@@ -2343,13 +2901,71 @@ function renderProfile(){
   document.getElementById('messageProfileBtn').classList.toggle('hidden',!!isMe);
   renderProfilePosts();
 }
+/* A post someone shared to their profile, rendered as a shared
+   card: a "X shared" line on top, then the ORIGINAL post card —
+   original author's name / avatar / badges / label pill, the
+   post's own date and its own counts. React / Comment on the card
+   act on the original post (it IS the original post card). The
+   sharer — and only the sharer — gets an Unshare control. A hidden
+   or deleted original is never shown as a shared card. */
+function sharedCardHtml(share){
+  const p=cachedPosts.find(x=>String(x.id)===String(share.post_id));
+  if(!p||isPostHidden(p)||isPostDeleted(p))return '';
+  const sharer=userByEmail(share.sharer_email)||{full_name:share.sharer_name||'Someone',username:'',badge_type:'none'};
+  const isMine=!!(currentUser&&share.sharer_email===currentUser.system_email);
+  return '<div class="shared-card"><div class="shared-by">'+IC.share
+    +'<span><b>'+escapeHtml(sharer.full_name)+'</b> shared</span>'
+    +(share.created_at?'<span class="shared-time" title="Shared '+escapeHtml(formatDateTime(share.created_at))+'">· '+escapeHtml(relTime(share.created_at))+'</span>':'')
+    +(isMine?'<span style="flex:1"></span><button type="button" class="btn btn-sm btn-secondary" data-action="unshare-profile" data-id="'+escapeHtml(String(share.post_id))+'">Unshare</button>':'')
+    +'</div>'+postCardHtml(p)+'</div>';
+}
 function renderProfilePosts(){
   const u=viewedProfile;if(!u)return;
-  const posts=cachedPosts.filter(p=>p.author_username===u.username&&!isPostHidden(p)&&!isPostDeleted(p));
-  document.getElementById('profilePostsList').innerHTML=posts.length?posts.map(postCardHtml).join(''):emptyState(IC.feed,'No posts yet',(currentUser&&u.system_email===currentUser.system_email)?'You have not published anything yet.':'This member has not published anything yet.');
+  const own=cachedPosts.filter(p=>p.author_username===u.username&&!isPostHidden(p)&&!isPostDeleted(p));
+  const shares=profileSharesFor(u.system_email);
+  const tval=v=>{const t=v?new Date(v).getTime():NaN;return isNaN(t)?0:t;};
+  const entries=own.map(p=>({t:tval(p.created_at),html:postCardHtml(p)}))
+    .concat(shares.map(s=>({t:tval(s.created_at),html:sharedCardHtml(s)})).filter(en=>en.html));
+  entries.sort((a,b)=>b.t-a.t);
+  document.getElementById('profilePostsList').innerHTML=entries.length?entries.map(en=>en.html).join(''):emptyState(IC.feed,'No posts yet',(currentUser&&u.system_email===currentUser.system_email)?'You have not published anything yet.':'This member has not published anything yet.');
   observePostCards();
+  ensureSharedPostsLoaded(u.system_email);
+}
+/* A shared post can be older than the newest-60 feed cache — fetch
+   any missing originals straight from home_posts (same pattern as
+   the Saved view) so the shared card can render. */
+let sharedFetchBusy=false;
+async function ensureSharedPostsLoaded(email){
+  if(sharedFetchBusy||!ghostDb||!email)return;
+  const shares=profileSharesFor(email);if(!shares.length)return;
+  const have=new Set(cachedPosts.map(p=>String(p.id)));
+  const missing=shares.map(s=>String(s.post_id)).filter(id=>!have.has(id));
+  if(!missing.length)return;
+  sharedFetchBusy=true;
+  try{
+    const ids=missing.map(id=>isNaN(Number(id))?id:Number(id));
+    let res=await ghostDb.from('home_posts').select('id, author_email, author_name, author_username, content, created_at, is_hidden, deleted_at').in('id',ids);
+    if(res.error)res=await ghostDb.from('home_posts').select('id, author_email, author_name, author_username, content, created_at, is_hidden').in('id',ids);
+    if(res.error)res=await ghostDb.from('home_posts').select('id, author_email, author_name, author_username, content, created_at').in('id',ids);
+    if(!res.error&&res.data&&res.data.length){res.data.forEach(p=>{if(!have.has(String(p.id)))cachedPosts.push(p);});if(currentView==='profile'&&viewedProfile&&viewedProfile.system_email===email)renderProfilePosts();}
+  }catch(_){}
+  sharedFetchBusy=false;
 }
 document.getElementById('followProfileBtn').addEventListener('click',async e=>{await toggleFollow(e.currentTarget.getAttribute('data-email'));});
+/* Profile presence dot — tap / keyboard reveal for the status
+   tooltip. Desktop hover and focus are pure CSS (.profile-dot-wrap
+   :hover / :focus-visible); touch has no hover, so a tap toggles
+   .tip-open on the dot, and any tap elsewhere (or Escape) closes
+   it. Only one tooltip can be open at a time. */
+document.addEventListener('click',e=>{
+  const wrap=e.target&&e.target.closest?e.target.closest('.profile-dot-wrap'):null;
+  document.querySelectorAll('.profile-dot-wrap.tip-open').forEach(el=>{if(el!==wrap)el.classList.remove('tip-open');});
+  if(wrap)wrap.classList.toggle('tip-open');
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){document.querySelectorAll('.profile-dot-wrap.tip-open').forEach(el=>el.classList.remove('tip-open'));return;}
+  if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.classList&&e.target.classList.contains('profile-dot-wrap')){e.preventDefault();e.target.classList.toggle('tip-open');}
+});
 document.getElementById('messageProfileBtn').addEventListener('click',()=>{if(viewedProfile)openChatWith(viewedProfile);});
 /* Edit Profile lives in Settings now — the profile page is view-only.
    This fills the Settings form from the signed-in account, honouring
@@ -2374,6 +2990,9 @@ function fillEditProfileForm(){
   /* The active-status switch reflects your saved choice. */
   syncActiveStatusToggle();
   const sam=document.getElementById('showActiveMsg');if(sam){sam.textContent='';sam.className='msg';}
+  /* The Brand Account section reflects your current account type. */
+  syncBrandSettingsUI();
+  const bm=document.getElementById('brandMsg');if(bm){bm.textContent='';bm.className='msg';}
 }
 document.getElementById('cancelEditBtn').addEventListener('click',()=>fillEditProfileForm());
 /* ---------- active status privacy (Settings switch) ----------
@@ -2410,6 +3029,64 @@ async function setShowActiveStatus(on){
   updatePresenceDom();renderRightRail();
 }
 document.getElementById('showActiveToggle').addEventListener('click',()=>{if(!currentUser)return;setShowActiveStatus(!showsActiveStatus(currentUser));});
+/* ---------- brand account (Settings) ----------
+   Converting / switching back saves to the server
+   (system_accounts.is_brand) the moment it is tapped, and the
+   Messages list regroups at once: brand → Personal/Brand tabs,
+   personal → the single merged list again. No message is ever
+   deleted, hidden or moved on the server — only the list grouping
+   changes. Until the is_brand column exists, the choice is kept as
+   a per-account preference on this device (same guarded pattern as
+   the active-status switch). */
+function syncBrandSettingsUI(){
+  if(!currentUser)return;
+  const brand=amBrand();
+  const pb=document.getElementById('brandPersonalBlock'),ab=document.getElementById('brandActiveBlock');
+  if(pb)pb.classList.toggle('hidden',brand);
+  if(ab)ab.classList.toggle('hidden',!brand);
+}
+async function setBrandStatus(on){
+  if(!currentUser)return;
+  currentUser.is_brand=on;
+  const me=allUsers.find(u=>u.system_email===currentUser.system_email);if(me)me.is_brand=on;
+  if(viewedProfile&&viewedProfile.system_email===currentUser.system_email)viewedProfile.is_brand=on;
+  lsSet(LS_USER,currentUser);
+  const prefs=lsGet(LS_BRAND,{});prefs[currentUser.system_email]=on;lsSet(LS_BRAND,prefs);
+  syncBrandSettingsUI();
+  /* Regroup the conversation list immediately — switching back to
+     personal restores the one merged list right away. */
+  if(currentView==='messages')renderUsersList();else syncMsgTabsUI();
+  if(ghostDb){
+    try{
+      const r=await ghostDb.from('system_accounts').update({is_brand:on}).eq('system_email',currentUser.system_email);
+      if(r.error){if(/is_brand|column|schema cache/i.test(r.error.message||''))brandColOk=false;}
+      else brandColOk=true;
+    }catch(_){}
+  }
+  const msg=document.getElementById('brandMsg');
+  if(msg){msg.textContent=on?'You are now a Brand Account — your Messages are split into Personal and Brand.':'You are back to a Personal Account — all your conversations are in one list again.';msg.className='msg ok';}
+  toast(on?'Brand Account on — Messages split into Personal & Brand.':'Personal Account restored — one conversation list again.');
+}
+document.getElementById('convertBrandBtn').addEventListener('click',()=>{if(currentUser)setBrandStatus(true);});
+document.getElementById('unbrandBtn').addEventListener('click',()=>{if(currentUser)setBrandStatus(false);});
+/* Brand tabs in Messages: visible ONLY for brand accounts. Each tab
+   carries its own unread badge; the main Messages nav badge stays
+   the total of both (updateMsgBadges is untouched). */
+function syncMsgTabsUI(){
+  const tabs=document.getElementById('brandMsgTabs');if(!tabs)return;
+  const brand=amBrand();
+  tabs.classList.toggle('hidden',!brand);
+  if(!brand)return;
+  document.querySelectorAll('[data-msg-tab]').forEach(b=>{
+    const on=b.getAttribute('data-msg-tab')===msgTab;
+    b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false');
+  });
+  const pu=document.getElementById('msgTabPersonalUnread'),bu=document.getElementById('msgTabBrandUnread');
+  const pc=unreadForSection('personal'),bc=unreadForSection('brand');
+  if(pu){pu.textContent=pc>99?'99+':String(pc);pu.classList.toggle('hidden',!pc);pu.title=pc+' unread in Personal';}
+  if(bu){bu.textContent=bc>99?'99+':String(bc);bu.classList.toggle('hidden',!bc);bu.title=bc+' unread in Brand';}
+}
+document.querySelectorAll('[data-msg-tab]').forEach(b=>b.addEventListener('click',()=>{msgTab=b.getAttribute('data-msg-tab');renderUsersList();}));
 /* Reset to default: clears the cover text field — pressing "Save
    changes" then stores it empty and the profile cover goes back to
    the plain animated cover with no text. */
@@ -2669,6 +3346,10 @@ document.getElementById('driveNoteTitle').addEventListener('input',updateDriveNo
 document.getElementById('driveNoteContent').addEventListener('input',updateDriveNoteSize);
 
 /* ---------- follow ---------- */
+/* Followers / Following popup state: which profile's lists the
+   popup is showing, and which of its two tabs is active. The
+   popup functions themselves live right below toggleFollow. */
+let followListUser=null,followListTab='followers';
 async function toggleFollow(email){
   if(guestMode){showLoginPrompt();return;}
   if(!currentUser||!email||email===currentUser.system_email)return;
@@ -2677,9 +3358,104 @@ async function toggleFollow(email){
   else{const {error}=await ghostDb.from('profile_follows').insert([{follower_email:currentUser.system_email,following_email:email}]);if(!error)cachedFollows.push({follower_email:currentUser.system_email,following_email:email});}
   renderRightRail();renderPeopleResults();
   if(currentView==='profile'&&viewedProfile)renderProfile();
+  /* If the Followers / Following popup is open, repaint it too —
+     the tapped row's button (and the tab counts) follow the new
+     follow state immediately. */
+  if(followListUser&&!document.getElementById('followListModal').classList.contains('hidden'))renderFollowList();
+  /* Brand accounts: a follow / unfollow can complete or break a
+     mutual follow, which moves this chat between Personal and
+     Brand — repaint the list so the move shows immediately. */
+  if(amBrand()&&currentView==='messages')renderUsersList();
   const target=userByEmail(email);
   toast(following?('Unfollowed '+(target?'@'+target.username:'user')):('Following '+(target?'@'+target.username:'user')));
 }
+
+/* ---------- followers / following popup ----------
+   The Followers and Following counts on any profile (mine or
+   someone else's) are buttons. Tapping one opens this popup on
+   the matching tab — Followers shows everyone who follows that
+   profile, Following shows everyone that profile follows — all
+   computed live from profile_follows, newest follow first. Each
+   row's button reflects MY relationship with that person:
+   Unfollow when I already follow them, Follow Back when they
+   follow me and I don't follow them yet, Follow otherwise; my
+   own row never gets a button. The buttons run through the same
+   toggleFollow as every other follow control, so the popup, the
+   profile counts behind it and the rest of the app stay in step.
+   Tapping a row (outside its button) closes the popup and opens
+   that person's profile. Guests get the login prompt instead. */
+const FOLLOW_LIST_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+function followListFor(tab){
+  if(!followListUser)return [];
+  const email=followListUser.system_email;
+  const rows=tab==='followers'
+    ?cachedFollows.filter(f=>f.following_email===email).map(f=>({email:f.follower_email,at:f.created_at}))
+    :cachedFollows.filter(f=>f.follower_email===email).map(f=>({email:f.following_email,at:f.created_at}));
+  const seen=new Set();const out=[];
+  rows.forEach(r=>{
+    if(!r.email||seen.has(r.email))return;seen.add(r.email);
+    const u=userByEmail(r.email)||{system_email:r.email,full_name:String(r.email).split('@')[0]||'Member',username:'',badge_type:'none'};
+    out.push({u:u,at:r.at});
+  });
+  out.sort((a,b)=>{
+    const ta=a.at?new Date(a.at).getTime():NaN,tb=b.at?new Date(b.at).getTime():NaN;
+    if(!isNaN(ta)&&!isNaN(tb)&&ta!==tb)return tb-ta;
+    return String(a.u.full_name||'').localeCompare(String(b.u.full_name||''));
+  });
+  return out.map(x=>x.u);
+}
+function followRowHtml(u){
+  const isMe=!!(currentUser&&u.system_email===currentUser.system_email);
+  const iFollow=!!(currentUser&&myFollowingSet().has(u.system_email));
+  const followsMe=!!(currentUser&&myFollowersSet().has(u.system_email));
+  let btn='';
+  if(currentUser&&!isMe){
+    if(iFollow)btn='<button type="button" class="btn btn-sm btn-following" data-follow-act="'+escapeHtml(u.system_email)+'">Unfollow</button>';
+    else if(followsMe)btn='<button type="button" class="btn btn-sm" data-follow-act="'+escapeHtml(u.system_email)+'">Follow Back</button>';
+    else btn='<button type="button" class="btn btn-sm" data-follow-act="'+escapeHtml(u.system_email)+'">Follow</button>';
+  }
+  return '<div class="person-row"><button type="button" class="person-open"'+(u.username?' data-follow-open="'+escapeHtml(u.username)+'"':'')+'>'+avatarHtml(u,'',true)
+    +'<span style="min-width:0"><span class="nm fl-nm">'+escapeHtml(u.full_name)+badgeHtml(u.badge_type)+labelPillHtml(u)+'</span><span class="un" style="display:block">'+(u.username?'@'+escapeHtml(u.username):escapeHtml(u.system_email))+'</span></span></button>'
+    +btn+'</div>';
+}
+function renderFollowList(){
+  if(!followListUser)return;
+  const isMe=!!(currentUser&&followListUser.system_email===currentUser.system_email);
+  document.getElementById('followListTitle').textContent=followListTab==='followers'?'Followers':'Following';
+  document.getElementById('followListSub').textContent=(isMe?'You':followListUser.full_name)+' · @'+followListUser.username;
+  const followers=followListFor('followers'),following=followListFor('following');
+  document.getElementById('followTabCountFollowers').textContent='('+followers.length+')';
+  document.getElementById('followTabCountFollowing').textContent='('+following.length+')';
+  document.querySelectorAll('[data-follow-tab]').forEach(b=>{const on=b.getAttribute('data-follow-tab')===followListTab;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false');});
+  const list=followListTab==='followers'?followers:following;
+  const body=document.getElementById('followListBody');
+  if(!list.length){
+    body.innerHTML=followListTab==='followers'
+      ?emptyState(FOLLOW_LIST_ICON,'No followers yet',isMe?'When someone follows you, they will show up here.':'Nobody follows '+(followListUser.full_name||'this member')+' yet.')
+      :emptyState(FOLLOW_LIST_ICON,'Not following anyone yet',isMe?'People you follow will show up here.':(followListUser.full_name||'This member')+' is not following anyone yet.');
+    return;
+  }
+  body.innerHTML=list.map(followRowHtml).join('');
+}
+function openFollowList(tab){
+  if(guestMode||!currentUser){showLoginPrompt();return;}
+  if(!viewedProfile)return;
+  followListUser=viewedProfile;followListTab=tab==='following'?'following':'followers';
+  renderFollowList();
+  document.getElementById('followListModal').classList.remove('hidden');
+}
+function closeFollowList(){document.getElementById('followListModal').classList.add('hidden');}
+document.getElementById('statFollowersBtn').addEventListener('click',()=>openFollowList('followers'));
+document.getElementById('statFollowingBtn').addEventListener('click',()=>openFollowList('following'));
+document.getElementById('followListCloseBtn').addEventListener('click',closeFollowList);
+document.getElementById('followListModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeFollowList();});
+document.querySelectorAll('[data-follow-tab]').forEach(b=>b.addEventListener('click',()=>{followListTab=b.getAttribute('data-follow-tab');renderFollowList();}));
+document.getElementById('followListBody').addEventListener('click',async e=>{
+  const act=e.target.closest('[data-follow-act]');
+  if(act){await toggleFollow(act.getAttribute('data-follow-act'));renderFollowList();return;}
+  const open=e.target.closest('[data-follow-open]');
+  if(open){const un=open.getAttribute('data-follow-open');closeFollowList();openProfile(un);}
+});
 
 /* ---------- post actions (event delegation) ---------- */
 /* Post cards have no three-dot menu any more: Copy text / Share post
@@ -2882,93 +3658,161 @@ function rerenderCurrentList(){
   else if(currentView==='saved')renderSaved();
   else if(currentView==='profile')renderProfilePosts();
 }
+/* Ids the user unsaved whose server row could not be deleted at the
+   time (failed request, signed out). The probe filters them out of
+   the server list and retries the delete, so an unsaved post never
+   resurrects on the next load just because one delete was dropped. */
+const LS_UNSAVED='ghost_unsaved_posts_v1';
 /* (Re)probe post_saves and hydrate serverSaves from the server —
-   newest save first, exactly the rows Saved view and the Save
-   buttons are rendered from. Runs at load, and again whenever a
-   write fails, so one dropped request at sign-in can never disable
-   server saves for the rest of the session. */
+   newest save first. Runs at load, and again whenever a write fails,
+   so one dropped request at sign-in can never disable server saves
+   for the rest of the session. After the server rows land, any save
+   that exists ONLY in the on-device mirror (an earlier server write
+   failed, or the table was unreachable then) is pushed up to the
+   server now, so the mirror and post_saves converge instead of the
+   server list silently replacing — and erasing — local saves. */
 async function probeSavesTable(){
-  if(!currentUser||!ghostDb)return false;
+  if(!saverEmail()||!ghostDb)return false;
   try{
     let sv=await ghostDb.from('post_saves').select('post_id, created_at').eq('user_email',currentUser.system_email).order('created_at',{ascending:false});
     if(sv.error)sv=await ghostDb.from('post_saves').select('post_id').eq('user_email',currentUser.system_email);
-    if(!sv.error&&sv.data){serverSaves=sv.data.map(r=>String(r.post_id));savesTableOk=true;return true;}
+    if(!sv.error&&sv.data){
+      serverSaves=sv.data.map(r=>String(r.post_id));savesTableOk=true;
+      const tomb=new Set((lsGet(LS_UNSAVED,[])).map(String));
+      if(tomb.size){
+        serverSaves=serverSaves.filter(id=>!tomb.has(id));
+        for(const id of Array.from(tomb)){if(await deleteSaveRow(id))tomb.delete(id);}
+        lsSet(LS_UNSAVED,Array.from(tomb));
+      }
+      const onServer=new Set(serverSaves);
+      const localOnly=(lsGet(LS_SAVED,[])).map(String).filter(id=>!onServer.has(id));
+      for(const id of localOnly){if(await insertSaveRow(id))serverSaves.unshift(id);}
+      return true;
+    }
   }catch(_){}
   savesTableOk=false;return false;
 }
-/* Only a genuinely missing post_saves table (the SQL has not been
-   run) may switch saves to the on-device fallback. Anything else —
-   a dropped connection, a duplicate row — is a retryable failure,
-   never a reason to stop talking to the server. */
+/* Only a genuinely missing post_saves TABLE (the SQL has not been
+   run) counts here: 42P01 / PGRST205 / "could not find the table" /
+   "relation … does not exist". A missing COLUMN error also mentions
+   the schema cache ("Could not find the 'user_name' column of
+   'post_saves' in the schema cache") — that is NOT a missing table,
+   and treating it as one used to flip saves into a fallback whose
+   list the next server probe then overwrote, wiping every save.
+   Column mismatches are handled by the payload fallbacks in
+   insertSaveRow instead. */
 function isMissingTableError(err){
   if(!err)return false;
   const m=(String(err.message||'')+' '+String(err.code||'')).toLowerCase();
-  return m.includes('42p01')||m.includes('pgrst205')||m.includes('does not exist')||m.includes('schema cache')||m.includes('could not find the table');
+  return m.includes('42p01')||m.includes('pgrst205')||m.includes('could not find the table')||(m.includes('relation')&&m.includes('does not exist'));
 }
-/* One post_saves write: Save inserts {post_id, user_email,
-   user_name}, Unsave deletes the matching row. A duplicate-key
-   answer on insert means the post is ALREADY saved on the server —
-   exactly the end state wanted — so it counts as success instead of
-   failing the whole save. */
-async function writeSaveToServer(pid,wasSaved){
-  try{
-    const idVal=isNaN(Number(pid))?pid:Number(pid);
-    if(wasSaved){
-      const r=await ghostDb.from('post_saves').delete().eq('post_id',idVal).eq('user_email',currentUser.system_email);
-      if(!r.error)return true;
-      if(isMissingTableError(r.error))savesTableOk=false;
-      return false;
-    }
-    const r=await ghostDb.from('post_saves').insert([{post_id:idVal,user_email:currentUser.system_email,user_name:currentUser.full_name}]);
-    if(!r.error)return true;
-    if(r.error.code==='23505')return true;
-    if(isMissingTableError(r.error))savesTableOk=false;
-    return false;
-  }catch(_){return false;}
-}
-async function toggleSave(pid){
-  pid=String(pid);
-  const wasSaved=getSavedIds().has(pid);
-  /* Server first (post_saves): the row lands on the server, the
-     button re-renders in its saved state, and the post shows under
-     Saved — including after a refresh or a fresh login, because the
-     Saved view hydrates from this same table. If a write fails, the
-     table is re-probed and the write retried once before anything
-     else happens; the on-device list below is ONLY for when the
-     table genuinely cannot be reached. */
-  let serverDone=false;
-  if(currentUser&&ghostDb){
-    if(!savesTableOk)await probeSavesTable();
-    if(savesTableOk){
-      serverDone=await writeSaveToServer(pid,wasSaved);
-      if(!serverDone&&savesTableOk&&await probeSavesTable())serverDone=await writeSaveToServer(pid,wasSaved);
+/* Insert one post_saves row, tolerating the schema differences a
+   real table can have: it may or may not have a user_name column,
+   and its post_id may be numeric or text. Payloads are tried from
+   richest to plainest, in both id shapes, until one lands. A
+   duplicate-key answer (23505) means the post is ALREADY saved on
+   the server — exactly the end state wanted — so it is success. */
+async function insertSaveRow(pid){
+  const num=isNaN(Number(pid))?null:Number(pid);
+  const idForms=num===null?[String(pid)]:[num,String(pid)];
+  for(const idVal of idForms){
+    const payloads=[{post_id:idVal,user_email:currentUser.system_email,user_name:currentUser.full_name},{post_id:idVal,user_email:currentUser.system_email}];
+    for(const pl of payloads){
+      try{
+        const r=await ghostDb.from('post_saves').insert([pl]);
+        if(!r.error)return true;
+        if(r.error.code==='23505')return true;
+        if(isMissingTableError(r.error)){savesTableOk=false;return false;}
+      }catch(_){return false;}
     }
   }
-  if(serverDone){
+  return false;
+}
+/* Delete one post_saves row in both id shapes — a numeric delete
+   silently matches nothing when post_id is stored as text, and the
+   post would then come back as saved on the next load. */
+async function deleteSaveRow(pid){
+  const num=isNaN(Number(pid))?null:Number(pid);
+  const idForms=num===null?[String(pid)]:[num,String(pid)];
+  let ok=false;
+  for(const idVal of idForms){
+    try{
+      const r=await ghostDb.from('post_saves').delete().eq('post_id',idVal).eq('user_email',currentUser.system_email);
+      if(!r.error)ok=true;
+      else if(isMissingTableError(r.error))savesTableOk=false;
+    }catch(_){}
+  }
+  return ok;
+}
+async function writeSaveToServer(pid,wasSaved){
+  if(wasSaved)return deleteSaveRow(pid);
+  return insertSaveRow(pid);
+}
+/* One save/unsave per post at a time: while a tap is being written
+   to the server, further taps on the SAME post are ignored, so an
+   impatient double-tap (or a slow server making the button look
+   dead) can never flip a save straight back off again. */
+const saveInFlight=new Set();
+async function toggleSave(pid){
+  pid=String(pid);
+  if(saveInFlight.has(pid))return;
+  /* A signed-in user is never a guest: if a stale guest flag is
+     somehow still set alongside a live session, clear it instead of
+     letting the save be treated as a visitor's tap. */
+  if(guestMode&&currentUser)guestMode=false;
+  if(!saverEmail()){
+    toast('Log in to save posts — your session was not found.');
+    return;
+  }
+  saveInFlight.add(pid);
+  try{
+    const wasSaved=getSavedIds().has(pid);
+    /* 1) The on-device mirror and the in-memory server list are
+       updated FIRST and unconditionally: from this moment the post
+       counts as saved (or unsaved) no matter what the server does. */
+    const mirror=new Set((lsGet(LS_SAVED,[])).map(String));
+    if(wasSaved)mirror.delete(pid);else mirror.add(pid);
+    lsSet(LS_SAVED,Array.from(mirror));
     if(!serverSaves)serverSaves=[];
     if(wasSaved)serverSaves=serverSaves.filter(x=>String(x)!==pid);
     else if(!serverSaves.some(x=>String(x)===pid))serverSaves.unshift(pid);
-  }else if(!currentUser||!ghostDb||!savesTableOk){
-    /* post_saves genuinely unreachable (or browsing signed out) —
-       keep the save on this device only, MERGED with whatever the
-       server already had so nothing saved elsewhere disappears. */
-    const saved=new Set((lsGet(LS_SAVED,[])).map(String));
-    if(wasSaved)saved.delete(pid);else saved.add(pid);
-    lsSet(LS_SAVED,Array.from(saved));
-    if(serverSaves){
-      const merged=serverSaves.map(String);
-      if(wasSaved)serverSaves=merged.filter(x=>x!==pid);
-      else{if(!merged.includes(pid))merged.unshift(pid);serverSaves=merged;}
+    /* 2) The UI answers IMMEDIATELY — the button flips to Saved, the
+       toast confirms it, and the Saved list is repainted from the
+       union — without waiting for any network round-trip. (Before,
+       all of this waited behind the server write and its retries:
+       on a slow or failing post_saves the tap looked like it did
+       nothing, and a second tap quietly unsaved the post again.) */
+    refreshPostCard(pid);
+    if(currentView==='saved')renderSaved();
+    toast(wasSaved?'Removed from Saved.':'Saved — find it in Saved');
+    /* 3) The server write then runs with one re-probe + retry; if it
+       lands, the save is permanent and cross-device, and if it does
+       not, probeSavesTable keeps retrying the push on every load
+       and every visit to Saved until it does. The visible state is
+       never rolled back because a single request failed. */
+    let serverDone=false;
+    if(ghostDb){
+      if(!savesTableOk)await probeSavesTable();
+      if(savesTableOk){
+        serverDone=await writeSaveToServer(pid,wasSaved);
+        if(!serverDone&&savesTableOk&&await probeSavesTable())serverDone=await writeSaveToServer(pid,wasSaved);
+        /* Reconcile the in-memory list with what the mirror says, in
+           case the re-probe above rebuilt serverSaves from the
+           server's rows alone. */
+        if(wasSaved)serverSaves=serverSaves.filter(x=>String(x)!==pid);
+        else if(!serverSaves.some(x=>String(x)===pid))serverSaves.unshift(pid);
+      }
     }
-  }else{
-    /* The table is there but the write still failed — say so plainly
-       instead of pretending the post was saved somewhere it wasn't. */
-    toast(wasSaved?'Could not remove this post on the server — check your connection and try again.':'Could not save this post on the server — check your connection and try again.');
-    return;
+    /* Keep the unsave tombstones in step: a confirmed server delete
+       (or a fresh save) clears the id; an unconfirmed unsave records
+       it so the probe can finish the delete on a later load. */
+    const tomb=new Set((lsGet(LS_UNSAVED,[])).map(String));
+    if(wasSaved&&!serverDone)tomb.add(pid);else tomb.delete(pid);
+    lsSet(LS_UNSAVED,Array.from(tomb));
+    if(currentView==='saved')renderSaved();
+  }finally{
+    saveInFlight.delete(pid);
   }
-  toast(wasSaved?'Removed from Saved.':'Saved. Find it any time under Saved.');
-  refreshPostCard(pid);
-  if(currentView==='saved')renderSaved();
 }
 async function setOwnPostHidden(pid,hide){
   const p=cachedPosts.find(x=>String(x.id)===String(pid));if(!p||!currentUser)return;
@@ -2992,13 +3836,28 @@ async function copyText(text,okMsg){
   try{await navigator.clipboard.writeText(text);toast(okMsg||'Copied to clipboard.');}
   catch(_){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(okMsg||'Copied to clipboard.');}catch(__){toast('Copy failed — your browser blocked it.');}ta.remove();}
 }
+/* ---------- unique post link ----------
+   Every post's shareable link is built from the app's own deployed
+   address: <origin + pathname>#post-<post_id>. Hash-based, so it
+   works on static hosting (GitHub Pages) with no domain or router —
+   opening the link lands on that exact post (see handleDeepLink). */
+function postLink(pid){return location.origin+location.pathname+'#post-'+pid;}
 function openShare(pid){
   const p=cachedPosts.find(x=>String(x.id)===String(pid));if(!p)return;
   sharePostId=pid;
   document.getElementById('sharePreview').textContent=plainText(p.content).slice(0,220)||'(link post)';
   document.getElementById('shareNativeBtn').classList.toggle('hidden',!(navigator.share));
+  const linkInput=document.getElementById('shareLinkInput');if(linkInput)linkInput.value=postLink(pid);
+  updateShareProfileBtn();
   renderShareFriends(p);
   document.getElementById('shareModal').classList.remove('hidden');
+}
+function updateShareProfileBtn(){
+  const btn=document.getElementById('shareProfileBtn');if(!btn)return;
+  const txt=document.getElementById('shareProfileBtnText');
+  const on=sharePostId!=null&&iSharedToProfile(sharePostId);
+  btn.classList.toggle('on',on);
+  if(txt)txt.textContent=on?'On your profile — tap to remove':'Share to my profile';
 }
 function renderShareFriends(p){
   const wrap=document.getElementById('shareFriendsList');if(!wrap)return;
@@ -3029,6 +3888,68 @@ async function sharePostToFriend(p,recipientEmail){
   toast('Post shared with '+(target?'@'+target.username:'your friend')+' — it is in your Messages now.');
 }
 async function bumpShare(pid){await recordShare(pid,null,'copy');}
+/* ---------- share to my profile ----------
+   Records the share in post_shares (sharer = me, shared_to_email =
+   NULL, share_scope = 'profile') and mirrors it on this device, so
+   the post appears on my profile at once as a shared card — the
+   ORIGINAL post, credited to its original author. Nothing is ever
+   copied into home_posts. Until the share_scope column exists on
+   the server, the insert falls back to the app's plain share
+   record and the on-device mirror carries the profile share. */
+async function shareToProfile(pid){
+  if(!currentUser)return;
+  const p=cachedPosts.find(x=>String(x.id)===String(pid));if(!p)return;
+  if(iSharedToProfile(pid)){await unshareFromProfile(pid);return;}
+  const numId=isNaN(Number(pid))?pid:Number(pid);
+  const localRow={post_id:numId,sharer_email:currentUser.system_email,sharer_name:currentUser.full_name,created_at:new Date().toISOString()};
+  rememberLocalProfileShare(localRow);
+  let onServer=false;
+  if(ghostDb&&sharesTableOk&&shareScopeColOk){
+    try{
+      const r=await ghostDb.from('post_shares').insert([{post_id:numId,sharer_email:currentUser.system_email,sharer_name:currentUser.full_name,shared_to_email:null,share_scope:'profile'}]).select().single();
+      if(!r.error&&r.data){cachedProfileShares.push(r.data);onServer=true;}
+      else if(r.error&&/share_scope/i.test(r.error.message||''))shareScopeColOk=false;
+    }catch(_){}
+  }
+  if(onServer){
+    if(serverShareCounts)serverShareCounts[String(pid)]=(serverShareCounts[String(pid)]||0)+1;
+    else{const counts=lsGet(LS_SHARES,{});counts[pid]=(counts[pid]||0)+1;lsSet(LS_SHARES,counts);}
+    refreshPostCard(pid);
+  }else{
+    /* No share_scope column yet (or the table is unreachable):
+       record the share the way the app already records shares —
+       count + card refresh included — while the mirror above
+       carries the profile placement. */
+    await recordShare(pid,null,'profile');
+  }
+  updateShareProfileBtn();
+  if(currentView==='profile'&&viewedProfile&&viewedProfile.system_email===currentUser.system_email)renderProfilePosts();
+  toast('Shared to your profile — it appears there with @'+p.author_username+' credited as the author.');
+}
+/* Remove my own profile share: the post_shares row goes (when the
+   share_scope column exists), the mirror entry goes, the count
+   steps back. The original post itself is untouched. */
+async function unshareFromProfile(pid){
+  if(!currentUser)return;
+  const me=currentUser.system_email;
+  forgetLocalProfileShare(me,pid);
+  cachedProfileShares=cachedProfileShares.filter(s=>!(s.sharer_email===me&&String(s.post_id)===String(pid)));
+  if(ghostDb&&shareScopeColOk){
+    try{await ghostDb.from('post_shares').delete().eq('post_id',isNaN(Number(pid))?pid:Number(pid)).eq('sharer_email',me).eq('share_scope','profile');}catch(_){}
+  }
+  if(serverShareCounts){if(serverShareCounts[String(pid)])serverShareCounts[String(pid)]=Math.max(0,serverShareCounts[String(pid)]-1);}
+  else{const counts=lsGet(LS_SHARES,{});if(counts[pid])counts[pid]=Math.max(0,counts[pid]-1);lsSet(LS_SHARES,counts);}
+  refreshPostCard(pid);
+  updateShareProfileBtn();
+  if(currentView==='profile'&&viewedProfile&&viewedProfile.system_email===me)renderProfilePosts();
+  toast('Removed from your profile.');
+}
+document.getElementById('shareProfileBtn').addEventListener('click',async()=>{if(sharePostId!=null)await shareToProfile(sharePostId);});
+document.getElementById('shareLinkBtn').addEventListener('click',async()=>{
+  if(sharePostId==null)return;
+  await copyText(postLink(sharePostId),'Post link copied — anyone who opens it lands right on this post.');
+  await recordShare(sharePostId,null,'link');
+});
 document.getElementById('shareCloseBtn').addEventListener('click',()=>document.getElementById('shareModal').classList.add('hidden'));
 document.getElementById('shareCopyBtn').addEventListener('click',async()=>{
   const p=cachedPosts.find(x=>String(x.id)===String(sharePostId));
@@ -3037,7 +3958,7 @@ document.getElementById('shareCopyBtn').addEventListener('click',async()=>{
 });
 document.getElementById('shareNativeBtn').addEventListener('click',async()=>{
   const p=cachedPosts.find(x=>String(x.id)===String(sharePostId));if(!p)return;
-  try{await navigator.share({title:'Ghost — @'+p.author_username,text:plainText(p.content).slice(0,280)});await recordShare(sharePostId,null,'native');}catch(_){}
+  try{await navigator.share({title:'Ghost — @'+p.author_username,text:plainText(p.content).slice(0,280),url:postLink(sharePostId)});await recordShare(sharePostId,null,'native');}catch(_){}
 });
 function openEditPost(pid){
   const p=cachedPosts.find(x=>String(x.id)===String(pid));if(!p)return;
@@ -3138,6 +4059,11 @@ document.addEventListener('click',async e=>{
   if(action==='follow'){await toggleFollow(el.getAttribute('data-email'));return;}
   if(action==='tag'){activeTag=el.getAttribute('data-tag');feedQuery='';globalSearch.value='';setFeedFilter('all');showView('feed');renderFeed();window.scrollTo({top:0,behavior:'smooth'});return;}
   if(action==='trend-open'){activeTag='';feedQuery='';globalSearch.value='';searchClearBtn.classList.remove('show');closeSearchDropdown();setFeedFilter('all');showView('feed');renderFeed();setTimeout(()=>{const el2=document.getElementById('post-'+pid);if(el2){el2.scrollIntoView({behavior:'smooth',block:'center'});el2.classList.add('flash');setTimeout(()=>el2.classList.remove('flash'),2200);}},60);return;}
+  /* Notification (like / comment) tap: open the post in the Home
+     feed with the same scroll-and-flash the Trending rows use. If
+     the post is not in the feed (e.g. it is one of my hidden posts),
+     fall back to the actor's profile. */
+  if(action==='notif-open'){const nUname=el.getAttribute('data-username');activeTag='';feedQuery='';globalSearch.value='';searchClearBtn.classList.remove('show');closeSearchDropdown();if(feedFilter!=='all')setFeedFilter('all');showView('feed');renderFeed();setTimeout(()=>{const el2=pid?document.getElementById('post-'+pid):null;if(el2){el2.scrollIntoView({behavior:'smooth',block:'center'});el2.classList.add('flash');setTimeout(()=>el2.classList.remove('flash'),2200);}else if(nUname)openProfile(nUname);},60);return;}
   if(action==='comment-like'){await toggleCommentLike(el.getAttribute('data-cid'),el.getAttribute('data-pid'));return;}
   if(action==='comment-reply'){
     const rcid=el.getAttribute('data-cid'),rpid=el.getAttribute('data-pid');
@@ -3158,6 +4084,7 @@ document.addEventListener('click',async e=>{
   if(action==='manage-restore'){await restorePost(pid);return;}
   if(action==='manage-delete-forever'){await deletePostForever(pid);return;}
   if(action==='share'){openShare(pid);return;}
+  if(action==='unshare-profile'){await unshareFromProfile(pid);return;}
   if(action==='save'){await toggleSave(pid);return;}
   if(action==='manage-edit'){openEditPost(pid);return;}
   if(action==='manage-hide'){const hp2=cachedPosts.find(x=>String(x.id)===String(pid));if(hp2)await setOwnPostHidden(pid,!isPostHidden(hp2));return;}
@@ -3234,16 +4161,34 @@ function lastMsgPreview(email){
 }
 function renderUsersList(){
   if(!currentUser)return;
+  const brand=amBrand();
+  syncMsgTabsUI();
   const q=(userSearchEl.value||'').trim().toLowerCase().replace(/^@/,'');
   const others=allUsers.filter(u=>u.system_email!==currentUser.system_email);
   let visible=q?others.filter(u=>(u.full_name||'').toLowerCase().includes(q)||(u.username||'').toLowerCase().includes(q)):others.filter(u=>hasHistory(u.system_email)||(selectedPeer&&selectedPeer.username===u.username));
+  /* BRAND accounts only: the conversation list is split by the
+     live mutual-follow test. Searching still finds EVERYONE (so a
+     brand user can start a chat with anyone) and each result is
+     tagged with the section that chat lives in; the plain list
+     shows only the active tab's section. Normal accounts skip this
+     entirely — one single merged list, exactly as before. */
+  if(brand&&!q)visible=visible.filter(u=>peerSection(u.system_email)===msgTab);
   visible=visible.slice().sort((a,b)=>lastActivityTime(b.system_email)-lastActivityTime(a.system_email));
-  if(!visible.length){usersListEl.innerHTML='<div class="meta-small" style="padding:8px">'+(q?'No matching profile found.':'No conversations yet. Search a name above to start chatting.')+'</div>';return;}
+  if(!visible.length){
+    let emptyMsg;
+    if(q)emptyMsg='No matching profile found.';
+    else if(brand&&msgTab==='personal')emptyMsg='No personal conversations yet. When someone you follow follows you back, your chat with them moves here automatically.';
+    else if(brand&&msgTab==='brand')emptyMsg='No brand conversations yet. Followers and everyone else you chat with appear here — a chat moves to Personal once you follow each other.';
+    else emptyMsg='No conversations yet. Search a name above to start chatting.';
+    usersListEl.innerHTML='<div class="meta-small" style="padding:8px">'+emptyMsg+'</div>';return;
+  }
   usersListEl.innerHTML=visible.map(u=>{
     const active=selectedPeer&&selectedPeer.username===u.username;
     const un=unreadCountFor(u.system_email);
+    const secTag=(brand&&q)?'<span class="peer-section-tag '+peerSection(u.system_email)+'" title="This chat lives in your '+peerSection(u.system_email)+' list">'+(peerSection(u.system_email)==='personal'?'Personal':'Brand')+'</span>':'';
     return '<button type="button" class="user-item'+(active?' active':'')+(un?' unread':'')+'" data-peer="'+escapeHtml(u.username)+'">'+avatarHtml(u,'',true)
       +'<span style="min-width:0;flex:1"><span class="nm">'+escapeHtml(u.full_name)+badgeHtml(u.badge_type)+'</span><span class="pv" style="display:block">'+escapeHtml(lastMsgPreview(u.system_email))+'</span><span style="display:block;margin-top:1px">'+presenceSpan(u)+'</span></span>'
+      +secTag
       +(un?'<span class="unread-pill" title="'+un+' unread message'+(un===1?'':'s')+' from '+escapeHtml(u.full_name)+'">'+un+'</span>':'')
       +'</button>';
   }).join('');
@@ -3252,6 +4197,10 @@ function renderUsersList(){
 userSearchEl.addEventListener('input',renderUsersList);
 function selectPeer(u){
   selectedPeer=u;
+  /* Brand accounts: opening a chat (from search, a profile, or the
+     other tab) switches the list to the section that chat lives in,
+     so the open conversation is always visible in its own list. */
+  if(u&&amBrand())msgTab=peerSection(u.system_email);
   clearPendingReply();closeMsgMenu();
   if(u)markConversationRead(u.system_email);
   renderUsersList();
@@ -3424,30 +4373,97 @@ document.addEventListener('pointerdown',e=>{
 });
 messagesArea.addEventListener('scroll',()=>closeMsgMenu(),{passive:true});
 let msgPressTimer=null,msgPressStart=null,msgSuppressClickAt=0;
+/* ---------- direction-specific swipe-to-reply ----------
+   The reply gesture depends on whose bubble it is:
+   • the OTHER person's message (incoming, left side) — swipe RIGHT
+   • MY OWN message (outgoing, right side) — swipe LEFT
+   Dragging in that direction makes the bubble follow the finger /
+   mouse while a reply arrow slides in on the side the bubble is
+   moving away from; releasing past the threshold opens the usual
+   reply mode (quoted preview + reply_to_id on send). Dragging in
+   the WRONG direction does nothing at all — the bubble does not
+   follow and no reply starts. Either way the bubble springs back
+   on release. Works for touch and for mouse drags. Call-log rows
+   are not bubbles (no .bubble[data-msg-id]), so they never enter
+   this code. The tap / long-press menu stays as the other path. */
+const SWIPE_REPLY_THRESHOLD=55, SWIPE_REPLY_MAX=72;
+function showSwipeHint(st,follow){
+  if(!st.row)return;
+  if(!st.hint){
+    const h=document.createElement('span');
+    h.className='swipe-hint '+(st.dir>0?'left':'right');
+    h.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17l-5-5 5-5"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>';
+    st.row.appendChild(h);st.hint=h;
+    document.body.classList.add('msg-swipe-active');
+  }
+  const t=Math.min(1,follow/SWIPE_REPLY_THRESHOLD);
+  st.hint.style.opacity=String(0.25+0.75*t);
+  /* Counter-move the hint by exactly the row's own offset, so it
+     stays in place at the edge while the bubble slides away. */
+  st.hint.style.transform='translateY(-50%) translateX('+(-follow*st.dir)+'px) scale('+(0.7+0.3*t)+')';
+  st.hint.classList.toggle('ready',follow>SWIPE_REPLY_THRESHOLD);
+}
+function hideSwipeHint(st){
+  if(st&&st.hint){st.hint.remove();st.hint=null;}
+  document.body.classList.remove('msg-swipe-active');
+}
+function resetMsgSwipe(st){
+  if(!st)return;
+  if(st.row){
+    const row=st.row;
+    row.style.transition='transform .18s ease';
+    row.style.transform='';
+    setTimeout(()=>{row.style.transition='';},200);
+  }
+  hideSwipeHint(st);
+}
 messagesArea.addEventListener('pointerdown',e=>{
   const bubble=e.target.closest?e.target.closest('.bubble[data-msg-id]'):null;
   if(!bubble)return;
-  msgPressStart={x:e.clientX,y:e.clientY,id:bubble.getAttribute('data-msg-id'),row:bubble.closest('.bubble-row'),type:e.pointerType,moved:false};
+  const m=cachedMessages.find(x=>String(x.id)===String(bubble.getAttribute('data-msg-id')));
+  const mine=!!(m&&currentUser&&m.sender_email===currentUser.system_email);
+  /* dir: +1 = reply by swiping right (their bubble), -1 = reply by
+     swiping left (my bubble). */
+  msgPressStart={x:e.clientX,y:e.clientY,id:bubble.getAttribute('data-msg-id'),row:bubble.closest('.bubble-row'),type:e.pointerType,moved:false,cancelled:false,mine:mine,dir:mine?-1:1,hint:null};
   clearTimeout(msgPressTimer);
   msgPressTimer=setTimeout(()=>{
     if(msgPressStart&&!msgPressStart.moved){msgSuppressClickAt=Date.now();openMsgMenu(msgPressStart.id,bubble.getBoundingClientRect());}
   },480);
 });
 messagesArea.addEventListener('pointermove',e=>{
-  if(!msgPressStart||msgPressStart.type!=='touch')return;
-  const dx=e.clientX-msgPressStart.x,dy=e.clientY-msgPressStart.y;
-  if(Math.abs(dy)>14&&Math.abs(dy)>Math.abs(dx)){msgPressStart.moved=true;clearTimeout(msgPressTimer);if(msgPressStart.row)msgPressStart.row.style.transform='';return;}
-  if(Math.abs(dx)>8){msgPressStart.moved=true;clearTimeout(msgPressTimer);}
-  if(msgPressStart.row)msgPressStart.row.style.transform='translateX('+Math.max(-64,Math.min(64,dx))+'px)';
+  if(!msgPressStart||msgPressStart.cancelled)return;
+  if(msgPressStart.type==='mouse'&&!(e.buttons&1))return;
+  const st=msgPressStart;
+  const dx=e.clientX-st.x,dy=e.clientY-st.y;
+  /* Vertical-dominant movement is a scroll, not a swipe: cancel the
+     gesture and let the bubble spring back. */
+  if(Math.abs(dy)>14&&Math.abs(dy)>Math.abs(dx)){st.moved=true;st.cancelled=true;clearTimeout(msgPressTimer);resetMsgSwipe(st);return;}
+  if(Math.abs(dx)>8){st.moved=true;clearTimeout(msgPressTimer);}
+  /* Progress counts ONLY in this bubble's reply direction; the
+     wrong direction leaves the bubble exactly where it is. */
+  const prog=dx*st.dir;
+  const follow=prog>0?Math.min(prog,SWIPE_REPLY_MAX):0;
+  if(st.row){
+    st.row.style.transition='none';
+    st.row.style.transform=follow?('translateX('+(follow*st.dir)+'px)'):'';
+  }
+  if(follow>4)showSwipeHint(st,follow);else hideSwipeHint(st);
 });
 function endMsgPress(e){
   clearTimeout(msgPressTimer);
   if(!msgPressStart)return;
   const st=msgPressStart;msgPressStart=null;
-  if(st.row)st.row.style.transform='';
-  if(st.type==='touch'&&st.moved){
-    const dx=(e&&e.clientX!=null?e.clientX:st.x)-st.x;
-    if(Math.abs(dx)>55){const m=cachedMessages.find(x=>String(x.id)===String(st.id));if(m){msgSuppressClickAt=Date.now();startReplyTo(m);}}
+  const dx=(e&&e.clientX!=null?e.clientX:st.x)-st.x;
+  const prog=dx*st.dir;
+  const wasDrag=st.moved&&!st.cancelled;
+  resetMsgSwipe(st);
+  if(st.cancelled)return;
+  /* A real drag (either direction) must not turn into a tap that
+     opens the menu on release. */
+  if(wasDrag)msgSuppressClickAt=Date.now();
+  if(prog>SWIPE_REPLY_THRESHOLD){
+    const m=cachedMessages.find(x=>String(x.id)===String(st.id));
+    if(m){msgSuppressClickAt=Date.now();startReplyTo(m);}
   }
 }
 messagesArea.addEventListener('pointerup',endMsgPress);
@@ -3464,6 +4480,10 @@ function startMsgPolling(){
   msgPollTimer=setInterval(async()=>{
     if(currentView!=='messages'||!currentUser)return;
     await loadMessagesCache();
+    /* Follows decide the Personal/Brand split for brand accounts —
+       refreshing them here is what makes a follow-back move a chat
+       to Personal live, while this list is open. */
+    await refreshFollowsCache();
     /* The open conversation is being read right now — keep it marked
        read as new messages land in it. */
     if(selectedPeer){markConversationRead(selectedPeer.system_email);renderMessages();}
@@ -3676,34 +4696,86 @@ document.querySelectorAll('[data-topmenu]').forEach(b=>b.addEventListener('click
 
 /* ---------- guest preview (not logged in) ----------
    A visitor lands straight on the Home feed and can read public
-   posts, open profiles and browse Trending — read-only. After
-   ~7 seconds, or the moment they try to react / comment / follow /
-   post / message / save, the login view slides up over the softly
-   blurred feed. A saved session never enters this flow. */
-const GUEST_LOGIN_ACTIONS=new Set(['react-toggle','react-pick','toggle-comments','save','follow','share','manage-edit','manage-hide','manage-delete','manage-restore','manage-delete-forever','comment-like','comment-reply']);
+   posts, open profiles and browse Trending — read-only — for a
+   maximum of exactly 15 SECONDS from the moment the preview is
+   first shown. The moment they try to react / comment / follow /
+   post / message / save, the existing auth panel slides up over
+   the softly blurred feed immediately (dismissible via Continue
+   while preview time remains; the 15s clock keeps running from
+   the preview start, it never restarts). When the 15 seconds
+   expire, lockGuestPreview() ends the preview completely: the
+   SAME single auth card (Log In / Sign Up tabs, all fields, eye
+   toggles, submit buttons) is presented over the heavily blurred,
+   dimmed, unclickable homepage with NO dismiss option — signing
+   up / logging in happens right there, and on success
+   onAuthenticated() removes the overlay and opens the full app.
+   A saved session never enters this flow, and a signed-in user
+   never sees any of it. */
+const GUEST_LOGIN_ACTIONS=new Set(['react-toggle','react-pick','toggle-comments','save','follow','share','unshare-profile','manage-edit','manage-hide','manage-delete','manage-restore','manage-delete-forever','comment-like','comment-reply']);
 document.addEventListener('click',e=>{
-  if(!guestMode)return;
+  /* The guest wall applies ONLY while there is genuinely no signed-in
+     user. If a session exists, the tap is a member's tap even if a
+     stale guestMode flag survived — never swallow it (this capture-
+     phase guard runs BEFORE the main action handler, so wrongly
+     stopping propagation here would silently kill Save & friends). */
+  if(!guestMode||currentUser)return;
   const el=e.target.closest?e.target.closest('[data-action]'):null;
   if(!el)return;
   if(GUEST_LOGIN_ACTIONS.has(el.getAttribute('data-action'))){e.preventDefault();e.stopPropagation();showLoginPrompt();}
 },true);
 document.addEventListener('submit',e=>{
-  if(!guestMode)return;
+  if(!guestMode||currentUser)return;
   if(e.target.closest('[data-comment-form],[data-reply-form],#chatForm')){e.preventDefault();e.stopPropagation();showLoginPrompt();}
 },true);
-function showLoginPrompt(){
-  if(!guestMode)return;
+function scheduleGuestExpiry(){
   clearTimeout(guestPromptTimer);guestPromptTimer=null;
+  if(!guestMode||currentUser||guestExpired||!guestStartedAt)return;
+  const remaining=GUEST_PREVIEW_MS-(Date.now()-guestStartedAt);
+  if(remaining<=0){lockGuestPreview();return;}
+  guestPromptTimer=setTimeout(lockGuestPreview,remaining);
+}
+function showLoginPrompt(){
+  if(!guestMode||currentUser)return;
+  /* Preview time already used up — the prompt IS the locked wall. */
+  if(guestExpired||(guestStartedAt&&(Date.now()-guestStartedAt)>=GUEST_PREVIEW_MS)){lockGuestPreview();return;}
   guestPromptShown=true;
   document.getElementById('guestContinueBtn').classList.remove('hidden');
   authSection.classList.remove('hidden');
   document.body.classList.add('guest-prompt');
   window.scrollTo({top:0});
+  /* NOTE: the expiry timer is deliberately NOT cleared here — the
+     15 seconds count from the preview start, so if it runs out
+     while this prompt is open, it upgrades in place to the lock. */
+  scheduleGuestExpiry();
+}
+function lockGuestPreview(){
+  if(!guestMode||currentUser)return;
+  const wasHidden=authSection.classList.contains('hidden');
+  guestExpired=true;guestPromptShown=true;
+  clearTimeout(guestPromptTimer);guestPromptTimer=null;
+  /* No way back to the preview: Continue-as-guest is gone. */
+  document.getElementById('guestContinueBtn').classList.add('hidden');
+  const note=document.getElementById('guestLockNote');if(note)note.classList.remove('hidden');
+  authSection.classList.remove('hidden');
+  document.body.classList.add('guest-prompt');
+  document.body.classList.add('guest-locked');
+  /* Fresh arrival on the wall lands on Sign Up (the emphasised
+     action); if the visitor was already mid-login in the prompt,
+     their tab and typed input are left untouched. */
+  if(wasHidden)switchAuthTab('signup');
+  window.scrollTo({top:0});
 }
 function hideLoginPrompt(){
+  /* Once expired there is no dismiss — the wall stays until the
+     visitor signs up / logs in in the card itself. */
+  if(guestExpired){lockGuestPreview();return;}
   document.body.classList.remove('guest-prompt');
   authSection.classList.add('hidden');
   document.getElementById('guestContinueBtn').classList.add('hidden');
+  /* Returning to the preview does NOT restart the clock: the
+     remaining time (if any) is re-armed from the original start,
+     and if it has already run out the lock appears immediately. */
+  scheduleGuestExpiry();
 }
 document.getElementById('guestContinueBtn').addEventListener('click',hideLoginPrompt);
 document.getElementById('guestLoginBtn').addEventListener('click',()=>{if(guestMode)showLoginPrompt();});
@@ -3732,11 +4804,14 @@ async function loadGuestData(){
     try{const cr=await ghostDb.from('system_accounts').select('system_email, is_creator');if(!cr.error&&cr.data){const cmap={};cr.data.forEach(r=>{cmap[r.system_email]=r.is_creator;});allUsers.forEach(u=>{if(u.system_email in cmap)u.is_creator=cmap[u.system_email];});}}catch(_){}
     await loadProfileLabels();
     await loadCoverTexts();
+    await loadPostShares();
     renderAll();
   }catch(err){toast(friendlyError(err),'Retry',()=>{loadGuestData();});}
 }
 async function startGuestPreview(){
-  guestMode=true;
+  guestMode=true;guestExpired=false;guestPromptShown=false;guestStartedAt=0;
+  document.body.classList.remove('guest-locked');
+  {const _ln=document.getElementById('guestLockNote');if(_ln)_ln.classList.add('hidden');}
   const splash=document.getElementById('splashSection');
   await ensureGhostDb();
   if(!ghostDb){guestMode=false;splash.classList.add('hidden');authSection.classList.remove('hidden');return;}
@@ -3747,24 +4822,65 @@ async function startGuestPreview(){
   splash.classList.add('hidden');
   authSection.classList.add('hidden');
   appSection.classList.remove('hidden');
+  /* The 15-second clock starts now — the moment the guest
+     preview is first actually shown on screen. */
+  guestStartedAt=Date.now();
   showView('feed');
   renderSkeletons();
   await loadGuestData();
-  /* The login prompt arrives on its own after a short preview. */
-  clearTimeout(guestPromptTimer);
-  guestPromptTimer=setTimeout(showLoginPrompt,7000);
+  /* The preview ends on its own after exactly 15 seconds,
+     counted from when the preview was first shown above. */
+  scheduleGuestExpiry();
+  /* A guest who arrived through a post link (#post-<id>) lands on
+     that post inside the preview. */
+  handleDeepLink();
 }
 
-/* ---------- deep link (#/post/<id>) ---------- */
-function handleDeepLink(){
-  const m=(location.hash||'').match(/^#\/post\/(.+)$/);
-  if(!m)return;
-  const pid=m[1];
-  setTimeout(()=>{
-    const el=document.getElementById('post-'+pid);
-    if(el){showView('feed');el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),2200);}
-  },350);
+/* ---------- deep link (#post-<id>) ----------
+   Every post's unique link is <this app's address>#post-<post_id>
+   (see postLink). Opening one lands on that exact post: any search
+   / tag / tab filtering is cleared, the Home feed opens, and the
+   post scrolls into view with the same flash the Trending and
+   Notification rows use. If the post is not in the loaded feed
+   (older than the newest 60), it is fetched on its own from
+   home_posts and placed at the top of the feed. The older
+   #/post/<id> form is still understood. For a guest, all of this
+   happens inside the read-only preview — member-only actions on
+   the post still prompt for login, exactly as before. */
+function deepLinkPostId(){
+  const h=location.hash||'';
+  let m=h.match(/^#post-(.+)$/);if(m)return m[1];
+  m=h.match(/^#\/post\/(.+)$/);if(m)return m[1];
+  return null;
 }
+async function handleDeepLink(){
+  const pid=deepLinkPostId();if(!pid)return;
+  const reveal=()=>{
+    const el=document.getElementById('post-'+pid);
+    if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),2200);}
+    return !!el;
+  };
+  activeTag='';feedQuery='';globalSearch.value='';searchClearBtn.classList.remove('show');closeSearchDropdown();
+  if(feedFilter!=='all')setFeedFilter('all');
+  showView('feed');renderFeed();
+  if(reveal())return;
+  if(ghostDb){
+    try{
+      const numId=isNaN(Number(pid))?pid:Number(pid);
+      let res=await ghostDb.from('home_posts').select('id, author_email, author_name, author_username, content, created_at, is_hidden, deleted_at').eq('id',numId).maybeSingle();
+      if(res.error)res=await ghostDb.from('home_posts').select('id, author_email, author_name, author_username, content, created_at, is_hidden').eq('id',numId).maybeSingle();
+      if(res.error)res=await ghostDb.from('home_posts').select('id, author_email, author_name, author_username, content, created_at').eq('id',numId).maybeSingle();
+      if(!res.error&&res.data){
+        const p=res.data;
+        if(isPostDeleted(p)||isPostHidden(p)){toast('That post is no longer available.');return;}
+        if(!cachedPosts.some(x=>String(x.id)===String(p.id)))cachedPosts.unshift(p);
+        renderFeed();reveal();return;
+      }
+    }catch(_){/* fall through to the delayed retry below */}
+  }
+  setTimeout(reveal,400);
+}
+window.addEventListener('hashchange',()=>{handleDeepLink();});
 
 /* ---------- boot ---------- */
 (function boot(){
